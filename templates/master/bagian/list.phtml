@@ -1,0 +1,113 @@
+<div data-options="region:'north',title:'',split:true" style="width:99%;height:350px;margin:5px auto;">
+	<table id="dtgPatient"
+			data-options="rownumbers:true,singleSelect:true,pagination:true,url:'<?php echo $baseUrl; ?>api/patient/lists',method:'get',toolbar:'#tbPatient'">
+		<thead>
+			<tr>
+				<th data-options="field:'ptn_id',width:80,hidden:true">Patient ID</th>
+				<th data-options="field:'ptn_code',width:100">Kode</th>
+				<th data-options="field:'ptn_fullname',width:100">Nama</th>
+				<th data-options="field:'ptn_address',width:240">Alamat</th>
+				<th data-options="field:'ptn_birthdate',width:100">Tanggal Lahir</th>
+				<th data-options="field:'ptn_phone',width:100">No HP/Telpon</th>
+				<th data-options="field:'ptn_gender',width:100">Jenis Kelamin</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="tbPatient" style="padding:2px 5px;">
+		<input class="easyui-searchbox" data-options="prompt:'Please Input Value',searcher:doSearch" style="width:100%">
+	</div>
+</div>
+
+<div id="dlgPatient" class="easyui-dialog panel-body panel-body-noborder window-body" data-options="cache: false, resizable: false, closable: true, modal: true, onResize: function(width, height){if(height!='auto') frmResizePatient(width, height) }" closed="true" style="width:700px;height:550px;padding:10px;top:50px;">
+		<iframe name="frmPatient" id="frmPatient" frameborder="0"></iframe>
+</div>
+
+<script type="text/javascript">
+	function doSearch(value){
+		alert('You input: ' + value);
+	}
+
+	function showPopupMessagePatient(messageType) {
+		var message = 'The message content is empty';
+
+		if(messageType == 'insert') message = 'Insert data berhasil';
+		if(messageType == 'update') message = 'Update data berhasil';
+		if(messageType == 'delete') message = 'Delete data berhasil';
+
+		$.messager.show({
+			title:'Info Message',
+			msg:message,
+			showType:'show',
+			style:{
+				left:'',
+				right:0,
+				top:document.body.scrollTop+document.documentElement.scrollTop,
+				bottom:''
+			}
+		});
+	}
+
+	var fnEditPatient = function(){
+		var singleRow = $('#dtgPatient').datagrid('getSelected');
+		if(singleRow) {
+			$('#dlgPatient').dialog({
+				title: 'Edit Data Patient',
+				width: 700,
+				height: 550
+			});
+			$('#frmPatient').hide();
+			$('#frmPatient').attr('src','<?php echo $baseUrl; ?>patient/edit?ptn_id='+singleRow.ptn_id);
+			$('#dlgPatient').window('open');
+		} else {
+			$.messager.alert('Info Message', 'Pilih data pasien yang ingin di-edit!', 'warning');
+		}
+	};
+
+	$(function(){
+		var pager = $('#dtgPatient').datagrid({onDblClickRow: fnEditPatient}).datagrid('getPager');	// get the pager of datagrid
+		pager.pagination({
+			buttons:[{
+				iconCls:'icon-add',
+				handler:function(){
+					$('#dlgPatient').dialog({
+						title: 'Input Data Patient',
+						width: 700,
+						height: 550
+					});
+					$('#frmPatient').hide();
+					$('#frmPatient').attr('src','<?php echo $baseUrl; ?>patient/add');
+					$('#dlgPatient').window('open');
+				}
+			},{
+				iconCls:'icon-edit',
+				handler:fnEditPatient
+			},{
+				iconCls:'icon-remove',
+				handler:function(){
+					var singleRow = $('#dtgPatient').datagrid('getSelected');
+					if (singleRow) {
+						$.messager.confirm('Confirm','Yakin ingin menghapus data pasien ini?',function(res) {
+							if (res) {
+								$.post('<?php echo $baseUrl; ?>api/patient/delete',{ptn_id:singleRow.ptn_id},function(data) {
+									if(data.success == true) {
+										$('#dtgPatient').datagrid('reload');
+										showPopupMessagePatient('delete');
+									} else {
+										$.messager.alert('Info Message', data.errMsg, 'warning');
+									}
+								},'json');
+							}
+						});
+					} else {
+						$.messager.alert('Info Message', 'Pilih data pasien yang ingin dihapus!', 'warning');
+					}
+				}
+			}]
+		});
+	});
+
+	function frmResizePatient(width,height) {
+		$('#frmPatient').width(width-14);
+		$('#frmPatient').height(height-40);
+	}
+</script>

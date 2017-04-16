@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Full Layout - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>assets/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>assets/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>assets/demo/demo.css">
+	<script type="text/javascript" src="<?php echo $baseUrl; ?>assets/jquery.min.js"></script>
+	<script type="text/javascript" src="<?php echo $baseUrl; ?>assets/jquery.easyui.min.js"></script>
+</head>
+<body>
+	<div class="easyui-layout" style="width:650px; height:450px; background-color:#FFF;">
+		<div data-options="region:'center',border:false">
+			<div style="padding:0px 15px;">
+				<form id="ffPatient" class="easyui-form" action="<?php echo $baseUrl; ?>api/patient/edit" method="post" data-options="novalidate:true">
+					<input type="hidden" name="ptn_id" id="ptn_id" value="">
+			  	<div class="easyui-panel" style="width:600px;padding:50px 60px">
+						<div style="margin-bottom:20px">
+			  			<input class="easyui-textbox" prompt="Kode ID" iconWidth="28" style="width:100%;height:34px;padding:10px;" id="ptn_code" name="ptn_code" data-options="label:'Kode ID:',required:true,labelWidth:100">
+			  		</div>
+			  		<div style="margin-bottom:20px">
+			  			<input class="easyui-textbox" prompt="Nama" iconWidth="28" style="width:100%;height:34px;padding:10px;" id="ptn_fullname" name="ptn_fullname" data-options="label:'Nama:',required:true,labelWidth:100">
+			  		</div>
+						<div style="margin-bottom:20px">
+			  			<select class="easyui-combobox" prompt="Jenis Kelamin" name="ptn_gender" data-options="label:'Jenis Kelamin:',required:true,labelWidth:100" style="width:100%;height:34px;padding:10px;">
+								<option value="">--- Pilih Jenis Kelamin ---</option>
+								<option value="Pria">Pria</option>
+								<option value="Wanita">Wanita</option>
+							</select>
+			  		</div>
+						<div style="margin-bottom:20px">
+			  			<input class="easyui-datebox" prompt="Tanggal Lahir" iconWidth="28" style="width:100%;height:34px;padding:10px;" id="ptn_birthdate" name="ptn_birthdate" data-options="label:'Tanggal Lahir:',required:true,labelWidth:100">
+			  		</div>
+						<div style="margin-bottom:20px">
+			  			<input class="easyui-textbox" prompt="Alamat" iconWidth="28" style="width:100%;height:34px;padding:10px;" id="ptn_address" name="ptn_address" data-options="label:'Alamat:',required:true,labelWidth:100">
+			  		</div>
+						<div style="margin-bottom:20px">
+			  			<input class="easyui-textbox" prompt="No HP/Telpon" iconWidth="28" style="width:100%;height:34px;padding:10px;" id="ptn_phone" name="ptn_phone" data-options="label:'No HP/Telpon:',required:true,labelWidth:100">
+			  		</div>
+			  	</div>
+			  </form>
+			</div>
+		</div>
+		<div data-options="region:'south',border:false">
+			<div style="text-align:center;padding:5px 0">
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="fnSavePatient()">Save</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="fnCancelPatient()">Cancel</a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	$(function(){
+		$('#ffPatient').form('load', '<?php echo $baseUrl; ?>api/patient/edit?ptn_id=<?php echo $ptn_id; ?>');
+		window.parent.$('#frmPatient').show();
+	});
+
+  function fnSavePatient(){
+    $('#ffPatient').form('submit',{
+      onSubmit:function(){
+        var isValid = $(this).form('enableValidation').form('validate');
+        return isValid;
+      },
+      success:function(data){
+        data = $.parseJSON(data);
+				if(data.success == true) {
+					window.parent.$('#dtgPatient').datagrid('reload');
+					window.parent.$('#dlgPatient').dialog('close');
+					parent.showPopupMessagePatient('update');
+        } else {
+          $.messager.alert('Info Message', data.errMsg, 'warning');
+        }
+      }
+    });
+  }
+
+	function fnCancelPatient() {
+		window.parent.$('#frmPatient input').empty();
+		window.parent.$('#frmPatient select').empty();
+		window.parent.$('#dlgPatient').dialog('close');
+	}
+	</script>
+</body>
+</html>
