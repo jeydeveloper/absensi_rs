@@ -12,9 +12,3 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid "Aplikasi Absensi RS"
-msgstr "rs attendance application"
-
-msgid "Silahkan login menggunakan username dan password yang sudah terdaftar"
-msgstr "please login using the username and password are already registered"
