@@ -1,7 +1,7 @@
-# absensi_rs
+# Absensi RS
 Aplikasi Web Absensi RS
 
-## Config Database
+## Konfigurasi Database
 File config database : "src/settings.php"
 
 File import sql : "absensi.sql"
@@ -10,3 +10,6 @@ File import sql : "absensi.sql"
 username : superadmin
 
 password : rahasia1234
+
+## Akses URL
+http://localhost/[ROOT_DIR]/public
