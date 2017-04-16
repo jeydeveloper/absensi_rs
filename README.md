@@ -12,4 +12,4 @@ username : superadmin
 password : rahasia1234
 
 ## Akses URL
-http://localhost/[ROOT_DIR]/public 
+http://localhost/[ROOT_DIR]/public
