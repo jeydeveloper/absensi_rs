@@ -1,113 +1,387 @@
-<div data-options="region:'north',title:'',split:true" style="width:99%;height:350px;margin:5px auto;">
-	<table id="dtgPatient"
-			data-options="rownumbers:true,singleSelect:true,pagination:true,url:'<?php echo $baseUrl; ?>api/patient/lists',method:'get',toolbar:'#tbPatient'">
-		<thead>
-			<tr>
-				<th data-options="field:'ptn_id',width:80,hidden:true">Patient ID</th>
-				<th data-options="field:'ptn_code',width:100">Kode</th>
-				<th data-options="field:'ptn_fullname',width:100">Nama</th>
-				<th data-options="field:'ptn_address',width:240">Alamat</th>
-				<th data-options="field:'ptn_birthdate',width:100">Tanggal Lahir</th>
-				<th data-options="field:'ptn_phone',width:100">No HP/Telpon</th>
-				<th data-options="field:'ptn_gender',width:100">Jenis Kelamin</th>
-			</tr>
-		</thead>
-	</table>
-	<div id="tbPatient" style="padding:2px 5px;">
-		<input class="easyui-searchbox" data-options="prompt:'Please Input Value',searcher:doSearch" style="width:100%">
-	</div>
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Page title -->
+    <title>HOMER | WebApp admin theme</title>
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!--<link rel="shortcut icon" type="<?php echo $baseUrl; ?>assets/image//ico" href="favicon.ico" />-->
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/fontawesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/metisMenu/dist/metisMenu.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/animate.css/animate.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/datatables.net-bs/css/dataTables.bootstrap.min.css" />
+
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/ladda-themeless.min.css" />
+
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/toastr/build/toastr.min.css" />
+
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/styles/style.css">
+
+</head>
+<body class="fixed-navbar sidebar-scroll">
+
+<!-- Simple splash screen-->
+<div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>Homer - Responsive Admin Theme</h1><p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
+<!--[if lt IE 7]>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Header -->
+<div id="header">
+    <div class="color-line">
+    </div>
+    <div id="logo" class="light-version">
+        <span>
+            Homer Theme
+        </span>
+    </div>
+    <nav role="navigation">
+        <div class="header-link hide-menu"><i class="fa fa-bars"></i></div>
+        <div class="small-logo">
+            <span class="text-primary">HOMER APP</span>
+        </div>
+        <form role="search" class="navbar-form-custom" method="post" action="#">
+            <div class="form-group">
+                <input type="text" placeholder="Search something special" class="form-control" name="search">
+            </div>
+        </form>
+        <div class="mobile-menu">
+            <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse" data-target="#mobile-collapse">
+                <i class="fa fa-chevron-down"></i>
+            </button>
+            <div class="collapse mobile-navbar" id="mobile-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="" href="login.html">Login</a>
+                    </li>
+                    <li>
+                        <a class="" href="login.html">Logout</a>
+                    </li>
+                    <li>
+                        <a class="" href="profile.html">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-right">
+            <ul class="nav navbar-nav no-borders">
+                <li class="dropdown">
+                    <a href="<?php echo $baseUrl; ?>logout">
+                        <i class="pe-7s-upload pe-rotate-90"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
-<div id="dlgPatient" class="easyui-dialog panel-body panel-body-noborder window-body" data-options="cache: false, resizable: false, closable: true, modal: true, onResize: function(width, height){if(height!='auto') frmResizePatient(width, height) }" closed="true" style="width:700px;height:550px;padding:10px;top:50px;">
-		<iframe name="frmPatient" id="frmPatient" frameborder="0"></iframe>
+<!-- Navigation -->
+<aside id="menu">
+    <div id="navigation">
+        <div class="profile-picture">
+            <a href="index.html">
+                <img src="<?php echo $baseUrl; ?>assets/images/profile.jpg" class="img-circle m-b" alt="logo">
+            </a>
+
+            <div class="stats-label text-color">
+                <span class="font-extra-bold font-uppercase">Robert Razer</span>
+
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                        <small class="text-muted">Founder of App <b class="caret"></b></small>
+                    </a>
+                    <ul class="dropdown-menu animated flipInX m-t-xs">
+                        <li><a href="contacts.html">Contacts</a></li>
+                        <li><a href="profile.html">Profile</a></li>
+                        <li><a href="analytics.html">Analytics</a></li>
+                        <li class="divider"></li>
+                        <li><a href="login.html">Logout</a></li>
+                    </ul>
+                </div>
+
+
+                <div id="sparkline1" class="small-chart m-t-sm"></div>
+                <div>
+                    <h4 class="font-extra-bold m-b-xs">
+                        $260 104,200
+                    </h4>
+                    <small class="text-muted">Your income from the last year in sales product X.</small>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav" id="side-menu">
+            <li class="active">
+                <a href="index.html"> <span class="nav-label">Dashboard</span> <span class="label label-success pull-right">v.1</span> </a>
+            </li>
+            <li>
+                <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level">
+                    <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</aside>
+
+<!-- Main Wrapper -->
+<div id="wrapper">
+
+  <div class="small-header">
+      <div class="hpanel">
+          <div class="panel-body">
+              <div id="hbreadcrumb" class="pull-right">
+                  <ol class="hbreadcrumb breadcrumb">
+                      <li><a href="index.html">Dashboard</a></li>
+                      <li>
+                          <span>Forms</span>
+                      </li>
+                      <li class="active">
+                          <span>Validation </span>
+                      </li>
+                  </ol>
+              </div>
+              <h2 class="font-light m-b-xs">
+                  Validation
+              </h2>
+              <small>Build a form with validation functionality</small>
+          </div>
+      </div>
+  </div>
+
+
+  <div class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="hpanel">
+                <div class="panel-heading">
+                    <div class="panel-tools">
+                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                        <a class="closebox"><i class="fa fa-times"></i></a>
+                    </div>
+                    Datatables
+                </div>
+                <div class="panel-body">
+                    <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="5%">No.</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th width="15%">Action</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal5"><i class="fa fa-plus"></i> Add</button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+    <!-- Footer-->
+    <footer class="footer">
+        <span class="pull-right">
+            Example text
+        </span>
+        Company 2015-2020
+    </footer>
+
 </div>
 
-<script type="text/javascript">
-	function doSearch(value){
-		alert('You input: ' + value);
-	}
+<div class="modal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="color-line"></div>
+            <div class="modal-header">
+                <h4 class="modal-title">Tambah Bagian</h4>
+            </div>
+            <form action="<?php echo $baseUrl; ?>api/bagian/add" role="form" id="form_2">
+            <div class="modal-body">
+                <div class="form-group"><label for="bag_name">Nama Bagian</label> <input type="text" id="bag_name" name="bag_name" placeholder="Isi nama bagian" class="form-control" required></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-	function showPopupMessagePatient(messageType) {
-		var message = 'The message content is empty';
 
-		if(messageType == 'insert') message = 'Insert data berhasil';
-		if(messageType == 'update') message = 'Update data berhasil';
-		if(messageType == 'delete') message = 'Delete data berhasil';
 
-		$.messager.show({
-			title:'Info Message',
-			msg:message,
-			showType:'show',
-			style:{
-				left:'',
-				right:0,
-				top:document.body.scrollTop+document.documentElement.scrollTop,
-				bottom:''
-			}
-		});
-	}
+<!-- Vendor scripts -->
+<script src="<?php echo $baseUrl; ?>assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/metisMenu/dist/metisMenu.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/sparkline/index.js"></script>
+<!-- DataTables -->
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- DataTables buttons scripts -->
+<script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/pdfmake.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/vfs_fonts.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
 
-	var fnEditPatient = function(){
-		var singleRow = $('#dtgPatient').datagrid('getSelected');
-		if(singleRow) {
-			$('#dlgPatient').dialog({
-				title: 'Edit Data Patient',
-				width: 700,
-				height: 550
-			});
-			$('#frmPatient').hide();
-			$('#frmPatient').attr('src','<?php echo $baseUrl; ?>patient/edit?ptn_id='+singleRow.ptn_id);
-			$('#dlgPatient').window('open');
-		} else {
-			$.messager.alert('Info Message', 'Pilih data pasien yang ingin di-edit!', 'warning');
-		}
-	};
+<script src="<?php echo $baseUrl; ?>assets/vendor/jquery-validation/jquery.validate.min.js"></script>
 
-	$(function(){
-		var pager = $('#dtgPatient').datagrid({onDblClickRow: fnEditPatient}).datagrid('getPager');	// get the pager of datagrid
-		pager.pagination({
-			buttons:[{
-				iconCls:'icon-add',
-				handler:function(){
-					$('#dlgPatient').dialog({
-						title: 'Input Data Patient',
-						width: 700,
-						height: 550
-					});
-					$('#frmPatient').hide();
-					$('#frmPatient').attr('src','<?php echo $baseUrl; ?>patient/add');
-					$('#dlgPatient').window('open');
-				}
-			},{
-				iconCls:'icon-edit',
-				handler:fnEditPatient
-			},{
-				iconCls:'icon-remove',
-				handler:function(){
-					var singleRow = $('#dtgPatient').datagrid('getSelected');
-					if (singleRow) {
-						$.messager.confirm('Confirm','Yakin ingin menghapus data pasien ini?',function(res) {
-							if (res) {
-								$.post('<?php echo $baseUrl; ?>api/patient/delete',{ptn_id:singleRow.ptn_id},function(data) {
-									if(data.success == true) {
-										$('#dtgPatient').datagrid('reload');
-										showPopupMessagePatient('delete');
-									} else {
-										$.messager.alert('Info Message', data.errMsg, 'warning');
-									}
-								},'json');
-							}
-						});
-					} else {
-						$.messager.alert('Info Message', 'Pilih data pasien yang ingin dihapus!', 'warning');
-					}
-				}
-			}]
-		});
-	});
+<script src="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/spin.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/ladda.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/ladda.jquery.min.js"></script>
 
-	function frmResizePatient(width,height) {
-		$('#frmPatient').width(width-14);
-		$('#frmPatient').height(height-40);
-	}
+<script src="<?php echo $baseUrl; ?>assets/vendor/toastr/build/toastr.min.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
+
+<!-- App scripts -->
+<script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
+
+
+<script>
+
+    $(function () {
+
+      // Toastr options
+      toastr.options = {
+          "debug": false,
+          "newestOnTop": false,
+          "positionClass": "toast-top-center",
+          "closeButton": true,
+          "toastClass": "animated fadeInDown",
+      };
+
+        // Initialize Example 1
+        var table = $('#example1').DataTable( {
+            "ajax": '<?php echo $baseUrl; ?>api/bagian/lists',
+            dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            buttons: [
+                {extend: 'copy',className: 'btn-sm'},
+                {extend: 'csv',title: 'ExampleFile', className: 'btn-sm'},
+                {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'},
+                {extend: 'print',className: 'btn-sm'}
+            ],
+            "columnDefs": [
+              {
+                "targets": -1,
+                "data": null,
+                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button>'
+              },
+              {
+                "targets": [ 1 ],
+                "visible": false,
+                "searchable": false
+              },
+            ]
+        });
+
+        $('#example1 tbody').on( 'click', '.btnEdit', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            alert( "'s Edit is: "+ data[ 1 ] );
+        } );
+
+        $('#example1 tbody').on( 'click', '.btnDelete', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            swal({
+              title: "Are you sure?",
+              text: "Data will be delete!",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes, delete it!",
+              cancelButtonText: "No, cancel!",
+              closeOnConfirm: false,
+              closeOnCancel: false },
+              function (isConfirm) {
+                if (isConfirm) {
+                  $.post('<?php echo $baseUrl; ?>api/bagian/delete',{bag_id:data[ 1 ]},function(data) {
+      							if(data.errMsg == '') {
+      								swal("Deleted!", "Your data has been deleted.", "success");
+                      table.ajax.reload( null, false ); // user paging is not reset on reload
+      							} else {
+      								swal("Cancelled!", "Oops.. " + data.errMsg, "error");
+      							}
+      						},'json');
+                } else {
+                    swal("Cancelled", "Your data is safe :)", "error");
+                }
+              }
+            );
+        } );
+
+        var l = $( '.ladda-button-demo' ).ladda();
+        var frm = $('#form_2');
+
+        frm.validate({
+            rules: {
+                bag_name: {
+                    required: true,
+                    minlength: 3
+                }
+            },
+            submitHandler: function(form) {
+              // Start loading
+              l.ladda( 'start' );
+
+              $.ajax({
+            		url: frm.attr('action'),
+            		method: "POST",
+            		data: frm.serializeArray(),
+            		dataType: "json"
+            	}).done(function( data ) {
+                if(data.errMsg == '') {
+                  toastr.success('Insert data success');
+                  frm.find(':input').val('');
+                  table.ajax.reload( null, false ); // user paging is not reset on reload
+                } else {
+                  toastr.error('Oops.. ' + data.errMsg);
+                }
+                l.ladda('stop');
+            	}).fail(function( jqXHR, textStatus ) {
+                toastr.error('Request data failed!');
+            		l.ladda('stop');
+            	})
+            },
+            errorPlacement: function(error, element) {
+                $( element )
+                        .closest( "form" )
+                        .find( "label[for='" + element.attr( "id" ) + "']" )
+                        .append( error );
+            },
+            errorElement: "span",
+        });
+
+    });
+
 </script>
+
+</body>
+</html>

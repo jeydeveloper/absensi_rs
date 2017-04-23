@@ -25,6 +25,7 @@ $container['notAllowedHandler'] = function ($c) {
 };
 
 // error 500
+/*
 $container['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         return $c['response']
@@ -33,6 +34,7 @@ $container['errorHandler'] = function ($c) {
             ->withJson(array('error' => 'Something went wrong!'));
     };
 };
+*/
 
 // view renderer
 $container['renderer'] = function ($c) {
@@ -69,18 +71,10 @@ $container['UserApi'] = function($c) {
     return new App\Api\UserApi($c);
 };
 
-$container['PatientController'] = function($c) {
-    return new App\Controllers\PatientController($c);
+$container['BagianController'] = function($c) {
+    return new App\Controllers\Master\BagianController($c);
 };
 
-$container['MedicineController'] = function($c) {
-    return new App\Controllers\MedicineController($c);
-};
-
-$container['VisitController'] = function($c) {
-    return new App\Controllers\VisitController($c);
-};
-
-$container['PatientApi'] = function($c) {
-    return new App\Api\PatientApi($c);
+$container['BagianApi'] = function($c) {
+    return new App\Api\BagianApi($c);
 };

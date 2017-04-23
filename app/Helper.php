@@ -17,4 +17,9 @@ class Helper
         $ret = $month . '/' . $day . '/' . $year;
         return $ret;
     }
+
+    public static function dateNowDB()
+    {
+        return date('Y-m-d H:i:s');
+    }
 }
