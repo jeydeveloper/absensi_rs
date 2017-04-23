@@ -6,6 +6,8 @@ File config database : "src/settings.php"
 
 File import sql : "absensi.sql"
 
+File update query : "update_query.sql"
+
 ## Login Superadmin
 username : superadmin
 
