@@ -223,6 +223,7 @@
                 <div class="form-group"><label for="bag_name">Nama Bagian</label> <input type="text" id="bag_name" name="bag_name" placeholder="Isi nama bagian" class="form-control" required></div>
             </div>
             <div class="modal-footer">
+                <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right">Save</button>
             </div>
@@ -261,6 +262,8 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/toastr/build/toastr.min.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
 
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
@@ -378,6 +381,7 @@
                     frm.find(':input').val('');
                     $("#<?php echo $inputFocus; ?>").focus();
                   }
+                  if($('#autoClose').is(":checked")) $("#myModal5").modal('hide');
                 } else {
                   toastr.error('Oops.. ' + data.message);
                 }
