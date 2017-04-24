@@ -358,7 +358,7 @@
             );
         } );
 
-        frm.validate({
+        var validator = frm.validate({
             rules: {
                 sta_name: {
                     required: true
@@ -382,6 +382,8 @@
                     $("#<?php echo $inputFocus; ?>").focus();
                   }
                   if($('#autoClose').is(":checked")) $("#myModal5").modal('hide');
+                  validator.resetForm();
+                  $('.form-control.error').removeClass('error');
                 } else {
                   toastr.error('Oops.. ' + data.message);
                 }
@@ -403,6 +405,8 @@
         $("#myModal5").on("hidden.bs.modal", function () {
             frm.find(':input').val('');
             frm.attr('action', '<?php echo $baseUrl ?>api/status/add');
+            validator.resetForm();
+            $('.form-control.error').removeClass('error');
         });
 
     });
