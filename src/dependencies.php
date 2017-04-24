@@ -78,3 +78,11 @@ $container['BagianController'] = function($c) {
 $container['BagianApi'] = function($c) {
     return new App\Api\BagianApi($c);
 };
+
+$container['StatusController'] = function($c) {
+    return new App\Controllers\Master\StatusController($c);
+};
+
+$container['StatusApi'] = function($c) {
+    return new App\Api\StatusApi($c);
+};
