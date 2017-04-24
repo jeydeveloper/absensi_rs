@@ -38,7 +38,7 @@ class BagianApi
     public function doAdd($request, $response, $args)
     {
       $arrData = array(
-          'errMsg' => '',
+          'message' => '',
           'success' => false,
       );
 
@@ -50,8 +50,9 @@ class BagianApi
 
       if($obj->save()) {
         $arrData['success'] = true;
+        $arrData['message'] = 'Insert data success';
       } else {
-        $arrData['errMsg'] = 'Oops.. please try again!';
+        $arrData['message'] = 'Oops.. please try again!';
       }
 
       return $response->withJson($arrData);
@@ -60,7 +61,7 @@ class BagianApi
     public function doEdit($request, $response, $args)
     {
       $arrData = array(
-          'errMsg' => '',
+          'message' => '',
           'success' => false,
       );
 
@@ -73,8 +74,9 @@ class BagianApi
 
       if($obj->save()) {
         $arrData['success'] = true;
+        $arrData['message'] = 'Update data success';
       } else {
-        $arrData['errMsg'] = 'Oops.. please try again!';
+        $arrData['message'] = 'Oops.. please try again!';
       }
 
       return $response->withJson($arrData);
@@ -97,7 +99,7 @@ class BagianApi
     public function doDelete($request, $response, $args)
     {
       $arrData = array(
-          'errMsg' => '',
+          'message' => '',
           'success' => false,
       );
 
@@ -107,8 +109,9 @@ class BagianApi
 
       if($obj->save()) {
         $arrData['success'] = true;
+        $arrData['message'] = 'Delete data success';
       } else {
-        $arrData['errMsg'] = 'Oops.. please try again!';
+        $arrData['message'] = 'Oops.. please try again!';
       }
 
       return $response->withJson($arrData);

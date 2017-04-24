@@ -191,7 +191,7 @@
                     </table>
                     <div class="row">
                       <div class="col-sm-12">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal5"><i class="fa fa-plus"></i> Add</button>
+                        <button id="btnAdd" class="btn btn-primary" data-toggle="modal" data-target="#myModal5"><i class="fa fa-plus"></i> Add</button>
                       </div>
                     </div>
                 </div>
@@ -218,6 +218,7 @@
                 <h4 class="modal-title">Tambah Bagian</h4>
             </div>
             <form action="<?php echo $baseUrl; ?>api/bagian/add" role="form" id="form_2">
+            <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body">
                 <div class="form-group"><label for="bag_name">Nama Bagian</label> <input type="text" id="bag_name" name="bag_name" placeholder="Isi nama bagian" class="form-control" required></div>
             </div>
@@ -269,6 +270,9 @@
 
     $(function () {
 
+      var l = $( '.ladda-button-demo' ).ladda();
+      var frm = $('#form_2');
+
       // Toastr options
       toastr.options = {
           "debug": false,
@@ -303,9 +307,21 @@
             ]
         });
 
+        var fillInputForm = function(data) {
+          $.each(data, function(idx, val){
+            $('#'+idx).val(val);
+          });
+        };
+
         $('#example1 tbody').on( 'click', '.btnEdit', function () {
             var data = table.row( $(this).parents('tr') ).data();
-            alert( "'s Edit is: "+ data[ 1 ] );
+            frm.attr('action', '<?php echo $baseUrl ?>api/bagian/edit?<?php echo $primaryKey; ?>=' + data[ 1 ]);
+            $.get( frm.attr('action'), function(data) {
+              fillInputForm(data);
+              $('#btnAdd').trigger('click');
+            }, 'json').fail(function() {
+              toastr.error('Request data failed!');
+            });
         } );
 
         $('#example1 tbody').on( 'click', '.btnDelete', function () {
@@ -322,29 +338,27 @@
               closeOnCancel: false },
               function (isConfirm) {
                 if (isConfirm) {
-                  $.post('<?php echo $baseUrl; ?>api/bagian/delete',{bag_id:data[ 1 ]},function(data) {
-      							if(data.errMsg == '') {
-      								swal("Deleted!", "Your data has been deleted.", "success");
+                  $.post('<?php echo $baseUrl; ?>api/bagian/delete',{<?php echo $primaryKey; ?>:data[ 1 ]},function(data) {
+      							if(data.success == true) {
+      								swal("Deleted!", data.message, "success");
                       table.ajax.reload( null, false ); // user paging is not reset on reload
       							} else {
-      								swal("Cancelled!", "Oops.. " + data.errMsg, "error");
+      								swal("Cancelled!", "Oops.. " + data.message, "error");
       							}
+                    setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
       						},'json');
                 } else {
                     swal("Cancelled", "Your data is safe :)", "error");
+                    setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
                 }
               }
             );
         } );
 
-        var l = $( '.ladda-button-demo' ).ladda();
-        var frm = $('#form_2');
-
         frm.validate({
             rules: {
                 bag_name: {
-                    required: true,
-                    minlength: 3
+                    required: true
                 }
             },
             submitHandler: function(form) {
@@ -352,23 +366,26 @@
               l.ladda( 'start' );
 
               $.ajax({
-            		url: frm.attr('action'),
-            		method: "POST",
-            		data: frm.serializeArray(),
-            		dataType: "json"
-            	}).done(function( data ) {
-                if(data.errMsg == '') {
-                  toastr.success('Insert data success');
-                  frm.find(':input').val('');
+                url: frm.attr('action'),
+                method: "POST",
+                data: frm.serializeArray(),
+                dataType: "json"
+              }).done(function( data ) {
+                if(data.success == true) {
+                  toastr.success(data.message);
                   table.ajax.reload( null, false ); // user paging is not reset on reload
+                  if($('#<?php echo $primaryKey; ?>').val() == '') {
+                    frm.find(':input').val('');
+                    $("#<?php echo $inputFocus; ?>").focus();
+                  }
                 } else {
-                  toastr.error('Oops.. ' + data.errMsg);
+                  toastr.error('Oops.. ' + data.message);
                 }
                 l.ladda('stop');
-            	}).fail(function( jqXHR, textStatus ) {
+              }).fail(function( jqXHR, textStatus ) {
                 toastr.error('Request data failed!');
-            		l.ladda('stop');
-            	})
+                l.ladda('stop');
+              })
             },
             errorPlacement: function(error, element) {
                 $( element )
@@ -377,6 +394,11 @@
                         .append( error );
             },
             errorElement: "span",
+        });
+
+        $("#myModal5").on("hidden.bs.modal", function () {
+            frm.find(':input').val('');
+            frm.attr('action', '<?php echo $baseUrl ?>api/bagian/add');
         });
 
     });
