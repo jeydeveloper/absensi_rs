@@ -1,6 +1,8 @@
 logs/app.log
 src/settings.php
 
+bs-config.js
+
 # OS generated files #
 ######################
 .DS_Store
