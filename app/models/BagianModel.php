@@ -17,13 +17,31 @@ class BagianModel extends Model
 
     public static function getAllNonVoid()
     {
-      $patient = BagianModel::where('bag_void', 0)->get();
-      return $patient;
+      $result = BagianModel::where('bag_void', 0)->get();
+      return $result;
     }
 
     public static function getPatientByID($id)
     {
-      $patient = BagianModel::where('bag_id', $id)->first();
-      return $patient;
+      $result = BagianModel::where('bag_id', $id)->first();
+      return $result;
+    }
+
+    public static function getOptNonVoid()
+    {
+      $arrData = array();
+
+      $result = BagianModel::where('bag_void', 0)->get();
+
+      if(!empty($result)) {
+        foreach ($result as $key => $value) {
+          $arrData[] = array(
+            'key' => $value->bag_id,
+            'value' => $value->bag_name,
+          );
+        }
+      }
+
+      return $arrData;
     }
 }

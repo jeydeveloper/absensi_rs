@@ -26,4 +26,22 @@ class JabatanModel extends Model
       $patient = JabatanModel::where('jab_id', $id)->first();
       return $patient;
     }
+
+    public static function getOptNonVoid()
+    {
+      $arrData = array();
+
+      $result = JabatanModel::where('jab_void', 0)->get();
+
+      if(!empty($result)) {
+        foreach ($result as $key => $value) {
+          $arrData[] = array(
+            'key' => $value->jab_id,
+            'value' => $value->jab_name,
+          );
+        }
+      }
+
+      return $arrData;
+    }
 }

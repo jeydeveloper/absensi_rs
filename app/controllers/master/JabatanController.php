@@ -3,43 +3,27 @@
 namespace App\Controllers\Master;
 
 use Interop\Container\ContainerInterface;
+use Gettext\Translator;
 
-class JabatanController
+class JabatanController extends \App\Controllers\BaseController
 {
     protected $ci;
+    protected $data;
 
     public function __construct(ContainerInterface $ci)
     {
+        parent::__construct();
         $this->ci = $ci;
+
+        $this->data['primaryKey'] = 'jab_id';
+        $this->data['inputFocus'] = 'jab_name';
+        $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
     }
 
     public function lists($request, $response, $args)
     {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /jabatan/list' route");
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/jabatan/list' route");
 
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
-
-        return $this->ci->get('renderer')->render($response, 'jabatan/list.phtml', $data);
-    }
-
-    public function add($request, $response, $args)
-    {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /jabatan/add' route");
-
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
-
-        return $this->ci->get('renderer')->render($response, 'jabatan/add.phtml', $data);
-    }
-
-    public function edit($request, $response, $args)
-    {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /jabatan/edit' route");
-
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
-
-        $ptn_id = $request->getParam('ptn_id');
-        $data['ptn_id'] = $ptn_id;
-
-        return $this->ci->get('renderer')->render($response, 'jabatan/edit.phtml', $data);
+        return $this->ci->get('renderer')->render($response, 'master/jabatan/list.phtml', $this->data);
     }
 }

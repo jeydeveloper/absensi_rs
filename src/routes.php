@@ -39,3 +39,45 @@ $app->group('/api/status', function () {
   $this->get('/edit', \StatusApi::class . ':edit')->setName('api-status-edit');
   $this->post('/delete', \StatusApi::class . ':doDelete')->setName('post-api-status-delete');
 });
+
+$app->group('/jabatan', function () {
+  $this->get('', \JabatanController::class . ':lists')->setName('jabatan-list');
+  $this->get('/add', \JabatanController::class . ':add')->setName('jabatan-add');
+  $this->get('/edit', \JabatanController::class . ':edit')->setName('jabatan-edit');
+});
+
+$app->group('/api/jabatan', function () {
+  $this->get('/lists', \JabatanApi::class . ':lists')->setName('api-jabatan-lists');
+  $this->post('/add', \JabatanApi::class . ':doAdd')->setName('post-api-jabatan-add');
+  $this->post('/edit', \JabatanApi::class . ':doEdit')->setName('post-api-jabatan-edit');
+  $this->get('/edit', \JabatanApi::class . ':edit')->setName('api-jabatan-edit');
+  $this->post('/delete', \JabatanApi::class . ':doDelete')->setName('post-api-jabatan-delete');
+});
+
+$app->group('/unit', function () {
+  $this->get('', \UnitController::class . ':lists')->setName('unit-list');
+  $this->get('/add', \UnitController::class . ':add')->setName('unit-add');
+  $this->get('/edit', \UnitController::class . ':edit')->setName('unit-edit');
+});
+
+$app->group('/api/unit', function () {
+  $this->get('/lists', \UnitApi::class . ':lists')->setName('api-unit-lists');
+  $this->post('/add', \UnitApi::class . ':doAdd')->setName('post-api-unit-add');
+  $this->post('/edit', \UnitApi::class . ':doEdit')->setName('post-api-unit-edit');
+  $this->get('/edit', \UnitApi::class . ':edit')->setName('api-unit-edit');
+  $this->post('/delete', \UnitApi::class . ':doDelete')->setName('post-api-unit-delete');
+});
+
+$app->group('/employee', function () {
+  $this->get('', \EmployeeController::class . ':lists')->setName('employee-list');
+  $this->get('/add', \EmployeeController::class . ':add')->setName('employee-add');
+  $this->get('/edit', \EmployeeController::class . ':edit')->setName('employee-edit');
+});
+
+$app->group('/api/employee', function () {
+  $this->get('/lists', \EmployeeApi::class . ':lists')->setName('api-employee-lists');
+  $this->post('/add', \EmployeeApi::class . ':doAdd')->setName('post-api-employee-add');
+  $this->post('/edit', \EmployeeApi::class . ':doEdit')->setName('post-api-employee-edit');
+  $this->get('/edit', \EmployeeApi::class . ':edit')->setName('api-employee-edit');
+  $this->post('/delete', \EmployeeApi::class . ':doDelete')->setName('post-api-employee-delete');
+});

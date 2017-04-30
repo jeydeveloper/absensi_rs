@@ -26,4 +26,22 @@ class UnitModel extends Model
       $patient = UnitModel::where('uni_id', $id)->first();
       return $patient;
     }
+
+    public static function getOptNonVoid()
+    {
+      $arrData = array();
+
+      $result = UnitModel::where('uni_void', 0)->get();
+
+      if(!empty($result)) {
+        foreach ($result as $key => $value) {
+          $arrData[$value->uni_bag_id][$value->uni_id] = array(
+            'key' => $value->uni_id,
+            'value' => $value->uni_name,
+          );
+        }
+      }
+
+      return $arrData;
+    }
 }

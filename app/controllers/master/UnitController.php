@@ -3,43 +3,30 @@
 namespace App\Controllers\Master;
 
 use Interop\Container\ContainerInterface;
+use Gettext\Translator;
+use App\Models\BagianModel as Bagian;
 
-class UnitController
+class UnitController extends \App\Controllers\BaseController
 {
     protected $ci;
+    protected $data;
 
     public function __construct(ContainerInterface $ci)
     {
+        parent::__construct();
         $this->ci = $ci;
+
+        $this->data['primaryKey'] = 'uni_id';
+        $this->data['inputFocus'] = 'uni_name';
+        $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
     }
 
     public function lists($request, $response, $args)
     {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /unit/list' route");
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/unit/list' route");
 
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+        $this->data['optBagian'] = Bagian::getOptNonVoid();
 
-        return $this->ci->get('renderer')->render($response, 'unit/list.phtml', $data);
-    }
-
-    public function add($request, $response, $args)
-    {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /unit/add' route");
-
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
-
-        return $this->ci->get('renderer')->render($response, 'unit/add.phtml', $data);
-    }
-
-    public function edit($request, $response, $args)
-    {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /unit/edit' route");
-
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
-
-        $ptn_id = $request->getParam('ptn_id');
-        $data['ptn_id'] = $ptn_id;
-
-        return $this->ci->get('renderer')->render($response, 'unit/edit.phtml', $data);
+        return $this->ci->get('renderer')->render($response, 'master/unit/list.phtml', $this->data);
     }
 }

@@ -86,3 +86,27 @@ $container['StatusController'] = function($c) {
 $container['StatusApi'] = function($c) {
     return new App\Api\StatusApi($c);
 };
+
+$container['JabatanController'] = function($c) {
+    return new App\Controllers\Master\JabatanController($c);
+};
+
+$container['JabatanApi'] = function($c) {
+    return new App\Api\JabatanApi($c);
+};
+
+$container['UnitController'] = function($c) {
+    return new App\Controllers\Master\UnitController($c);
+};
+
+$container['UnitApi'] = function($c) {
+    return new App\Api\UnitApi($c);
+};
+
+$container['EmployeeController'] = function($c) {
+    return new App\Controllers\Master\EmployeeController($c);
+};
+
+$container['EmployeeApi'] = function($c) {
+    return new App\Api\EmployeeApi($c);
+};
