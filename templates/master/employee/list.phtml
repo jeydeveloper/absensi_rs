@@ -25,6 +25,8 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
 
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
+
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
@@ -36,6 +38,11 @@
     }
     .pd-tb-10 {
       padding: 10px 0;
+    }
+    .tb-active {
+      background-color: #34495e !important;
+      border-color: #34495e !important;
+      color: #fff !important;
     }
     </style>
 
@@ -229,39 +236,234 @@
                 <h4 class="modal-title">Tambah Employee</h4>
             </div>
             <form action="<?php echo $baseUrl; ?>api/employee/add" role="form" id="form_2" class="pd-tb-10">
-            <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
-            <div class="modal-body custom">
-                <div class="form-group"><label for="emp_name">Nama Employee</label> <input type="text" id="emp_name" name="emp_name" placeholder="Isi nama status" class="form-control" required></div>
-            </div>
-            <div class="modal-body custom">
-                <div class="form-group"><label for="emp_uni_id">Nama Unit</label>
-                  <select id="emp_uni_id" name="emp_uni_id" placeholder="Isi nama unit" class="form-control" required>
-                    <<option value="">-- Pilih Unit --</option>
-                    <?php foreach($optUnit as $key1 => $value1): ?>
-                      <optgroup label="<?php echo $key1; ?>">
-                      <?php foreach($value1 as $value2): ?>
-                      <option value="<?php echo $value2['key']; ?>"><?php echo $value2['value']; ?></option>
-                      <?php endforeach; ?>
-                      </optgroup>
-                    <?php endforeach; ?>
-                  </select>
+                <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
+                <div class="modal-body">
+                  <div class="text-center m-b-md" id="wizardControl">
+                      <a class="btn btn-default ln-tb-step tb-active" href="#step1" data-toggle="tab" id="ln-tb-step1">Step 1 - Personal data</a>
+                      <a class="btn btn-default ln-tb-step" href="#step2" data-toggle="tab" id="ln-tb-step2">Step 2 - Address & Contact</a>
+                      <a class="btn btn-default ln-tb-step" href="#step3" data-toggle="tab" id="ln-tb-step3">Step 3 - Bank & Insurance</a>
+                      <a class="btn btn-default ln-tb-step" href="#step4" data-toggle="tab" id="ln-tb-step4">Step 4 - Employee Info</a>
+                  </div>
+                  <div class="tab-content">
+                    <div id="step1" class="p-m tab-pane active">
+                        <div class="row text-center">
+                          <div class="col-lg-12">
+                              <i class="pe-7s-user fa-5x text-muted"></i>
+                              <p class="small m-t-md">
+                                  This is personal data information
+                              </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_name">Nama Employee</label>
+                                      <input type="text" id="emp_name" name="emp_name" placeholder="Isi nama status" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_initial">Initial</label>
+                                      <input type="text" id="emp_initial" name="emp_initial" placeholder="Isi initial" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_code">Code</label>
+                                      <input type="text" id="emp_code" name="emp_code" placeholder="Isi employee code" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_NIK">NIK</label>
+                                      <input type="text" id="emp_NIK" name="emp_NIK" placeholder="Isi employee NIK" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                      <label for="emp_gender">Gender</label>
+                                      <input type="text" id="emp_gender" name="emp_gender" placeholder="Isi gender" class="form-control" required>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                      <div class="row">
+                                        <div class="form-group col-lg-6">
+                                          <label for="emp_birthplace">Birth Place</label>
+                                          <input type="text" id="emp_birthplace" name="emp_birthplace" placeholder="Isi birth place" class="form-control">
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                          <label for="emp_birthdate">Birth Date</label>
+                                          <input type="text" id="emp_birthdate" name="emp_birthdate" placeholder="Isi birth date" class="form-control datapicker">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                      <label for="emp_religion">Religion</label>
+                                      <input type="text" id="emp_religion" name="emp_religion" placeholder="Isi religion" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                      <label for="emp_marital_status">Marital Status</label>
+                                      <input type="text" id="emp_marital_status" name="emp_marital_status" placeholder="Isi marital status" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step2" class="p-m tab-pane">
+                        <div class="row text-center">
+                          <div class="col-lg-12">
+                              <i class="pe-7s-id fa-5x text-muted"></i>
+                              <p class="small m-t-md">
+                                  This is address & contact data information
+                              </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                      <label for="emp_address1">Address 1</label>
+                                      <input type="text" id="emp_address1" name="emp_address1" placeholder="Isi address 1" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                      <label for="emp_address2">Address 2</label>
+                                      <input type="text" id="emp_address2" name="emp_address2" placeholder="Isi address 2" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                      <label for="emp_address3">Address 3</label>
+                                      <input type="text" id="emp_address3" name="emp_address3" placeholder="Isi address 3" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="emp_post_code">Post Code</label>
+                                        <input type="text" id="emp_post_code" name="emp_post_code" placeholder="Isi post code" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                      <label for="emp_ext_phone">Ext Phone</label>
+                                      <input type="text" id="emp_ext_phone" name="emp_ext_phone" placeholder="Isi ext phone" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                      <label for="emp_office_phone">Office Phone</label>
+                                      <input type="text" id="emp_office_phone" name="emp_office_phone" placeholder="Isi office phone" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                      <label for="emp_home_phone">Home Phone</label>
+                                      <input type="text" id="emp_home_phone" name="emp_home_phone" placeholder="Isi home phone" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-3">
+                                      <label for="emp_mobile_phone">Mobile Phone</label>
+                                      <input type="text" id="emp_mobile_phone" name="emp_mobile_phone" placeholder="Isi mobile phone" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                      <label for="emp_pin_bb">Pin BB</label>
+                                      <input type="text" id="emp_pin_bb" name="emp_pin_bb" placeholder="Isi pin bb" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_email">Email</label>
+                                      <input type="text" id="emp_email" name="emp_email" placeholder="Isi email" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                      <label for="emp_website">Web Site</label>
+                                      <input type="text" id="emp_website" name="emp_website" placeholder="Isi website" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step3" class="p-m tab-pane">
+                        <div class="row text-center">
+                          <div class="col-lg-12">
+                              <i class="pe-7s-credit fa-5x text-muted"></i>
+                              <p class="small m-t-md">
+                                  This is bank & insurance data information
+                              </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label for="emp_acc_bank">Account Bank</label>
+                                        <input type="text" id="emp_acc_bank" name="emp_acc_bank" placeholder="Isi account bank" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="emp_acc_no">Account No</label>
+                                        <input type="text" id="emp_acc_no" name="emp_acc_no" placeholder="Isi account no" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="emp_acc_name">Account Name</label>
+                                        <input type="text" id="emp_acc_name" name="emp_acc_name" placeholder="Isi account name" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_insurance">Insurance Name</label>
+                                        <input type="text" id="emp_insurance" name="emp_insurance" placeholder="Isi insurance name" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_insurance_no">Insurance No</label>
+                                        <input type="text" id="emp_insurance_no" name="emp_insurance_no" placeholder="Isi insurance no" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step4" class="p-m tab-pane">
+                        <div class="row text-center">
+                          <div class="col-lg-12">
+                              <i class="pe-7s-medal fa-5x text-muted"></i>
+                              <p class="small m-t-md">
+                                  This is employee data information
+                              </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_active">Employee Active</label> <input type="text" id="emp_active" name="emp_active" placeholder="Isi employee active" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_start_date">Start Date</label> <input type="text" id="emp_start_date" name="emp_start_date" placeholder="Isi start date" class="form-control datapicker">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_out_date">Out Date</label> <input type="text" id="emp_out_date" name="emp_out_date" placeholder="Isi out date" class="form-control datapicker">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label for="emp_reason_out">Reason Out</label> <input type="text" id="emp_reason_out" name="emp_reason_out" placeholder="Isi reason out" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="emp_photo">Photo</label> <input type="text" id="emp_photo" name="emp_photo" placeholder="Isi photo" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="emp_base_salary">Base Salary</label> <input type="text" id="emp_base_salary" name="emp_base_salary" placeholder="Isi base salary" class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="emp_uni_id">Nama Unit</label>
+                                        <select id="emp_uni_id" name="emp_uni_id" placeholder="Isi nama unit" class="form-control">
+                                          <<option value="">-- Pilih Unit --</option>
+                                          <?php foreach($optUnit as $key1 => $value1): ?>
+                                            <optgroup label="<?php echo $key1; ?>">
+                                            <?php foreach($value1 as $value2): ?>
+                                            <option value="<?php echo $value2['key']; ?>"><?php echo $value2['value']; ?></option>
+                                            <?php endforeach; ?>
+                                            </optgroup>
+                                          <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="emp_jab_id">Nama Jabatan</label>
+                                        <select id="emp_jab_id" name="emp_jab_id" placeholder="Isi nama jabatan" class="form-control">
+                                          <<option value="">-- Pilih Jabatan --</option>
+                                          <?php foreach($optJabatan as $value): ?>
+                                          <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                          <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
-            <div class="modal-body custom">
-                <div class="form-group"><label for="emp_jab_id">Nama Jabatan</label>
-                  <select id="emp_jab_id" name="emp_jab_id" placeholder="Isi nama jabatan" class="form-control" required>
-                    <<option value="">-- Pilih Jabatan --</option>
-                    <?php foreach($optJabatan as $value): ?>
-                    <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                <div class="modal-footer">
+                    <div style="display: inline-block;float: left;">
+                      <label><input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label>
+                    </div>
+                    <a class="btn btn-default prev" href="#">Previous</a>
+                    <a class="btn btn-default next" href="#">Next</a>
+                    <button class="ladda-button ladda-button-demo btn btn-success" data-style="expand-right">Save</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right">Save</button>
-            </div>
             </form>
         </div>
     </div>
@@ -299,6 +501,10 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/moment/moment.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
 
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
@@ -442,6 +648,27 @@
             frm.attr('action', '<?php echo $baseUrl ?>api/employee/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');
+        });
+
+        $('.ln-tb-step').click(function(){
+          $('.ln-tb-step').removeClass('tb-active');
+          $(this).addClass('tb-active');
+        });
+
+        $('.prev').click(function(){
+          var id = ($('.tb-active').attr('href')).replace( /^\D+/g, '');
+          id = parseInt(id);
+          if(id > 1) $('#ln-tb-step'+(id-1)).trigger('click');
+        });
+
+        $('.next').click(function(){
+          var id = ($('.tb-active').attr('href')).replace( /^\D+/g, '');
+          id = parseInt(id);
+          if(id < 4) $('#ln-tb-step'+(id+1)).trigger('click');
+        });
+
+        $('.datapicker').datepicker({autclose: true}).on('changeDate', function (ev) {
+          $(this).datepicker('hide');
         });
 
     });
