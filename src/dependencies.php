@@ -110,3 +110,19 @@ $container['EmployeeController'] = function($c) {
 $container['EmployeeApi'] = function($c) {
     return new App\Api\EmployeeApi($c);
 };
+
+$container['HolidayController'] = function($c) {
+    return new App\Controllers\Attendance\HolidayController($c);
+};
+
+$container['HolidayApi'] = function($c) {
+    return new App\Api\HolidayApi($c);
+};
+
+$container['CutiController'] = function($c) {
+    return new App\Controllers\Attendance\CutiController($c);
+};
+
+$container['CutiApi'] = function($c) {
+    return new App\Api\CutiApi($c);
+};

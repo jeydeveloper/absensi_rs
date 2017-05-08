@@ -81,3 +81,31 @@ $app->group('/api/employee', function () {
   $this->get('/edit', \EmployeeApi::class . ':edit')->setName('api-employee-edit');
   $this->post('/delete', \EmployeeApi::class . ':doDelete')->setName('post-api-employee-delete');
 });
+
+$app->group('/holiday', function () {
+  $this->get('', \HolidayController::class . ':lists')->setName('holiday-list');
+  $this->get('/add', \HolidayController::class . ':add')->setName('holiday-add');
+  $this->get('/edit', \HolidayController::class . ':edit')->setName('holiday-edit');
+});
+
+$app->group('/api/holiday', function () {
+  $this->get('/lists', \HolidayApi::class . ':lists')->setName('api-holiday-lists');
+  $this->post('/add', \HolidayApi::class . ':doAdd')->setName('post-api-holiday-add');
+  $this->post('/edit', \HolidayApi::class . ':doEdit')->setName('post-api-holiday-edit');
+  $this->get('/edit', \HolidayApi::class . ':edit')->setName('api-holiday-edit');
+  $this->post('/delete', \HolidayApi::class . ':doDelete')->setName('post-api-holiday-delete');
+});
+
+$app->group('/cuti', function () {
+  $this->get('', \CutiController::class . ':lists')->setName('cuti-list');
+  $this->get('/add', \CutiController::class . ':add')->setName('cuti-add');
+  $this->get('/edit', \CutiController::class . ':edit')->setName('cuti-edit');
+});
+
+$app->group('/api/cuti', function () {
+  $this->get('/lists', \CutiApi::class . ':lists')->setName('api-cuti-lists');
+  $this->post('/add', \CutiApi::class . ':doAdd')->setName('post-api-cuti-add');
+  $this->post('/edit', \CutiApi::class . ':doEdit')->setName('post-api-cuti-edit');
+  $this->get('/edit', \CutiApi::class . ':edit')->setName('api-cuti-edit');
+  $this->post('/delete', \CutiApi::class . ':doDelete')->setName('post-api-cuti-delete');
+});
