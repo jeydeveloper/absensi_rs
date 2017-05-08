@@ -102,3 +102,35 @@ ALTER TABLE `abs_employee`
 
 ALTER TABLE `abs_employee`
   MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `abs_cuti` (
+  `cut_id` int(11) NOT NULL,
+  `cut_name` varchar(200) NOT NULL,
+  `cut_jumlah` int(11) NOT NULL,
+  `cut_keterangan` text NOT NULL,
+  `cut_void` tinyint(4) NOT NULL,
+  `cut_created_at` datetime NOT NULL,
+  `cut_updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_cuti`
+  ADD PRIMARY KEY (`cut_id`);
+
+ALTER TABLE `abs_cuti`
+  MODIFY `cut_id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `abs_holiday` (
+  `hol_id` int(11) NOT NULL,
+  `hol_name` varchar(200) NOT NULL,
+  `hol_tanggal` date NOT NULL,
+  `hol_keterangan` text NOT NULL,
+  `hol_void` tinyint(4) NOT NULL,
+  `hol_created_at` datetime NOT NULL,
+  `hol_updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_holiday`
+  ADD PRIMARY KEY (`hol_id`);
+
+ALTER TABLE `abs_holiday`
+  MODIFY `hol_id` int(11) NOT NULL AUTO_INCREMENT;
