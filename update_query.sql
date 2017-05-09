@@ -134,3 +134,22 @@ ALTER TABLE `abs_holiday`
 
 ALTER TABLE `abs_holiday`
   MODIFY `hol_id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `abs_employee_cuti` (
+  `emcu_id` int(11) NOT NULL,
+  `emcu_emp_id` int(11) NOT NULL,
+  `emcu_name` varchar(100) NOT NULL,
+  `emcu_keterangan` text NOT NULL,
+  `emcu_tanggal_awal` date NOT NULL,
+  `emcu_tanggal_akhir` date NOT NULL,
+  `emcu_status` tinyint(4) NOT NULL,
+  `emcu_void` tinyint(4) NOT NULL,
+  `emcu_created_at` datetime NOT NULL,
+  `emcu_updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_employee_cuti`
+  ADD PRIMARY KEY (`emcu_id`);
+
+ALTER TABLE `abs_employee_cuti`
+  MODIFY `emcu_id` int(11) NOT NULL AUTO_INCREMENT;
