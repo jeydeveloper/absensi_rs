@@ -126,3 +126,11 @@ $container['CutiController'] = function($c) {
 $container['CutiApi'] = function($c) {
     return new App\Api\CutiApi($c);
 };
+
+$container['IzinController'] = function($c) {
+    return new App\Controllers\Attendance\IzinController($c);
+};
+
+$container['IzinApi'] = function($c) {
+    return new App\Api\IzinApi($c);
+};

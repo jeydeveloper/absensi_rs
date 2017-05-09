@@ -26,4 +26,22 @@ class EmployeeModel extends Model
       $patient = EmployeeModel::where('emp_id', $id)->first();
       return $patient;
     }
+
+    public static function getOptNonVoid()
+    {
+      $arrData = array();
+
+      $result = EmployeeModel::where('emp_void', 0)->get();
+
+      if(!empty($result)) {
+        foreach ($result as $key => $value) {
+          $arrData[] = array(
+            'key' => $value->emp_id,
+            'value' => $value->emp_name,
+          );
+        }
+      }
+
+      return $arrData;
+    }
 }

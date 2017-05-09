@@ -109,3 +109,17 @@ $app->group('/api/cuti', function () {
   $this->get('/edit', \CutiApi::class . ':edit')->setName('api-cuti-edit');
   $this->post('/delete', \CutiApi::class . ':doDelete')->setName('post-api-cuti-delete');
 });
+
+$app->group('/izin', function () {
+  $this->get('', \IzinController::class . ':lists')->setName('izin-list');
+  $this->get('/add', \IzinController::class . ':add')->setName('izin-add');
+  $this->get('/edit', \IzinController::class . ':edit')->setName('izin-edit');
+});
+
+$app->group('/api/izin', function () {
+  $this->get('/lists', \IzinApi::class . ':lists')->setName('api-izin-lists');
+  $this->post('/add', \IzinApi::class . ':doAdd')->setName('post-api-izin-add');
+  $this->post('/edit', \IzinApi::class . ':doEdit')->setName('post-api-izin-edit');
+  $this->get('/edit', \IzinApi::class . ':edit')->setName('api-izin-edit');
+  $this->post('/delete', \IzinApi::class . ':doDelete')->setName('post-api-izin-delete');
+});
