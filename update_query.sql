@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `abs_bagian`;
 CREATE TABLE `abs_bagian` (
   `bag_id` int(11) NOT NULL,
   `bag_name` varchar(100) NOT NULL,
@@ -12,6 +13,7 @@ ALTER TABLE `abs_bagian`
 ALTER TABLE `abs_bagian`
   MODIFY `bag_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_status`;
 CREATE TABLE `abs_status` (
   `sta_id` int(11) NOT NULL,
   `sta_name` varchar(100) NOT NULL,
@@ -26,6 +28,7 @@ ALTER TABLE `abs_status`
 ALTER TABLE `abs_status`
   MODIFY `sta_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_unit`;
 CREATE TABLE `abs_unit` (
   `uni_id` int(11) NOT NULL,
   `uni_name` varchar(100) NOT NULL,
@@ -41,6 +44,7 @@ ALTER TABLE `abs_unit`
 ALTER TABLE `abs_unit`
   MODIFY `uni_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_jabatan`;
 CREATE TABLE `abs_jabatan` (
 `jab_id` int(11) NOT NULL,
 `jab_name` varchar(100) NOT NULL,
@@ -56,6 +60,7 @@ ALTER TABLE `abs_jabatan`
 ALTER TABLE `abs_jabatan`
   MODIFY `jab_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_employee`;
 CREATE TABLE `abs_employee` (
   `emp_id` int(11) NOT NULL,
   `emp_code` varchar(15) NOT NULL DEFAULT ' ' COMMENT 'Employee Code',
@@ -103,6 +108,7 @@ ALTER TABLE `abs_employee`
 ALTER TABLE `abs_employee`
   MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_cuti`;
 CREATE TABLE `abs_cuti` (
   `cut_id` int(11) NOT NULL,
   `cut_name` varchar(200) NOT NULL,
@@ -119,6 +125,7 @@ ALTER TABLE `abs_cuti`
 ALTER TABLE `abs_cuti`
   MODIFY `cut_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_holiday`;
 CREATE TABLE `abs_holiday` (
   `hol_id` int(11) NOT NULL,
   `hol_name` varchar(200) NOT NULL,
@@ -135,6 +142,7 @@ ALTER TABLE `abs_holiday`
 ALTER TABLE `abs_holiday`
   MODIFY `hol_id` int(11) NOT NULL AUTO_INCREMENT;
 
+DROP TABLE IF EXISTS `abs_employee_cuti`;
 CREATE TABLE `abs_employee_cuti` (
   `emcu_id` int(11) NOT NULL,
   `emcu_emp_id` int(11) NOT NULL,
@@ -153,3 +161,40 @@ ALTER TABLE `abs_employee_cuti`
 
 ALTER TABLE `abs_employee_cuti`
   MODIFY `emcu_id` int(11) NOT NULL AUTO_INCREMENT;
+
+DROP TABLE IF EXISTS `abs_schedule`;
+CREATE TABLE `abs_schedule` (
+  `schd_id` int(11) NOT NULL,
+  `schd_name` varchar(200) NOT NULL,
+  `schd_waktu_awal` time NOT NULL,
+  `schd_waktu_akhir` time NOT NULL,
+  `schd_keterangan` text NOT NULL,
+  `schd_void` tinyint(4) NOT NULL,
+  `schd_created_at` datetime NOT NULL,
+  `schd_updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_schedule`
+  ADD PRIMARY KEY (`schd_id`);
+
+ALTER TABLE `abs_schedule`
+  MODIFY `schd_id` int(11) NOT NULL AUTO_INCREMENT;
+
+DROP TABLE IF EXISTS `abs_employee_overtime`;
+CREATE TABLE `abs_employee_overtime` (
+  `emov_id` int(11) NOT NULL,
+  `emov_emp_id` int(11) NOT NULL,
+  `emov_name` varchar(100) NOT NULL,
+  `emov_keterangan` text NOT NULL,
+  `emov_tanggal` date NOT NULL,
+  `emov_status` tinyint(4) NOT NULL,
+  `emov_void` tinyint(4) NOT NULL,
+  `emov_created_at` datetime NOT NULL,
+  `emov_updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_employee_overtime`
+  ADD PRIMARY KEY (`emov_id`);
+
+ALTER TABLE `abs_employee_overtime`
+  MODIFY `emov_id` int(11) NOT NULL AUTO_INCREMENT;
