@@ -30,6 +30,10 @@ class EmployeeController extends \App\Controllers\BaseController
 
         $this->data['optJabatan'] = Jabatan::getOptNonVoid();
 
+        $this->data['optReligion'] = $this->ci->get('settings')['dataStatic']['religion'];
+        $this->data['optStatusMarried'] = $this->ci->get('settings')['dataStatic']['statusMarried'];
+        $this->data['optStatusActived'] = $this->ci->get('settings')['dataStatic']['statusActived'];
+
         return $this->ci->get('renderer')->render($response, 'master/employee/list.phtml', $this->data);
     }
 }

@@ -298,6 +298,28 @@
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
 
+<script type="text/javascript">
+  function session_checking()
+  {
+    $.post( '<?php echo $baseUrl ?>api/session/check', function( data ) {
+        if(data.loggedIn == 0)
+        {
+            swal({
+                title: "Session Expired!!",
+                text: "Your will be redirect to the login page",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK"
+            },
+            function () {
+                location.reload();
+            });
+        }
+    }, 'json');
+  }
+  var validateSession = setInterval(session_checking, 5000);
+</script>
 
 <script>
 

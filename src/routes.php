@@ -151,3 +151,7 @@ $app->group('/api/schedule', function () {
   $this->get('/edit', \ScheduleApi::class . ':edit')->setName('api-schedule-edit');
   $this->post('/delete', \ScheduleApi::class . ':doDelete')->setName('post-api-schedule-delete');
 });
+
+$app->group('/api/session', function () {
+  $this->post('/check', \SessionApi::class . ':doCheck')->setName('post-api-session-check');
+});

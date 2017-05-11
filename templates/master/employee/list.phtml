@@ -301,11 +301,21 @@
                                     </div>
                                     <div class="form-group col-lg-12">
                                       <label for="emp_religion">Religion</label>
-                                      <input type="text" id="emp_religion" name="emp_religion" placeholder="Isi religion" class="form-control">
+                                      <select id="emp_religion" name="emp_religion" placeholder="Isi nama religion" class="form-control" required>
+                                        <<option value="">-- Pilih Religion --</option>
+                                        <?php foreach($optReligion as $value): ?>
+                                        <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
                                     </div>
                                     <div class="form-group col-lg-12">
                                       <label for="emp_marital_status">Marital Status</label>
-                                      <input type="text" id="emp_marital_status" name="emp_marital_status" placeholder="Isi marital status" class="form-control">
+                                      <select id="emp_marital_status" name="emp_marital_status" placeholder="Isi marital status" class="form-control" required>
+                                        <<option value="">-- Pilih Marital Status --</option>
+                                        <?php foreach($optStatusMarried as $value): ?>
+                                        <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
                                     </div>
                                 </div>
                             </div>
@@ -435,7 +445,7 @@
                                         <label for="emp_photo">Photo</label> <input type="text" id="emp_photo" name="emp_photo" placeholder="Isi photo" class="form-control">
                                     </div>
                                     <div class="form-group col-lg-12">
-                                        <label for="emp_base_salary">Base Salary</label> <input type="text" id="emp_base_salary" name="emp_base_salary" placeholder="Isi base salary" class="form-control">
+                                        <label for="emp_base_salary">Base Salary</label> <input type="text" id="emp_base_salary" name="emp_base_salary" placeholder="Isi base salary" class="form-control autonumeric">
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <label for="emp_uni_id">Nama Unit</label>
@@ -516,8 +526,33 @@
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/autonumeric/2.0.0/autoNumeric.min.js"></script>
+
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
+
+<script type="text/javascript">
+  function session_checking()
+  {
+    $.post( '<?php echo $baseUrl ?>api/session/check', function( data ) {
+        if(data.loggedIn == 0)
+        {
+            swal({
+                title: "Session Expired!!",
+                text: "Your will be redirect to the login page",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK"
+            },
+            function () {
+                location.reload();
+            });
+        }
+    }, 'json');
+  }
+  var validateSession = setInterval(session_checking, 5000);
+</script>
 
 
 <script>
@@ -658,6 +693,7 @@
             frm.attr('action', '<?php echo $baseUrl ?>api/employee/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');
+            $('#ln-tb-step1').trigger('click');
         });
 
         $('.ln-tb-step').click(function(){
@@ -680,6 +716,16 @@
         $('.datepicker').datepicker({autclose: true}).on('changeDate', function (ev) {
           $(this).datepicker('hide');
         });
+
+        // The options are...optional :)
+        const autoNumericOptionsEuro = {
+            digitGroupSeparator        : '.',
+            decimalCharacter           : ',',
+            minimumValue      : '0',
+            maximumValue : '1000000000'
+        };
+
+        $('.autonumeric').autoNumeric('init', autoNumericOptionsEuro);
 
     });
 

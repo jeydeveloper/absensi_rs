@@ -81,6 +81,7 @@ class EmployeeApi
       if(!empty($emp_birthdate)) $emp_birthdate = Helper::formatDBDate($emp_birthdate);
       if(!empty($emp_start_date)) $emp_start_date = Helper::formatDBDate($emp_start_date);
       if(!empty($emp_out_date)) $emp_out_date = Helper::formatDBDate($emp_out_date);
+      if(!empty($emp_base_salary)) $emp_base_salary = Helper::formatDBCurrency($emp_base_salary);
 
       $obj = new Employee;
       $obj->emp_name = $emp_name;
@@ -173,6 +174,7 @@ class EmployeeApi
       if(!empty($emp_birthdate)) $emp_birthdate = Helper::formatDBDate($emp_birthdate);
       if(!empty($emp_start_date)) $emp_start_date = Helper::formatDBDate($emp_start_date);
       if(!empty($emp_out_date)) $emp_out_date = Helper::formatDBDate($emp_out_date);
+      if(!empty($emp_base_salary)) $emp_base_salary = Helper::formatDBCurrency($emp_base_salary);
 
       $obj = Employee::find($emp_id);
       $obj->emp_name = $emp_name;
@@ -230,6 +232,7 @@ class EmployeeApi
         if(isset($obj->emp_birthdate)) $obj->emp_birthdate = Helper::formatDate($obj->emp_birthdate);
         if(isset($obj->emp_start_date)) $obj->emp_start_date = Helper::formatDate($obj->emp_start_date);
         if(isset($obj->emp_out_date)) $obj->emp_out_date = Helper::formatDate($obj->emp_out_date);
+        if(isset($obj->emp_base_salary)) $obj->emp_base_salary = Helper::formatCurrency($obj->emp_base_salary);
 
         $arrData['emp_id'] = $obj->emp_id;
         $arrData['emp_name'] = $obj->emp_name;

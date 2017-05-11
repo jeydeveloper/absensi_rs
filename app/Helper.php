@@ -22,4 +22,14 @@ class Helper
     {
         return date('Y-m-d H:i:s');
     }
+
+    public static function formatCurrency($curr)
+    {
+        return number_format($curr, 0, ',', '.');
+    }
+
+    public static function formatDBCurrency($curr)
+    {
+        return str_replace('.', '', $curr);
+    }
 }

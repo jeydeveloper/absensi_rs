@@ -23,7 +23,8 @@ $loggedInMiddleware = function ($request, $response, $next) {
     # needs to be logged in with.
     $publicRoutesArray = array(
         'login',
-        'post-login'
+        'post-login',
+        'post-api-session-check',
     );
 
     if (!isset($_SESSION['USERID']) && !in_array($routeName, $publicRoutesArray))

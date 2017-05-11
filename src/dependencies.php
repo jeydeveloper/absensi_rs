@@ -150,3 +150,7 @@ $container['ScheduleController'] = function($c) {
 $container['ScheduleApi'] = function($c) {
     return new App\Api\ScheduleApi($c);
 };
+
+$container['SessionApi'] = function($c) {
+    return new App\Api\SessionApi($c);
+};
