@@ -134,3 +134,19 @@ $container['IzinController'] = function($c) {
 $container['IzinApi'] = function($c) {
     return new App\Api\IzinApi($c);
 };
+
+$container['OvertimeController'] = function($c) {
+    return new App\Controllers\Attendance\OvertimeController($c);
+};
+
+$container['OvertimeApi'] = function($c) {
+    return new App\Api\OvertimeApi($c);
+};
+
+$container['ScheduleController'] = function($c) {
+    return new App\Controllers\Attendance\ScheduleController($c);
+};
+
+$container['ScheduleApi'] = function($c) {
+    return new App\Api\ScheduleApi($c);
+};

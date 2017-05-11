@@ -123,3 +123,31 @@ $app->group('/api/izin', function () {
   $this->get('/edit', \IzinApi::class . ':edit')->setName('api-izin-edit');
   $this->post('/delete', \IzinApi::class . ':doDelete')->setName('post-api-izin-delete');
 });
+
+$app->group('/overtime', function () {
+  $this->get('', \OvertimeController::class . ':lists')->setName('overtime-list');
+  $this->get('/add', \OvertimeController::class . ':add')->setName('overtime-add');
+  $this->get('/edit', \OvertimeController::class . ':edit')->setName('overtime-edit');
+});
+
+$app->group('/api/overtime', function () {
+  $this->get('/lists', \OvertimeApi::class . ':lists')->setName('api-overtime-lists');
+  $this->post('/add', \OvertimeApi::class . ':doAdd')->setName('post-api-overtime-add');
+  $this->post('/edit', \OvertimeApi::class . ':doEdit')->setName('post-api-overtime-edit');
+  $this->get('/edit', \OvertimeApi::class . ':edit')->setName('api-overtime-edit');
+  $this->post('/delete', \OvertimeApi::class . ':doDelete')->setName('post-api-overtime-delete');
+});
+
+$app->group('/schedule', function () {
+  $this->get('', \ScheduleController::class . ':lists')->setName('schedule-list');
+  $this->get('/add', \ScheduleController::class . ':add')->setName('schedule-add');
+  $this->get('/edit', \ScheduleController::class . ':edit')->setName('schedule-edit');
+});
+
+$app->group('/api/schedule', function () {
+  $this->get('/lists', \ScheduleApi::class . ':lists')->setName('api-schedule-lists');
+  $this->post('/add', \ScheduleApi::class . ':doAdd')->setName('post-api-schedule-add');
+  $this->post('/edit', \ScheduleApi::class . ':doEdit')->setName('post-api-schedule-edit');
+  $this->get('/edit', \ScheduleApi::class . ':edit')->setName('api-schedule-edit');
+  $this->post('/delete', \ScheduleApi::class . ':doDelete')->setName('post-api-schedule-delete');
+});
