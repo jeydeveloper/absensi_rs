@@ -170,3 +170,11 @@ $container['SettingController'] = function($c) {
 $container['SettingApi'] = function($c) {
     return new App\Api\SettingApi($c);
 };
+
+$container['MappingjadwalController'] = function($c) {
+    return new App\Controllers\Proses\MappingjadwalController($c);
+};
+
+$container['MappingjadwalApi'] = function($c) {
+    return new App\Api\MappingjadwalApi($c);
+};

@@ -15,9 +15,14 @@ class EmployeeModel extends Model
         return EmployeeModel::all();
     }
 
-    public static function getAllNonVoid()
+    public static function getAllNonVoid($limit = 0, $offset = 0)
     {
-      $patient = EmployeeModel::where('emp_void', 0)->get();
+      if(!empty($limit)) {
+        // echo "string - " . $offset; exit();
+        $patient = EmployeeModel::where('emp_void', 0)->limit($limit)->offset($offset)->get();
+      } else {
+        $patient = EmployeeModel::where('emp_void', 0)->get();
+      }
       return $patient;
     }
 

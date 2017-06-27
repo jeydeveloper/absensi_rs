@@ -178,3 +178,12 @@ $app->group('/api/setting', function () {
   $this->get('/edit', \SettingApi::class . ':edit')->setName('api-setting-edit');
   $this->post('/delete', \SettingApi::class . ':doDelete')->setName('post-api-setting-delete');
 });
+
+$app->group('/mapping-jadwal', function () {
+  $this->get('', \MappingjadwalController::class . ':lists')->setName('mappingjadwal-list');
+});
+
+$app->group('/api/mappingjadwal', function () {
+  $this->get('/lists', \MappingjadwalApi::class . ':lists')->setName('api-mappingjadwal-lists');
+  $this->post('/edit', \MappingjadwalApi::class . ':doEdit')->setName('post-api-mappingjadwal-edit');
+});

@@ -10,6 +10,7 @@
             <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
             <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
             <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
+            <li><a href="<?php echo $baseUrl; ?>setting">Setting</a></li>
         </ul>
     </li>
     <li <?php echo ($menuActived == 'attendance' ? 'class="active"' : ''); ?>>
@@ -24,6 +25,7 @@
     <li <?php echo ($menuActived == 'prosesAbsensi' ? 'class="active"' : ''); ?>>
         <a href="#"><span class="nav-label">Proses Absensi</span><span class="fa arrow"></span> </a>
         <ul class="nav nav-second-level">
+            <li><a href="<?php echo $baseUrl; ?>mapping-jadwal">Mapping Jadwal</a></li>
             <li><a href="<?php echo $baseUrl; ?>jadwal-kerja">Jadwal Kerja</a></li>
         </ul>
     </li>
