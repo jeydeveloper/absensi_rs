@@ -24,6 +24,7 @@ class ScheduleApi
         $result = Schedule::getAllNonVoid();
         if(!empty($result)) {
           foreach ($result as $key => $value) {
+            $color = '<div style="width:20px;height:20px;border:0;background-color:'.$value->schd_color.'">&nbsp;</div>';
             $arrData['data'][] = array(
               ($key + 1),
               $value->schd_id,
@@ -31,7 +32,7 @@ class ScheduleApi
               $value->schd_name,
               $value->schd_waktu_awal,
               $value->schd_waktu_akhir,
-              $value->schd_keterangan,
+              $color,
             );
           }
         }
