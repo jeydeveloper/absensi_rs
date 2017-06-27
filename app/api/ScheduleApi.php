@@ -27,6 +27,7 @@ class ScheduleApi
             $arrData['data'][] = array(
               ($key + 1),
               $value->schd_id,
+              $value->schd_code,
               $value->schd_name,
               $value->schd_waktu_awal,
               $value->schd_waktu_akhir,
@@ -49,6 +50,8 @@ class ScheduleApi
       $schd_waktu_awal = $request->getParam('schd_waktu_awal');
       $schd_waktu_akhir = $request->getParam('schd_waktu_akhir');
       $schd_keterangan = $request->getParam('schd_keterangan');
+      $schd_code = $request->getParam('schd_code');
+      $schd_color = $request->getParam('schd_color');
 
       if(!empty($schd_tanggal)) $schd_tanggal = Helper::formatDBDate($schd_tanggal);
 
@@ -58,6 +61,8 @@ class ScheduleApi
       $obj->schd_waktu_akhir = $schd_waktu_akhir;
       $obj->schd_keterangan = $schd_keterangan;
       $obj->schd_created_at = Helper::dateNowDB();
+      $obj->schd_code = $schd_code;
+      $obj->schd_color = $schd_color;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -81,6 +86,8 @@ class ScheduleApi
       $schd_waktu_awal = $request->getParam('schd_waktu_awal');
       $schd_waktu_akhir = $request->getParam('schd_waktu_akhir');
       $schd_keterangan = $request->getParam('schd_keterangan');
+      $schd_code = $request->getParam('schd_code');
+      $schd_color = $request->getParam('schd_color');
 
       if(!empty($schd_tanggal)) $schd_tanggal = Helper::formatDBDate($schd_tanggal);
 
@@ -90,6 +97,8 @@ class ScheduleApi
       $obj->schd_waktu_akhir = $schd_waktu_akhir;
       $obj->schd_keterangan = $schd_keterangan;
       $obj->schd_updated_at = Helper::dateNowDB();
+      $obj->schd_code = $schd_code;
+      $obj->schd_color = $schd_color;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -115,6 +124,8 @@ class ScheduleApi
         $arrData['schd_waktu_awal'] = $obj->schd_waktu_awal;
         $arrData['schd_waktu_akhir'] = $obj->schd_waktu_akhir;
         $arrData['schd_keterangan'] = $obj->schd_keterangan;
+        $arrData['schd_code'] = $obj->schd_code;
+        $arrData['schd_color'] = $obj->schd_color;
       }
 
       return $response->withJson($arrData);

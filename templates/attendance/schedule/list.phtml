@@ -27,6 +27,8 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/clockpicker/dist/bootstrap-clockpicker.min.css" />
 
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/spectrum/spectrum.css" />
+
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
@@ -131,31 +133,7 @@
             </div>
         </div>
 
-        <ul class="nav" id="side-menu">
-            <li class="active">
-                <a href="index.html"> <span class="nav-label">Dashboard</span> <span class="label label-success pull-right">v.1</span> </a>
-            </li>
-            <li>
-                <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
-                </ul>
-            </li>
-            <li class="active">
-                <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>izin">Izin</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>overtime">Overtime</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>schedule">Schedule</a></li>
-                </ul>
-            </li>
-        </ul>
+        <?php echo $sideMenu; ?>
     </div>
 </aside>
 
@@ -202,6 +180,7 @@
                         <tr>
                             <th width="5%">No.</th>
                             <th>ID</th>
+                            <th>Code</th>
                             <th>Name</th>
                             <th>Waktu Awal</th>
                             <th>Waktu Akhir</th>
@@ -241,6 +220,8 @@
             <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body">
                 <div class="form-group"><label for="schd_name">Nama Schedule</label> <input type="text" id="schd_name" name="schd_name" placeholder="Isi nama schedule" class="form-control" required></div>
+                <div class="form-group"><label for="schd_code">Code Schedule</label> <input type="text" id="schd_code" name="schd_code" placeholder="Isi kode schedule" class="form-control" required></div>
+                <div class="form-group"><label for="schd_color">Color Schedule</label> <input type="text" id="schd_color" name="schd_color" placeholder="Isi color schedule" class="form-control" required></div>
                 <div class="form-group">
                   <label for="schd_waktu_awal">Waktu Awal Schedule</label>
                   <div class="input-group clockpicker" data-autoclose="true">
@@ -259,7 +240,7 @@
                       </span>
                   </div>
                 </div>
-                <div class="form-group"><label for="schd_keterangan">Keterangan</label> <input type="text" id="schd_keterangan" name="schd_keterangan" placeholder="Isi keterangan" class="form-control" required></div>
+                <div class="form-group"><label for="schd_keterangan">Keterangan</label> <input type="text" id="schd_keterangan" name="schd_keterangan" placeholder="Isi keterangan" class="form-control"></div>
             </div>
             <div class="modal-footer">
                 <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
@@ -306,6 +287,8 @@
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
 
+<script src="<?php echo $baseUrl; ?>assets/vendor/spectrum/spectrum.js"></script>
+
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
 
@@ -335,6 +318,8 @@
 <script>
 
     $(function () {
+
+      $("#schd_color").spectrum();
 
       var l = $( '.ladda-button-demo' ).ladda();
       var frm = $('#form_2');
@@ -375,8 +360,18 @@
 
         var fillInputForm = function(data) {
           $.each(data, function(idx, val){
-            $('#'+idx).val(val);
+            if(idx == 'schd_color') {
+              if(val != '') {
+                $('#'+idx).spectrum("set", val);
+              } else {
+                $('#'+idx).spectrum("set", '');
+              }
+            } else {
+              $('#'+idx).val(val);
+            }
           });
+
+          $("#triggerSet").spectrum("set", $("#enterAColor").val());
         };
 
         $('#example1 tbody').on( 'click', '.btnEdit', function () {

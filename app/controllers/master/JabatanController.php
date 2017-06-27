@@ -24,6 +24,9 @@ class JabatanController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/jabatan/list' route");
 
+        $this->data['menuActived'] = 'master';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
         return $this->ci->get('renderer')->render($response, 'master/jabatan/list.phtml', $this->data);
     }
 }

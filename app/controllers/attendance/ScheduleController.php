@@ -24,6 +24,9 @@ class ScheduleController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /attendance/schedule/list' route");
 
+        $this->data['menuActived'] = 'attendance';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
         return $this->ci->get('renderer')->render($response, 'attendance/schedule/list.phtml', $this->data);
     }
 }

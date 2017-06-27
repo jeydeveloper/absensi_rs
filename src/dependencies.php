@@ -120,7 +120,7 @@ $container['HolidayApi'] = function($c) {
 };
 
 $container['CutiController'] = function($c) {
-    return new App\Controllers\Attendance\CutiController($c);
+    return new App\Controllers\Report\CutiController($c);
 };
 
 $container['CutiApi'] = function($c) {
@@ -153,4 +153,20 @@ $container['ScheduleApi'] = function($c) {
 
 $container['SessionApi'] = function($c) {
     return new App\Api\SessionApi($c);
+};
+
+$container['JadwalkerjaController'] = function($c) {
+    return new App\Controllers\Proses\JadwalkerjaController($c);
+};
+
+$container['JadwalkerjaApi'] = function($c) {
+    return new App\Api\JadwalkerjaApi($c);
+};
+
+$container['SettingController'] = function($c) {
+    return new App\Controllers\Master\SettingController($c);
+};
+
+$container['SettingApi'] = function($c) {
+    return new App\Api\SettingApi($c);
 };

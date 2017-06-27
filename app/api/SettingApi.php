@@ -3,10 +3,10 @@
 namespace App\Api;
 
 use Interop\Container\ContainerInterface;
-use App\Models\StatusModel as Status;
+use App\Models\SettingModel as Setting;
 use App\Helper;
 
-class StatusApi
+class SettingApi
 {
     protected $ci;
 
@@ -21,14 +21,14 @@ class StatusApi
           'data' => array()
         );
 
-        $result = Status::getAllNonVoid();
+        $result = Setting::getAllNonVoid();
         if(!empty($result)) {
           foreach ($result as $key => $value) {
             $arrData['data'][] = array(
               ($key + 1),
-              $value->sta_id,
-              $value->sta_name,
-              (!empty($value->sta_type) ? ($value->sta_type == 1 ? 'Hadir' : 'Tidak Hadir') : '-'),
+              $value->sett_id,
+              $value->sett_name,
+              $value->sett_value,
             );
           }
         }
@@ -43,13 +43,13 @@ class StatusApi
           'success' => false,
       );
 
-      $sta_name = $request->getParam('sta_name');
-      $sta_type = $request->getParam('sta_type');
+      $sett_name = $request->getParam('sett_name');
+      $sett_value = $request->getParam('sett_value');
 
-      $obj = new Status;
-      $obj->sta_name = $sta_name;
-      $obj->sta_type = $sta_type;
-      $obj->sta_created_at = Helper::dateNowDB();
+      $obj = new Setting;
+      $obj->sett_name = $sett_name;
+      $obj->sett_value = $sett_value;
+      $obj->sett_created_at = Helper::dateNowDB();
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -68,14 +68,14 @@ class StatusApi
           'success' => false,
       );
 
-      $sta_id = $request->getParam('sta_id');
-      $sta_name = $request->getParam('sta_name');
-      $sta_type = $request->getParam('sta_type');
+      $sett_id = $request->getParam('sett_id');
+      $sett_name = $request->getParam('sett_name');
+      $sett_value = $request->getParam('sett_value');
 
-      $obj = Status::find($sta_id);
-      $obj->sta_name = $sta_name;
-      $obj->sta_type = $sta_type;
-      $obj->sta_updated_at = Helper::dateNowDB();
+      $obj = Setting::find($sett_id);
+      $obj->sett_name = $sett_name;
+      $obj->sett_value = $sett_value;
+      $obj->sett_updated_at = Helper::dateNowDB();
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -91,12 +91,12 @@ class StatusApi
     {
       $arrData = array();
 
-      $sta_id = $request->getParam('sta_id');
-      $obj = Status::find($sta_id);
+      $sett_id = $request->getParam('sett_id');
+      $obj = Setting::find($sett_id);
       if(!empty($obj)) {
-        $arrData['sta_id'] = $obj->sta_id;
-        $arrData['sta_name'] = $obj->sta_name;
-        $arrData['sta_type'] = !empty($obj->sta_type) ? $obj->sta_type : '';
+        $arrData['sett_id'] = $obj->sett_id;
+        $arrData['sett_name'] = $obj->sett_name;
+        $arrData['sett_value'] = $obj->sett_value;
       }
 
       return $response->withJson($arrData);
@@ -109,9 +109,9 @@ class StatusApi
           'success' => false,
       );
 
-      $sta_id = $request->getParam('sta_id');
-      $obj = Status::find($sta_id);
-      $obj->sta_void = 1;
+      $sett_id = $request->getParam('sett_id');
+      $obj = Setting::find($sett_id);
+      $obj->sett_void = 1;
 
       if($obj->save()) {
         $arrData['success'] = true;

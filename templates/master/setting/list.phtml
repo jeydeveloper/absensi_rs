@@ -25,8 +25,6 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
 
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
-
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
@@ -147,7 +145,7 @@
                   </ol>
               </div>
               <h2 class="font-light m-b-xs">
-                  Attendance Overtime
+                  Master Setting
               </h2>
               <small>Build a form with validation functionality</small>
           </div>
@@ -173,7 +171,7 @@
                             <th width="5%">No.</th>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Tanggal</th>
+                            <th>Value</th>
                             <th width="15%">Action</th>
                         </tr>
                         </thead>
@@ -204,14 +202,13 @@
         <div class="modal-content">
             <div class="color-line"></div>
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Overtime</h4>
+                <h4 class="modal-title">Edit Setting</h4>
             </div>
-            <form action="<?php echo $baseUrl; ?>api/overtime/add" role="form" id="form_2">
+            <form action="<?php echo $baseUrl; ?>api/setting/add" role="form" id="form_2">
             <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body">
-                <div class="form-group"><label for="emov_name">Nama overtime</label> <input type="text" id="emov_name" name="emov_name" placeholder="Isi nama overtime" class="form-control" required></div>
-                <div class="form-group"><label for="emov_tanggal">Tanggal</label> <input type="text" id="emov_tanggal" name="emov_tanggal" placeholder="Isi tanggal overtime" class="form-control datepicker" required></div>
-                <div class="form-group"><label for="emov_keterangan">Keterangan</label> <input type="text" id="emov_keterangan" name="emov_keterangan" placeholder="Isi keterangan overtime" class="form-control"></div>
+                <div class="form-group"><label for="sett_name">Name of Setting</label> <input type="text" id="sett_name" name="sett_name" placeholder="Isi nama setting" class="form-control" required></div>
+                <div class="form-group"><label for="sett_value">Value of Setting</label> <input type="text" id="sett_value" name="sett_value" placeholder="Isi nilai setting" class="form-control" required></div>
             </div>
             <div class="modal-footer">
                 <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
@@ -255,10 +252,6 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
-
-<script src="<?php echo $baseUrl; ?>assets/vendor/moment/moment.js"></script>
-
-<script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
 
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
@@ -304,7 +297,7 @@
 
         // Initialize Example 1
         var table = $('#example1').DataTable( {
-            "ajax": '<?php echo $baseUrl; ?>api/overtime/lists',
+            "ajax": '<?php echo $baseUrl; ?>api/setting/lists',
             dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
             "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
             buttons: [
@@ -335,7 +328,7 @@
 
         $('#example1 tbody').on( 'click', '.btnEdit', function () {
             var data = table.row( $(this).parents('tr') ).data();
-            frm.attr('action', '<?php echo $baseUrl ?>api/overtime/edit?<?php echo $primaryKey; ?>=' + data[ 1 ]);
+            frm.attr('action', '<?php echo $baseUrl ?>api/setting/edit?<?php echo $primaryKey; ?>=' + data[ 1 ]);
             $.get( frm.attr('action'), function(data) {
               fillInputForm(data);
               $('#btnAdd').trigger('click');
@@ -358,7 +351,7 @@
               closeOnCancel: false },
               function (isConfirm) {
                 if (isConfirm) {
-                  $.post('<?php echo $baseUrl; ?>api/overtime/delete',{<?php echo $primaryKey; ?>:data[ 1 ]},function(data) {
+                  $.post('<?php echo $baseUrl; ?>api/setting/delete',{<?php echo $primaryKey; ?>:data[ 1 ]},function(data) {
       							if(data.success == true) {
       								swal("Deleted!", data.message, "success");
                       table.ajax.reload( null, false ); // user paging is not reset on reload
@@ -377,7 +370,7 @@
 
         var validator = frm.validate({
             rules: {
-                emov_name: {
+                sta_name: {
                     required: true
                 }
             },
@@ -421,13 +414,9 @@
 
         $("#myModal5").on("hidden.bs.modal", function () {
             frm.find(':input').val('');
-            frm.attr('action', '<?php echo $baseUrl ?>api/overtime/add');
+            frm.attr('action', '<?php echo $baseUrl ?>api/setting/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');
-        });
-
-        $('.datepicker').datepicker({autclose: true}).on('changeDate', function (ev) {
-          $(this).datepicker('hide');
         });
 
     });

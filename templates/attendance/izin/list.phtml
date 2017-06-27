@@ -128,31 +128,7 @@
             </div>
         </div>
 
-        <ul class="nav" id="side-menu">
-            <li class="active">
-                <a href="index.html"> <span class="nav-label">Dashboard</span> <span class="label label-success pull-right">v.1</span> </a>
-            </li>
-            <li>
-                <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
-                </ul>
-            </li>
-            <li class="active">
-                <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
-                <ul class="nav nav-second-level">
-                    <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>izin">Izin</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>overtime">Overtime</a></li>
-                    <li><a href="<?php echo $baseUrl; ?>schedule">Schedule</a></li>
-                </ul>
-            </li>
-        </ul>
+        <?php echo $sideMenu; ?>
     </div>
 </aside>
 
@@ -238,7 +214,7 @@
             <form action="<?php echo $baseUrl; ?>api/izin/add" role="form" id="form_2">
             <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body">
-                <div class="form-group"><label for="emcu_name">Nama Cuti</label> <input type="text" id="emcu_name" name="emcu_name" placeholder="Isi nama holiday" class="form-control" required></div>
+                <div class="form-group"><label for="emcu_name">Nama Izin</label> <input type="text" id="emcu_name" name="emcu_name" placeholder="Isi nama izin" class="form-control" required></div>
                 <div class="form-group"><label for="emcu_emp_id">Nama Employee</label>
                   <select id="emcu_emp_id" name="emcu_emp_id" placeholder="Isi nama employee" class="form-control js-source-states" required>
                     <<option value="">-- Pilih Employee --</option>
@@ -250,12 +226,13 @@
                 <div class="form-group">
                   <label for="emcu_tanggal">Tanggal</label>
                   <div class="input-daterange input-group">
-                      <input type="text" class="input-sm form-control" name="emcu_tanggal_awal"/>
+                      <input type="text" class="input-sm form-control" name="emcu_tanggal_awal" id="emcu_tanggal_awal"/>
                       <span class="input-group-addon">to</span>
-                      <input type="text" class="input-sm form-control" name="emcu_tanggal_akhir"/>
+                      <input type="text" class="input-sm form-control" name="emcu_tanggal_akhir" id="emcu_tanggal_akhir"/>
                   </div>
                 </div>
-                <div class="form-group"><label for="emcu_keterangan">Keterangan</label> <input type="text" id="emcu_keterangan" name="emcu_keterangan" placeholder="Isi keterangan holiday" class="form-control"></div>
+                <div class="form-group"><label for="emcu_keterangan">Keterangan</label> <input type="text" id="emcu_keterangan" name="emcu_keterangan" placeholder="Isi keterangan izin" class="form-control"></div>
+                <div class="form-group"><label for="emcu_flag_cuti">Potong Cuti?</label> <input type="checkbox" id="emcu_flag_cuti" name="emcu_flag_cuti" class="form-control" value="1"></div>
             </div>
             <div class="modal-footer">
                 <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
@@ -375,7 +352,18 @@
 
         var fillInputForm = function(data) {
           $.each(data, function(idx, val){
-            $('#'+idx).val(val);
+            var ckbox = $('#'+idx+'[type="checkbox"]');
+            if(ckbox.length > 0) {
+              if(val == 1) {
+                $('#'+idx).trigger('click');
+              } else {
+                $('#'+idx).attr('checked', false);
+              }
+            } else if($('#'+idx).is('select')) {
+              $('#'+idx).select2('val', val);
+            } else {
+              $('#'+idx).val(val);
+            }
           });
         };
 
@@ -466,7 +454,9 @@
         });
 
         $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
+            frm.find('input[type="text"]').val('');
+            frm.find("select").select2('val', '');
+            frm.find('input[type="checkbox"]').attr('checked', false);
             frm.attr('action', '<?php echo $baseUrl ?>api/izin/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');

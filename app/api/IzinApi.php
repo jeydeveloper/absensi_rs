@@ -51,6 +51,7 @@ class IzinApi
       $emcu_tanggal_awal = $request->getParam('emcu_tanggal_awal');
       $emcu_tanggal_akhir = $request->getParam('emcu_tanggal_akhir');
       $emcu_keterangan = $request->getParam('emcu_keterangan');
+      $emcu_flag_cuti = !empty($request->getParam('emcu_flag_cuti')) ? $request->getParam('emcu_flag_cuti') : 0;
 
       if(!empty($emcu_tanggal_awal)) $emcu_tanggal_awal = Helper::formatDBDate($emcu_tanggal_awal);
       if(!empty($emcu_tanggal_akhir)) $emcu_tanggal_akhir = Helper::formatDBDate($emcu_tanggal_akhir);
@@ -62,6 +63,7 @@ class IzinApi
       $obj->emcu_tanggal_akhir = $emcu_tanggal_akhir;
       $obj->emcu_keterangan = $emcu_keterangan;
       $obj->emcu_created_at = Helper::dateNowDB();
+      $obj->emcu_flag_cuti = $emcu_flag_cuti;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -86,6 +88,7 @@ class IzinApi
       $emcu_tanggal_awal = $request->getParam('emcu_tanggal_awal');
       $emcu_tanggal_akhir = $request->getParam('emcu_tanggal_akhir');
       $emcu_keterangan = $request->getParam('emcu_keterangan');
+      $emcu_flag_cuti = !empty($request->getParam('emcu_flag_cuti')) ? $request->getParam('emcu_flag_cuti') : 0;
 
       if(!empty($emcu_tanggal_awal)) $emcu_tanggal_awal = Helper::formatDBDate($emcu_tanggal_awal);
       if(!empty($emcu_tanggal_akhir)) $emcu_tanggal_akhir = Helper::formatDBDate($emcu_tanggal_akhir);
@@ -97,6 +100,7 @@ class IzinApi
       $obj->emcu_tanggal_akhir = $emcu_tanggal_akhir;
       $obj->emcu_keterangan = $emcu_keterangan;
       $obj->emcu_updated_at = Helper::dateNowDB();
+      $obj->emcu_flag_cuti = $emcu_flag_cuti;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -124,6 +128,7 @@ class IzinApi
         $arrData['emcu_tanggal_awal'] = $obj->emcu_tanggal_awal;
         $arrData['emcu_tanggal_akhir'] = $obj->emcu_tanggal_akhir;
         $arrData['emcu_keterangan'] = $obj->emcu_keterangan;
+        $arrData['emcu_flag_cuti'] = $obj->emcu_flag_cuti;
       }
 
       return $response->withJson($arrData);

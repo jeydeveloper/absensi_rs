@@ -155,3 +155,26 @@ $app->group('/api/schedule', function () {
 $app->group('/api/session', function () {
   $this->post('/check', \SessionApi::class . ':doCheck')->setName('post-api-session-check');
 });
+
+$app->group('/jadwal-kerja', function () {
+  $this->get('', \JadwalkerjaController::class . ':lists')->setName('jadwalkerja-list');
+});
+
+$app->group('/api/jadwalkerja', function () {
+  $this->get('/lists', \JadwalkerjaApi::class . ':lists')->setName('api-jadwalkerja-lists');
+  $this->post('/edit', \JadwalkerjaApi::class . ':doEdit')->setName('post-api-jadwalkerja-edit');
+});
+
+$app->group('/setting', function () {
+  $this->get('', \SettingController::class . ':lists')->setName('setting-list');
+  $this->get('/add', \SettingController::class . ':add')->setName('setting-add');
+  $this->get('/edit', \SettingController::class . ':edit')->setName('setting-edit');
+});
+
+$app->group('/api/setting', function () {
+  $this->get('/lists', \SettingApi::class . ':lists')->setName('api-setting-lists');
+  $this->post('/add', \SettingApi::class . ':doAdd')->setName('post-api-setting-add');
+  $this->post('/edit', \SettingApi::class . ':doEdit')->setName('post-api-setting-edit');
+  $this->get('/edit', \SettingApi::class . ':edit')->setName('api-setting-edit');
+  $this->post('/delete', \SettingApi::class . ':doDelete')->setName('post-api-setting-delete');
+});

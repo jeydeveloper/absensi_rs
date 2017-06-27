@@ -1,0 +1,36 @@
+<ul class="nav" id="side-menu">
+    <li <?php echo ($menuActived == 'home' ? 'class="active"' : ''); ?>>
+        <a href="index.html"> <span class="nav-label">Dashboard</span> <span class="label label-success pull-right">v.1</span> </a>
+    </li>
+    <li <?php echo ($menuActived == 'master' ? 'class="active"' : ''); ?>>
+        <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
+        <ul class="nav nav-second-level">
+            <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
+            <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
+            <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
+            <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
+            <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
+        </ul>
+    </li>
+    <li <?php echo ($menuActived == 'attendance' ? 'class="active"' : ''); ?>>
+        <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
+        <ul class="nav nav-second-level">
+            <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
+            <li><a href="<?php echo $baseUrl; ?>izin">Izin</a></li>
+            <li><a href="<?php echo $baseUrl; ?>overtime">Overtime</a></li>
+            <li><a href="<?php echo $baseUrl; ?>schedule">Schedule</a></li>
+        </ul>
+    </li>
+    <li <?php echo ($menuActived == 'prosesAbsensi' ? 'class="active"' : ''); ?>>
+        <a href="#"><span class="nav-label">Proses Absensi</span><span class="fa arrow"></span> </a>
+        <ul class="nav nav-second-level">
+            <li><a href="<?php echo $baseUrl; ?>jadwal-kerja">Jadwal Kerja</a></li>
+        </ul>
+    </li>
+    <li <?php echo ($menuActived == 'report' ? 'class="active"' : ''); ?>>
+        <a href="#"><span class="nav-label">Report</span><span class="fa arrow"></span> </a>
+        <ul class="nav nav-second-level">
+            <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
+        </ul>
+    </li>
+</ul>

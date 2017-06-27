@@ -27,6 +27,9 @@ class IzinController extends \App\Controllers\BaseController
 
         $this->data['optEmployee'] = Employee::getOptNonVoid();
 
+        $this->data['menuActived'] = 'attendance';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
         return $this->ci->get('renderer')->render($response, 'attendance/izin/list.phtml', $this->data);
     }
 }

@@ -24,6 +24,9 @@ class HolidayController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /attendance/holiday/list' route");
 
+        $this->data['menuActived'] = 'attendance';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
         return $this->ci->get('renderer')->render($response, 'attendance/holiday/list.phtml', $this->data);
     }
 }

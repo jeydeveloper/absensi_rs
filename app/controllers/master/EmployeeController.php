@@ -34,6 +34,9 @@ class EmployeeController extends \App\Controllers\BaseController
         $this->data['optStatusMarried'] = $this->ci->get('settings')['dataStatic']['statusMarried'];
         $this->data['optStatusActived'] = $this->ci->get('settings')['dataStatic']['statusActived'];
 
+        $this->data['menuActived'] = 'master';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
         return $this->ci->get('renderer')->render($response, 'master/employee/list.phtml', $this->data);
     }
 }

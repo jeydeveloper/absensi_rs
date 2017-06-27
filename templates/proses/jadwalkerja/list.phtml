@@ -25,12 +25,22 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
 
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
-
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css">
+
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/styles/style.css">
+
+    <style media="screen">
+    .table-striped > tbody > tr:nth-of-type(even) {
+      background-color: #fff;
+    }
+    .DTFC_LeftBodyWrapper{
+      top: -13px !important;
+    }
+    </style>
 
 </head>
 <body class="fixed-navbar sidebar-scroll">
@@ -147,7 +157,7 @@
                   </ol>
               </div>
               <h2 class="font-light m-b-xs">
-                  Attendance Overtime
+                  Proses Jadwal Kerja
               </h2>
               <small>Build a form with validation functionality</small>
           </div>
@@ -172,21 +182,148 @@
                         <tr>
                             <th width="5%">No.</th>
                             <th>ID</th>
+                            <th>NPK</th>
                             <th>Name</th>
-                            <th>Tanggal</th>
-                            <th width="15%">Action</th>
+                            <?php for($i=1; $i <= 31; $i++): ?>
+                              <th><?php echo $i; ?></th>
+                            <?php endfor; ?>
                         </tr>
                         </thead>
                     </table>
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <button id="btnAdd" class="btn btn-primary" data-toggle="modal" data-target="#myModal5"><i class="fa fa-plus"></i> Add</button>
-                      </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row">
+    <div class="col-lg-12">
+        <div class="hpanel">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-1"> Daftar Shift</a></li>
+                <li class=""><a data-toggle="tab" href="#tab-2">Status Ketidakhadiran</a></li>
+                <li class=""><a data-toggle="tab" href="#tab-3">Status Kehadiran</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="panel-body">
+                  <label for="ck"><input type="checkbox" name="ck" id="ck" value="1" class="i-checks"> Aktifkan mode klik [ <span id="activedStatus"></span> ]</label>
+                </div>
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                      <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                              <th width="10%">Kode</th>
+                              <th>Nama Shift</th>
+                              <th>Masuk</th>
+                              <th>Keluar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-info btn-sm btnStatus">SFT-01</button></td>
+                              <td>Shift 1</td>
+                              <td>07:00</td>
+                              <td>13:00</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-success btn-sm btnStatus">SFT-02</button></td>
+                              <td>Shift 2</td>
+                              <td>09:00</td>
+                              <td>16:00</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-warning btn-sm btnStatus">SFT-03</button></td>
+                              <td>Shift 3</td>
+                              <td>13:00</td>
+                              <td>20:00</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-primary2 btn-sm btnStatus">SFT-04</button></td>
+                              <td>Shift 4</td>
+                              <td>18:00</td>
+                              <td>23:00</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-danger btn-sm btnStatus">OFF</button></td>
+                              <td>Libur</td>
+                              <td>-</td>
+                              <td>-</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-default btn-sm btnStatus">TM</button></td>
+                              <td>Tidak Masuk</td>
+                              <td>-</td>
+                              <td>-</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="panel-body">
+                      <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                              <th width="10%">Kode Status</th>
+                              <th>Nama Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-info btn-sm btnStatus">KSTH-01</button></td>
+                              <td>Kode Status Tidak Hadir 1</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-success btn-sm btnStatus">KSTH-02</button></td>
+                              <td>Kode Status Tidak Hadir 2</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-warning btn-sm btnStatus">KSTH-03</button></td>
+                              <td>Kode Status Tidak Hadir 3</td>
+                          </tr>
+                          <tr>
+                              <td><button type="button" class="btn btn-block btn-outline btn-primary2 btn-sm btnStatus">KSTH-04</button></td>
+                              <td>Kode Status Tidak Hadir 4</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                     </div>
+                     <div id="tab-3" class="tab-pane">
+                         <div class="panel-body">
+                           <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped">
+                             <thead>
+                               <tr>
+                                   <th width="10%">Kode Status</th>
+                                   <th>Nama Status</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                   <td><button type="button" class="btn btn-block btn-outline btn-info btn-sm btnStatus">KSH-01</button></td>
+                                   <td>Kode Status Hadir 1</td>
+                               </tr>
+                               <tr>
+                                   <td><button type="button" class="btn btn-block btn-outline btn-success btn-sm btnStatus">KSH-02</button></td>
+                                   <td>Kode Status Hadir 2</td>
+                               </tr>
+                               <tr>
+                                   <td><button type="button" class="btn btn-block btn-outline btn-warning btn-sm btnStatus">KSH-03</button></td>
+                                   <td>Kode Status Hadir 3</td>
+                               </tr>
+                               <tr>
+                                   <td><button type="button" class="btn btn-block btn-outline btn-primary2 btn-sm btnStatus">KSH-04</button></td>
+                                   <td>Kode Status Hadir 4</td>
+                               </tr>
+                             </tbody>
+                           </table>
+                         </div>
+                          </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
   </div>
 
     <!-- Footer-->
@@ -199,22 +336,21 @@
 
 </div>
 
-<div class="modal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="color-line"></div>
             <div class="modal-header">
-                <h4 class="modal-title">Tambah Overtime</h4>
+                <small class="font-bold">Update status dari [<span id="beforeStatusUpdate"></span>] menjadi <span id="afterStatusUpdate"></span>?</small>
             </div>
-            <form action="<?php echo $baseUrl; ?>api/overtime/add" role="form" id="form_2">
-            <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
+            <form action="<?php echo $baseUrl; ?>api/jadwalkerja/edit" role="form" id="form_2">
+            <input type="hidden" name="hdStatus" id="hdStatus" value="">
             <div class="modal-body">
-                <div class="form-group"><label for="emov_name">Nama overtime</label> <input type="text" id="emov_name" name="emov_name" placeholder="Isi nama overtime" class="form-control" required></div>
-                <div class="form-group"><label for="emov_tanggal">Tanggal</label> <input type="text" id="emov_tanggal" name="emov_tanggal" placeholder="Isi tanggal overtime" class="form-control datepicker" required></div>
-                <div class="form-group"><label for="emov_keterangan">Keterangan</label> <input type="text" id="emov_keterangan" name="emov_keterangan" placeholder="Isi keterangan overtime" class="form-control"></div>
+              <div class="form-group">
+                <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control" id="txtAlasan"></textarea>
+              </div>
             </div>
             <div class="modal-footer">
-                <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right">Save</button>
             </div>
@@ -222,8 +358,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- Vendor scripts -->
 <script src="<?php echo $baseUrl; ?>assets/vendor/jquery/dist/jquery.min.js"></script>
@@ -256,9 +390,8 @@
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
 
-<script src="<?php echo $baseUrl; ?>assets/vendor/moment/moment.js"></script>
 
-<script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
@@ -287,9 +420,38 @@
 </script>
 
 <script>
+    var btnStatusToUpdate = '';
+    function doAlert(id, label) {
+      if($('#ck').is(':checked')) {
+        var activedStatus = $('#activedStatus').text();
+        if(activedStatus == '') {
+          swal({
+              title: "Warning!!",
+              text: "Status mode klik belum dipilih!",
+              type: "warning",
+              showCancelButton: false,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "OK"
+          });
+          return false;
+        }
+        $('#beforeStatusUpdate').text(label);
+        $('#afterStatusUpdate').text($('#activedStatus').text());
+        $('#myModal').modal('show');
+        btnStatusToUpdate = id;
+      } else {
+        swal({
+            title: "Warning!!",
+            text: "Aktifkan mode klik dahulu!",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "OK"
+        });
+      }
+    }
 
     $(function () {
-
       var l = $( '.ladda-button-demo' ).ladda();
       var frm = $('#form_2');
 
@@ -304,7 +466,7 @@
 
         // Initialize Example 1
         var table = $('#example1').DataTable( {
-            "ajax": '<?php echo $baseUrl; ?>api/overtime/lists',
+            "ajax": '<?php echo $baseUrl; ?>api/jadwalkerja/lists',
             dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
             "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
             buttons: [
@@ -315,75 +477,37 @@
             ],
             "columnDefs": [
               {
-                "targets": -1,
-                "data": null,
-                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button>'
-              },
-              {
                 "targets": [ 1 ],
                 "visible": false,
                 "searchable": false
               },
-            ]
+            ],
+            "scrollX": true,
+            "scrollY": '50vh',
+            "scrollCollapse": true,
+            "fixedColumns": {
+              "leftColumns": 4
+            }
         });
 
-        var fillInputForm = function(data) {
-          $.each(data, function(idx, val){
-            $('#'+idx).val(val);
-          });
-        };
+        //$('.dataTables_scrollBody').css('height', '200px');
 
-        $('#example1 tbody').on( 'click', '.btnEdit', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            frm.attr('action', '<?php echo $baseUrl ?>api/overtime/edit?<?php echo $primaryKey; ?>=' + data[ 1 ]);
-            $.get( frm.attr('action'), function(data) {
-              fillInputForm(data);
-              $('#btnAdd').trigger('click');
-            }, 'json').fail(function() {
-              toastr.error('Request data failed!');
-            });
-        } );
-
-        $('#example1 tbody').on( 'click', '.btnDelete', function () {
-            var data = table.row( $(this).parents('tr') ).data();
-            swal({
-              title: "Are you sure?",
-              text: "Data will be delete!",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Yes, delete it!",
-              cancelButtonText: "No, cancel!",
-              closeOnConfirm: false,
-              closeOnCancel: false },
-              function (isConfirm) {
-                if (isConfirm) {
-                  $.post('<?php echo $baseUrl; ?>api/overtime/delete',{<?php echo $primaryKey; ?>:data[ 1 ]},function(data) {
-      							if(data.success == true) {
-      								swal("Deleted!", data.message, "success");
-                      table.ajax.reload( null, false ); // user paging is not reset on reload
-      							} else {
-      								swal("Cancelled!", "Oops.. " + data.message, "error");
-      							}
-                    setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
-      						},'json');
-                } else {
-                    swal("Cancelled", "Your data is safe :)", "error");
-                    setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
-                }
-              }
-            );
-        } );
+        $('.btnStatus').click(function(){
+          var me = $(this);
+          var txt = me.text();
+          var valStatusActived = txt;
+          $('#activedStatus').text(valStatusActived);
+          //$('#ck').attr('checked', true);
+          if($('#ck').is(':checked')) return;
+          $('.iCheck-helper').trigger('click');
+        });
 
         var validator = frm.validate({
-            rules: {
-                emov_name: {
-                    required: true
-                }
-            },
             submitHandler: function(form) {
               // Start loading
               l.ladda( 'start' );
+
+              $('#hdStatus').val($('#activedStatus').text());
 
               $.ajax({
                 url: frm.attr('action'),
@@ -393,14 +517,13 @@
               }).done(function( data ) {
                 if(data.success == true) {
                   toastr.success(data.message);
-                  table.ajax.reload( null, false ); // user paging is not reset on reload
-                  if($('#<?php echo $primaryKey; ?>').val() == '') {
-                    frm.find(':input').val('');
-                    $("#<?php echo $inputFocus; ?>").focus();
-                  }
-                  if($('#autoClose').is(":checked")) $("#myModal5").modal('hide');
+                  $("#myModal").modal('hide');
                   validator.resetForm();
                   $('.form-control.error').removeClass('error');
+                  $('#txtAlasan').val('');
+                  var prt = $('#'+btnStatusToUpdate).closest('td');
+                  $('#'+btnStatusToUpdate).remove();
+                  prt.append(data.button);
                 } else {
                   toastr.error('Oops.. ' + data.message);
                 }
@@ -417,17 +540,6 @@
                         .append( error );
             },
             errorElement: "span",
-        });
-
-        $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
-            frm.attr('action', '<?php echo $baseUrl ?>api/overtime/add');
-            validator.resetForm();
-            $('.form-control.error').removeClass('error');
-        });
-
-        $('.datepicker').datepicker({autclose: true}).on('changeDate', function (ev) {
-          $(this).datepicker('hide');
         });
 
     });

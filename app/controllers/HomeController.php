@@ -23,6 +23,9 @@ class HomeController extends BaseController
         $data['login'] = User::getUserByID($_SESSION['USERID']);
         $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
+        $data['menuActived'] = 'home';
+        $data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $data);
+
         return $this->ci->get('renderer')->render($response, 'index.phtml', $data);
     }
 

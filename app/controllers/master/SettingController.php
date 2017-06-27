@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controllers\Attendance;
+namespace App\Controllers\Master;
 
 use Interop\Container\ContainerInterface;
 use Gettext\Translator;
 
-class OvertimeController extends \App\Controllers\BaseController
+class SettingController extends \App\Controllers\BaseController
 {
     protected $ci;
     protected $data;
@@ -15,18 +15,18 @@ class OvertimeController extends \App\Controllers\BaseController
         parent::__construct();
         $this->ci = $ci;
 
-        $this->data['primaryKey'] = 'emov_id';
-        $this->data['inputFocus'] = 'emov_name';
+        $this->data['primaryKey'] = 'sett_id';
+        $this->data['inputFocus'] = 'sett_name';
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
     }
 
     public function lists($request, $response, $args)
     {
-        $this->ci->get('logger')->info("Slim-Skeleton 'GET /attendance/overtime/list' route");
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/setting/list' route");
 
-        $this->data['menuActived'] = 'attendance';
+        $this->data['menuActived'] = 'master';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
-        return $this->ci->get('renderer')->render($response, 'attendance/overtime/list.phtml', $this->data);
+        return $this->ci->get('renderer')->render($response, 'master/setting/list.phtml', $this->data);
     }
 }
