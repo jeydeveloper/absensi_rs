@@ -6,7 +6,7 @@ File config database : "src/settings.php"
 
 File import sql : "absensi.sql"
 
-File update query : "update_query.sql"
+File update query : "update_query.sql" (sebelum menjalankan update query, pastikan data di database di-backup terlebih dahulu agar tidak hilang, setelah update query, jalankan import data yang barusan di-backup itu)
 
 ## Login Superadmin
 username : superadmin
