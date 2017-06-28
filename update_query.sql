@@ -198,3 +198,20 @@ ALTER TABLE `abs_employee_overtime`
 
 ALTER TABLE `abs_employee_overtime`
   MODIFY `emov_id` int(11) NOT NULL AUTO_INCREMENT;
+
+DROP TABLE IF EXISTS `abs_employee_schedule`;
+CREATE TABLE `abs_employee_schedule` (
+  `emsc_id` int(11) NOT NULL,
+  `emsc_emp_id` int(11) NOT NULL,
+  `emsc_uniq_code` varchar(50) NOT NULL,
+  `emsc_schd_id` int(11) NOT NULL,
+  `emsc_created_at` datetime NOT NULL,
+  `emsc_updated_at` datetime NOT NULL,
+  `emsc_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `abs_employee_schedule`
+  ADD PRIMARY KEY (`emsc_id`);
+
+ALTER TABLE `abs_employee_schedule`
+  MODIFY `emsc_id` int(11) NOT NULL AUTO_INCREMENT;

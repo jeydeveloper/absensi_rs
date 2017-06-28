@@ -216,42 +216,14 @@
                           </tr>
                         </thead>
                         <tbody>
+                          <?php foreach($listSchedule as $value): ?>
                           <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-info btn-sm btnStatus">SFT-01</button></td>
-                              <td>Shift 1</td>
-                              <td>07:00</td>
-                              <td>13:00</td>
+                              <td><button data-id="<?php echo $value->schd_id; ?>" type="button" class="btn btn-block btn-sm btnStatus" style="background-color:<?php echo $value->schd_color; ?> !important;color:#ffffff;"><?php echo $value->schd_code; ?></button></td>
+                              <td><?php echo $value->schd_name; ?></td>
+                              <td><?php echo $value->schd_waktu_awal; ?></td>
+                              <td><?php echo $value->schd_waktu_akhir; ?></td>
                           </tr>
-                          <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-success btn-sm btnStatus">SFT-02</button></td>
-                              <td>Shift 2</td>
-                              <td>09:00</td>
-                              <td>16:00</td>
-                          </tr>
-                          <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-warning btn-sm btnStatus">SFT-03</button></td>
-                              <td>Shift 3</td>
-                              <td>13:00</td>
-                              <td>20:00</td>
-                          </tr>
-                          <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-primary2 btn-sm btnStatus">SFT-04</button></td>
-                              <td>Shift 4</td>
-                              <td>18:00</td>
-                              <td>23:00</td>
-                          </tr>
-                          <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-danger btn-sm btnStatus">OFF</button></td>
-                              <td>Libur</td>
-                              <td>-</td>
-                              <td>-</td>
-                          </tr>
-                          <tr>
-                              <td><button type="button" class="btn btn-block btn-outline btn-default btn-sm btnStatus">TM</button></td>
-                              <td>Tidak Masuk</td>
-                              <td>-</td>
-                              <td>-</td>
-                          </tr>
+                          <?php endforeach; ?>
                         </tbody>
                       </table>
                     </div>
@@ -283,6 +255,10 @@
             </div>
             <form action="<?php echo $baseUrl; ?>api/mappingjadwal/edit" role="form" id="form_2">
             <input type="hidden" name="hdStatus" id="hdStatus" value="">
+            <input type="hidden" name="idChangeStatus" id="idChangeStatus" value="">
+            <input type="hidden" name="userId" id="userId" value="">
+            <input type="hidden" name="generateId" id="generateId" value="">
+            <input type="hidden" name="scheduleDate" id="scheduleDate" value="">
             <div class="modal-body">
               <div class="form-group">
                 <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control" id="txtAlasan"></textarea>
@@ -290,7 +266,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right">Save</button>
+                <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right" id="btnSave">Save</button>
             </div>
             </form>
         </div>
@@ -359,7 +335,9 @@
 
 <script>
     var btnStatusToUpdate = '';
-    function doAlert(id, label) {
+    var userIdUpdate = '';
+    var idChangeStatus = '';
+    function doAlert(generateId, userId, label, scheduleDate) {
       if($('#ck').is(':checked')) {
         var activedStatus = $('#activedStatus').text();
         if(activedStatus == '') {
@@ -375,8 +353,12 @@
         }
         $('#beforeStatusUpdate').text(label);
         $('#afterStatusUpdate').text($('#activedStatus').text());
-        $('#myModal').modal('show');
-        btnStatusToUpdate = id;
+        // $('#myModal').modal('show');
+        btnStatusToUpdate = 'btnStatusToUpdate_'+generateId;
+        $('#userId').val(userId);
+        $('#generateId').val(generateId);
+        $('#scheduleDate').val(scheduleDate);
+        $('#btnSave').trigger('click');
       } else {
         swal({
             title: "Warning!!",
@@ -434,6 +416,8 @@
 
         $('.btnStatus').click(function(){
           var me = $(this);
+          idChangeStatus = me.data('id');
+          $('#idChangeStatus').val(idChangeStatus);
           var txt = me.text();
           var valStatusActived = txt;
           $('#activedStatus').text(valStatusActived);

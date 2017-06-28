@@ -4,6 +4,7 @@ namespace App\Controllers\Proses;
 
 use Interop\Container\ContainerInterface;
 use Gettext\Translator;
+use App\Models\ScheduleModel as Schedule;
 
 class MappingjadwalController extends \App\Controllers\BaseController
 {
@@ -23,6 +24,8 @@ class MappingjadwalController extends \App\Controllers\BaseController
     public function lists($request, $response, $args)
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /proses/mappingjadwal/list' route");
+
+        $this->data['listSchedule'] = Schedule::getAllNonVoid();
 
         $this->data['menuActived'] = 'prosesAbsensi';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
