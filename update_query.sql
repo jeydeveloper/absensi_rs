@@ -207,7 +207,8 @@ CREATE TABLE `abs_employee_schedule` (
   `emsc_schd_id` int(11) NOT NULL,
   `emsc_created_at` datetime NOT NULL,
   `emsc_updated_at` datetime NOT NULL,
-  `emsc_date` date NOT NULL
+  `emsc_date` date NOT NULL,
+  `emsc_void` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `abs_employee_schedule`

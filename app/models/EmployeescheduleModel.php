@@ -21,6 +21,14 @@ class EmployeescheduleModel extends Model
       return $res;
     }
 
+    public static function getAllNonVoidWhereIn($data = null)
+    {
+      if(!is_array($data)) return 0;
+
+      $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')->where('emsc_void', 0)->whereIn('emsc_emp_id', $data)->get();
+      return $res;
+    }
+
     public static function getByUniqCode($uniqCode)
     {
       $res = EmployeescheduleModel::where('emsc_uniq_code', $uniqCode)->first();

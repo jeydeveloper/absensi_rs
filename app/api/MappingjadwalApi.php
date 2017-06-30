@@ -29,15 +29,34 @@ class MappingjadwalApi
         $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
         $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
 
+        $year = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : (int)date('m');
+        $month = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+
         // $result = Mappingjadwal::getAllNonVoid();
         $resultTotal = Employee::getAllNonVoid();
         $result = Employee::getAllNonVoid($limit, $offset);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
           $arrData['recordsFiltered'] = count($resultTotal);
-          $year = date('Y');
-          $month = date('m');
-          $jumlahTanggal = (int)date('t');
+          $jumlahTanggal = date('t', strtotime("$year-$month-01"));
+
+          $dataEmpHasSchedule = [];
+          $dataEmp = [];
+          foreach ($result as $key => $value) {
+            $dataEmp[$value->emp_id] = $value->emp_id;
+          }
+
+          if(!empty($dataEmp)) {
+            $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp);
+            if(!empty($res)) {
+              foreach ($res as $key => $value) {
+                $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
+                  'code' => $value->schd_code,
+                  'color' => $value->schd_color,
+                ];
+              }
+            }
+          }
 
           foreach ($result as $key => $value) {
             $arrData['data'][$key] = array(
@@ -54,10 +73,13 @@ class MappingjadwalApi
               $tanggal = $cnt < 10 ? ('0'.$cnt) : $cnt;
               $generateId = $year . $month . $tanggal . $value->emp_id;
               $scheduleDate = $year . '-' . $month . '-' . $tanggal;
-              $rand = rand(0,5);
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
-              $arrData['data'][$key][$i] = '<button style="width:60px;" id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-default btn-sm" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
+              if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm" style="width:60px;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'\', \''.$scheduleDate.'\')">'.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'</button>';
+              } else {
+                $arrData['data'][$key][$i] = '<button style="width:60px;" id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-default btn-sm" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
+              }
               $cnt++;
             }
           }

@@ -222,7 +222,7 @@
             <div class="modal-body">
                 <div class="form-group"><label for="schd_name">Nama Schedule</label> <input type="text" id="schd_name" name="schd_name" placeholder="Isi nama schedule" class="form-control" required></div>
                 <div class="form-group"><label for="schd_code">Code Schedule</label> <input type="text" id="schd_code" name="schd_code" placeholder="Isi kode schedule" class="form-control" required></div>
-                <div class="form-group"><label for="schd_color">Color Schedule</label> <input type="text" id="schd_color" name="schd_color" placeholder="Isi color schedule" class="form-control" required></div>
+                <div class="form-group"><label for="schd_color">Color Schedule</label> <input type="color" id="schd_color" name="schd_color" placeholder="Isi color schedule" class="form-control" required></div>
                 <div class="form-group">
                   <label for="schd_waktu_awal">Waktu Awal Schedule</label>
                   <div class="input-group clockpicker" data-autoclose="true">
@@ -320,7 +320,7 @@
 
     $(function () {
 
-      $("#schd_color").spectrum();
+      $("#schd_color").spectrum({preferredFormat: "hex"});
 
       var l = $( '.ladda-button-demo' ).ladda();
       var frm = $('#form_2');

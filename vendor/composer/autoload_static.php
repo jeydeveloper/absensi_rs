@@ -76,6 +76,10 @@ class ComposerStaticInit07bf9295a47736b7538ea8be7907e0cb
         array (
             'Carbon\\' => 7,
         ),
+        'B' => 
+        array (
+            'Box\\Spout\\' => 10,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -196,6 +200,10 @@ class ComposerStaticInit07bf9295a47736b7538ea8be7907e0cb
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
+        'Box\\Spout\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/box/spout/src/Spout',
         ),
         'App\\' => 
         array (
