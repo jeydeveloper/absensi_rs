@@ -27,6 +27,7 @@ class EmployeeApi
             $arrData['data'][] = array(
               ($key + 1),
               $value->emp_id,
+              $value->emp_code,
               $value->emp_name,
               $value->emp_uni_id,
               $value->emp_jab_id,

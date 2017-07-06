@@ -25,7 +25,7 @@ class MappingjadwalController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /proses/mappingjadwal/list' route");
 
-        $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : (int)date('m');
+        $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
         $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'].'-'.$this->data['selectedMonth'].'-01'));
         $this->data['listMonth'] = $this->ci->get('settings')['dataStatic']['listMonth'];

@@ -163,6 +163,7 @@ $app->group('/jadwal-kerja', function () {
 $app->group('/api/jadwalkerja', function () {
   $this->get('/lists', \JadwalkerjaApi::class . ':lists')->setName('api-jadwalkerja-lists');
   $this->post('/edit', \JadwalkerjaApi::class . ':doEdit')->setName('post-api-jadwalkerja-edit');
+  $this->get('/do-process', \JadwalkerjaApi::class . ':doProcess')->setName('api-jadwalkerja-doprocess');
 });
 
 $app->group('/setting', function () {

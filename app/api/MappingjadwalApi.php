@@ -29,8 +29,8 @@ class MappingjadwalApi
         $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
         $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
 
-        $year = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : (int)date('m');
-        $month = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+        $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
+        $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
         // $result = Mappingjadwal::getAllNonVoid();
         $resultTotal = Employee::getAllNonVoid();

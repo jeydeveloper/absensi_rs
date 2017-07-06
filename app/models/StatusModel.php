@@ -21,6 +21,18 @@ class StatusModel extends Model
       return $patient;
     }
 
+    public static function getAllKehadiranNonVoid()
+    {
+      $patient = StatusModel::where('sta_void', 0)->where('sta_type', 1)->get();
+      return $patient;
+    }
+
+    public static function getAllKetidakhadiranNonVoid()
+    {
+      $patient = StatusModel::where('sta_void', 0)->where('sta_type', 2)->get();
+      return $patient;
+    }
+
     public static function getPatientByID($id)
     {
       $patient = StatusModel::where('sta_id', $id)->first();
