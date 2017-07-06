@@ -241,6 +241,7 @@
                       </span>
                   </div>
                 </div>
+                <div class="form-group"><label for="schd_ganti_hari">Ganti Hari?</label> <input type="checkbox" id="schd_ganti_hari" name="schd_ganti_hari" class="form-control" value="1"></div>
                 <div class="form-group"><label for="schd_keterangan">Keterangan</label> <input type="text" id="schd_keterangan" name="schd_keterangan" placeholder="Isi keterangan" class="form-control"></div>
             </div>
             <div class="modal-footer">
@@ -361,18 +362,27 @@
 
         var fillInputForm = function(data) {
           $.each(data, function(idx, val){
-            if(idx == 'schd_color') {
-              if(val != '') {
-                $('#'+idx).spectrum("set", val);
+            var ckbox = $('#'+idx+'[type="checkbox"]');
+            if(ckbox.length > 0) {
+              if(val == 1) {
+                $('#'+idx).trigger('click');
               } else {
-                $('#'+idx).spectrum("set", '');
+                $('#'+idx).attr('checked', false);
               }
+            } else if($('#'+idx).is('select')) {
+              //$('#'+idx).select2('val', val);
             } else {
-              $('#'+idx).val(val);
+              if(idx == 'schd_color') {
+                if(val != '') {
+                  $('#'+idx).spectrum("set", val);
+                } else {
+                  $('#'+idx).spectrum("set", '');
+                }
+              } else {
+                $('#'+idx).val(val);
+              }
             }
           });
-
-          $("#triggerSet").spectrum("set", $("#enterAColor").val());
         };
 
         $('#example1 tbody').on( 'click', '.btnEdit', function () {
@@ -462,7 +472,9 @@
         });
 
         $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
+            frm.find('input[type="text"]').val('');
+            //frm.find("select").select2('val', '');
+            frm.find('input[type="checkbox"]').attr('checked', false);
             frm.attr('action', '<?php echo $baseUrl ?>api/schedule/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');

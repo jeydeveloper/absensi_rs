@@ -13,10 +13,12 @@ use App\Helper;
 class JadwalkerjaApi
 {
     protected $ci;
+    protected $minuteLate;
 
     public function __construct(ContainerInterface $ci)
     {
         $this->ci = $ci;
+        $this->minuteLate = 15;
     }
 
     public function lists($request, $response, $args)
@@ -95,21 +97,75 @@ class JadwalkerjaApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
-              $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) : 'EMPTY';
+              $tooltip = 'EMPTY';
+              if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                $tooltip = '[SCD] ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'] . ' - ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max'];
+              }
+
+              $anySchedule = $tooltip;
+
+              $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max'] . ' [ABS]') : 'EMPTY';
+
+              $tooltip .= ' | ' . $absenceLabel;
+
               if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]) AND !empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
                 $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
                 $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
                 $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min']);
                 $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
 
+                /*
                 if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) AND $intMaxAbsence >= $intMaxSchedule) {
                   $absenceLabel = 'COCOK';
                 } else {
                   $absenceLabel = 'BEDA';
                 }
+                */
+                if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
+                  if($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule) {
+                    $absenceLabel = 'EARLY IN | LATE OUT';
+                  } elseif($intMinAbsence >= $intMinSchedule) {
+                    $late = strtotime('+'.$this->minuteLate.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));
+                    if($intMinAbsence > $late) {
+                      $absenceLabel = 'LATE IN';
+                      if($intMaxAbsence < $intMaxSchedule) $absenceLabel .= ' | EARLY OUT';
+                      if($intMaxAbsence > $intMaxSchedule) $absenceLabel .= ' | LATE OUT';
+                    } elseif($intMaxAbsence < $intMaxSchedule) {
+                      $absenceLabel = 'EARLY OUT';
+                    } else {
+                      $absenceLabel = 'MATCH';
+                    }
+                  } elseif($intMinAbsence < $intMinSchedule) {
+                    $absenceLabel = 'EARLY IN';
+                    if($intMaxAbsence < $intMaxSchedule) $absenceLabel .= ' | EARLY OUT';
+                    if($intMaxAbsence > $intMaxSchedule) $absenceLabel .= ' | LATE OUT';
+                  } else {
+                    $absenceLabel = 'MATCH';
+                  }
+                } else {
+                  $absenceLabel = 'ERROR';
+                }
+              } elseif($anySchedule != 'EMPTY' AND $absenceLabel == 'EMPTY') {
+                $absenceLabel = 'ALPHA';
+              } elseif($anySchedule == 'EMPTY' AND $absenceLabel != 'EMPTY') {
+                $absenceLabel = 'LEMBUR';
+              } else {
+                $absenceLabel = 'EMPTY';
               }
 
-              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm btn-danger">'.$absenceLabel.'</button>';
+              if($absenceLabel == "EMPTY") {
+                $btnStyle = 'btn-default';
+              } elseif($absenceLabel == "ALPHA") {
+                $btnStyle = 'btn-warning';
+              } elseif($absenceLabel == "LEMBUR") {
+                $btnStyle = 'btn-success';
+              } elseif($absenceLabel == "ERROR") {
+                $btnStyle = 'btn-danger';
+              } else {
+                $btnStyle = 'btn-info';
+              }
+
+              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm '.$btnStyle.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'">'.$absenceLabel.'</button>';
               $cnt++;
             }
           }

@@ -40,6 +40,15 @@
     .DTFC_LeftBodyWrapper{
       top: -13px !important;
     }
+    .tooltip {
+        position: fixed;
+    }
+    .tooltip-inner {
+        max-width: 350px;
+        /* If max-width does not work, try using width instead */
+        width: 350px;
+        z-index: 9999;
+    }
     </style>
 
 </head>
@@ -176,7 +185,7 @@
                     </div>
                     Datatables
                 </div>
-                <div class="panel-body">
+                <div class="panel-body tooltip-demo">
                     <div class="row" style="margin-bottom:20px;">
                       <form action="" role="form" method="get">
                         <div class="form-group">
@@ -536,6 +545,12 @@
             },
             errorElement: "span",
         });
+
+        setTimeout(function(){
+          $('.tooltip-demo').tooltip({
+              selector: "[data-toggle=tooltip]"
+          });
+        }, 200);
 
     });
 

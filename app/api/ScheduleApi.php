@@ -53,6 +53,7 @@ class ScheduleApi
       $schd_keterangan = $request->getParam('schd_keterangan');
       $schd_code = $request->getParam('schd_code');
       $schd_color = $request->getParam('schd_color');
+      $schd_ganti_hari = !empty($request->getParam('schd_ganti_hari')) ? $request->getParam('schd_ganti_hari') : 0;
 
       if(!empty($schd_tanggal)) $schd_tanggal = Helper::formatDBDate($schd_tanggal);
 
@@ -64,6 +65,7 @@ class ScheduleApi
       $obj->schd_created_at = Helper::dateNowDB();
       $obj->schd_code = $schd_code;
       $obj->schd_color = $schd_color;
+      $obj->schd_ganti_hari = $schd_ganti_hari;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -89,6 +91,7 @@ class ScheduleApi
       $schd_keterangan = $request->getParam('schd_keterangan');
       $schd_code = $request->getParam('schd_code');
       $schd_color = $request->getParam('schd_color');
+      $schd_ganti_hari = !empty($request->getParam('schd_ganti_hari')) ? $request->getParam('schd_ganti_hari') : 0;
 
       if(!empty($schd_tanggal)) $schd_tanggal = Helper::formatDBDate($schd_tanggal);
 
@@ -100,6 +103,7 @@ class ScheduleApi
       $obj->schd_updated_at = Helper::dateNowDB();
       $obj->schd_code = $schd_code;
       $obj->schd_color = $schd_color;
+      $obj->schd_ganti_hari = $schd_ganti_hari;
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -127,6 +131,7 @@ class ScheduleApi
         $arrData['schd_keterangan'] = $obj->schd_keterangan;
         $arrData['schd_code'] = $obj->schd_code;
         $arrData['schd_color'] = $obj->schd_color;
+        $arrData['schd_ganti_hari'] = $obj->schd_ganti_hari;
       }
 
       return $response->withJson($arrData);
