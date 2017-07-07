@@ -5,6 +5,7 @@ namespace App\Api;
 use Interop\Container\ContainerInterface;
 use App\Models\EmployeeModel as Employee;
 use App\Models\ScheduleModel as Schedule;
+use App\Models\StatusModel as Status;
 use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\TransaksiModel as Transaksi;
 use App\Models\TransaksiprosesModel as Transaksiproses;
@@ -74,6 +75,7 @@ class JadwalkerjaApi
                 $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
                   'wkt_min' => $value->schd_waktu_awal,
                   'wkt_max' => $value->schd_waktu_akhir,
+                  'code' => $value->schd_code,
                 ];
               }
             }
@@ -153,19 +155,27 @@ class JadwalkerjaApi
                 $absenceLabel = 'EMPTY';
               }
 
+              $lblShift = '-';
+              if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) $lblShift = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
+
               if($absenceLabel == "EMPTY") {
                 $btnStyle = 'btn-default';
+                $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
               } elseif($absenceLabel == "ALPHA") {
                 $btnStyle = 'btn-warning';
+                $onClick = 'onclick="doAlertPopup(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
               } elseif($absenceLabel == "LEMBUR") {
                 $btnStyle = 'btn-success';
+                $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
               } elseif($absenceLabel == "ERROR") {
                 $btnStyle = 'btn-danger';
+                $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
               } else {
                 $btnStyle = 'btn-info';
+                $onClick = 'onclick="doAlertPopup(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
               }
 
-              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm '.$btnStyle.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'">'.$absenceLabel.'</button>';
+              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm '.$btnStyle.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$absenceLabel.'</button>';
               $cnt++;
             }
           }
@@ -182,22 +192,33 @@ class JadwalkerjaApi
       );
 
       $hdStatus = $request->getParam('hdStatus');
-      $idChangeStatus = $request->getParam('idChangeStatus');
-      $txtAlasan = $request->getParam('txtAlasan');
+      $idChangeStatus = !empty($request->getParam('idChangeStatus')) ? $request->getParam('idChangeStatus') : '';
       $generateId = $request->getParam('generateId');
       $userId = $request->getParam('userId');
       $scheduleDate = $request->getParam('scheduleDate');
+      $minAbsence = !empty($request->getParam('minAbsence')) ? $request->getParam('minAbsence') : '';
+      $maxAbsence = !empty($request->getParam('maxAbsence')) ? $request->getParam('maxAbsence') : '';
+      $intMinAbsence = !empty($minAbsence) ? strtotime($minAbsence) : 0;
+      $intMaxAbsence = !empty($maxAbsence) ? strtotime($maxAbsence) : 0;
+      $txtAlasan = !empty($request->getParam('txtAlasan')) ? $request->getParam('txtAlasan') : '';
+      $idStatus = !empty($request->getParam('idStatus')) ? $request->getParam('idStatus') : '';
 
       $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
-      $obj = Schedule::find($idChangeStatus);
+      if(!empty($idStatus)) {
+        $obj = Status::find($idStatus);
+      } else {
+        $obj = Schedule::find($idChangeStatus);
+      }
+
       if(!empty($obj)) {
         $objEs = Employeeschedule::getByUniqCode($generateId);
         if(!empty($objEs)) {
           $objEs->emsc_emp_id = $userId;
           $objEs->emsc_uniq_code	 = $generateId;
-          $objEs->emsc_schd_id = $idChangeStatus;
+          $objEs->emsc_sta_id = $idStatus;
           $objEs->emsc_date = $scheduleDate;
+          $objEs->emsc_status_reason = $txtAlasan;
           $objEs->emsc_updated_at = Helper::dateNowDB();
         } else {
           $objEs = new Employeeschedule;
@@ -205,6 +226,8 @@ class JadwalkerjaApi
           $objEs->emsc_uniq_code	 = $generateId;
           $objEs->emsc_schd_id = $idChangeStatus;
           $objEs->emsc_date = $scheduleDate;
+          $objEs->emsc_real_date_start = $minAbsence;
+          $objEs->emsc_real_date_end = $maxAbsence;
           $objEs->emsc_created_at = Helper::dateNowDB();
         }
 
@@ -217,7 +240,7 @@ class JadwalkerjaApi
           $arrData['message'] = 'Oops.. please try again!';
         }
       } else {
-        $arrData['message'] = 'Oops.. please try again!';
+        $arrData['message'] = 'Oops2.. please try again!';
       }
 
       return $response->withJson($arrData);

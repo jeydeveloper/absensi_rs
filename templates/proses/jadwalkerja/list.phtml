@@ -280,7 +280,7 @@
                         <tbody>
                           <?php foreach($listStatusKehadiran as $value): ?>
                           <tr>
-                              <td><button data-id="<?php echo $value->sta_id; ?>" type="button" class="btn btn-block btn-sm btnStatus"><?php echo $value->sta_id; ?></button></td>
+                              <td><button data-id="<?php echo $value->sta_id; ?>" type="button" class="btn btn-block btn-sm btnStatusReason"><?php echo $value->sta_id; ?></button></td>
                               <td><?php echo $value->sta_name; ?></td>
                           </tr>
                           <?php endforeach; ?>
@@ -300,7 +300,7 @@
                         <tbody>
                           <?php foreach($listStatusKetidakhadiran as $value): ?>
                           <tr>
-                              <td><button data-id="<?php echo $value->sta_id; ?>" type="button" class="btn btn-block btn-sm btnStatus"><?php echo $value->sta_id; ?></button></td>
+                              <td><button data-id="<?php echo $value->sta_id; ?>" type="button" class="btn btn-block btn-sm btnStatusReason"><?php echo $value->sta_id; ?></button></td>
                               <td><?php echo $value->sta_name; ?></td>
                           </tr>
                           <?php endforeach; ?>
@@ -339,6 +339,10 @@
             <input type="hidden" name="userId" id="userId" value="">
             <input type="hidden" name="generateId" id="generateId" value="">
             <input type="hidden" name="scheduleDate" id="scheduleDate" value="">
+            <input type="hidden" name="absenceLabel" id="absenceLabel" value="">
+            <input type="hidden" name="minAbsence" id="minAbsence" value="">
+            <input type="hidden" name="maxAbsence" id="maxAbsence" value="">
+            <input type="hidden" name="idStatus" id="idStatus" value="">
             <div class="modal-body">
               <div class="form-group">
                 <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control" id="txtAlasan"></textarea>
@@ -417,7 +421,8 @@
     var btnStatusToUpdate = '';
     var userIdUpdate = '';
     var idChangeStatus = '';
-    function doAlert(generateId, userId, label, scheduleDate) {
+    var idStatus = '';
+    function doAlert(generateId, userId, label, scheduleDate, absenceLabel, minAbsence, maxAbsence) {
       if($('#ck').is(':checked')) {
         var activedStatus = $('#activedStatus').text();
         if(activedStatus == '') {
@@ -438,7 +443,47 @@
         $('#userId').val(userId);
         $('#generateId').val(generateId);
         $('#scheduleDate').val(scheduleDate);
+        $('#absenceLabel').val(absenceLabel);
+        $('#minAbsence').val(minAbsence);
+        $('#maxAbsence').val(maxAbsence);
         $('#btnSave').trigger('click');
+      } else {
+        swal({
+            title: "Warning!!",
+            text: "Aktifkan mode klik dahulu!",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "OK"
+        });
+      }
+    }
+
+    function doAlertPopup(generateId, userId, label, scheduleDate, absenceLabel, minAbsence, maxAbsence) {
+      if($('#ck').is(':checked')) {
+        var activedStatus = $('#activedStatus').text();
+        if(activedStatus == '') {
+          swal({
+              title: "Warning!!",
+              text: "Status mode klik belum dipilih!",
+              type: "warning",
+              showCancelButton: false,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "OK"
+          });
+          return false;
+        }
+        $('#beforeStatusUpdate').text(label);
+        $('#afterStatusUpdate').text($('#activedStatus').text());
+        btnStatusToUpdate = 'btnStatusToUpdate_'+generateId;
+        $('#userId').val(userId);
+        $('#generateId').val(generateId);
+        $('#scheduleDate').val(scheduleDate);
+        $('#absenceLabel').val(absenceLabel);
+        $('#minAbsence').val(minAbsence);
+        $('#maxAbsence').val(maxAbsence);
+        $('#myModal').modal('show');
+        //$('#btnSave').trigger('click');
       } else {
         swal({
             title: "Warning!!",
@@ -498,6 +543,20 @@
           var me = $(this);
           idChangeStatus = me.data('id');
           $('#idChangeStatus').val(idChangeStatus);
+          $('#idStatus').val('');
+          var txt = me.text();
+          var valStatusActived = txt;
+          $('#activedStatus').text(valStatusActived);
+          //$('#ck').attr('checked', true);
+          if($('#ck').is(':checked')) return;
+          $('.iCheck-helper').trigger('click');
+        });
+
+        $('.btnStatusReason').click(function(){
+          var me = $(this);
+          idStatus = me.data('id');
+          $('#idStatus').val(idStatus);
+          $('#idChangeStatus').val('');
           var txt = me.text();
           var valStatusActived = txt;
           $('#activedStatus').text(valStatusActived);
