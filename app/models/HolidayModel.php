@@ -17,13 +17,16 @@ class HolidayModel extends Model
 
     public static function getAllNonVoid()
     {
-      $patient = HolidayModel::where('hol_void', 0)->get();
-      return $patient;
+      $res = HolidayModel::where('hol_void', 0)->orderBy('hol_tanggal', 'ASC')->get();
+      return $res;
     }
 
-    public static function getPatientByID($id)
+    public static function getHolidayByYear($val = '')
     {
-      $patient = HolidayModel::where('hol_id', $id)->first();
-      return $patient;
+      $res = HolidayModel::where('hol_void', 0)
+      ->whereRaw('DATE_FORMAT(hol_tanggal, "%Y") = "'.$val.'"')
+      ->orderBy('hol_tanggal', 'ASC')
+      ->get();
+      return $res;
     }
 }

@@ -27,8 +27,8 @@ class IzinApi
             $arrData['data'][] = array(
               ($key + 1),
               $value->emcu_id,
-              $value->emcu_name,
-              $value->emcu_emp_id,
+              $value->sta_name,
+              $value->emp_name,
               $value->emcu_tanggal_awal,
               $value->emcu_tanggal_akhir,
               $value->emcu_keterangan,
@@ -46,8 +46,8 @@ class IzinApi
           'success' => false,
       );
 
-      $emcu_name = $request->getParam('emcu_name');
       $emcu_emp_id = $request->getParam('emcu_emp_id');
+      $emcu_sta_id = $request->getParam('emcu_sta_id');
       $emcu_tanggal_awal = $request->getParam('emcu_tanggal_awal');
       $emcu_tanggal_akhir = $request->getParam('emcu_tanggal_akhir');
       $emcu_keterangan = $request->getParam('emcu_keterangan');
@@ -57,8 +57,8 @@ class IzinApi
       if(!empty($emcu_tanggal_akhir)) $emcu_tanggal_akhir = Helper::formatDBDate($emcu_tanggal_akhir);
 
       $obj = new Izin;
-      $obj->emcu_name = $emcu_name;
       $obj->emcu_emp_id = $emcu_emp_id;
+      $obj->emcu_sta_id = $emcu_sta_id;
       $obj->emcu_tanggal_awal = $emcu_tanggal_awal;
       $obj->emcu_tanggal_akhir = $emcu_tanggal_akhir;
       $obj->emcu_keterangan = $emcu_keterangan;
@@ -83,8 +83,8 @@ class IzinApi
       );
 
       $emcu_id = $request->getParam('emcu_id');
-      $emcu_name = $request->getParam('emcu_name');
       $emcu_emp_id = $request->getParam('emcu_emp_id');
+      $emcu_sta_id = $request->getParam('emcu_sta_id');
       $emcu_tanggal_awal = $request->getParam('emcu_tanggal_awal');
       $emcu_tanggal_akhir = $request->getParam('emcu_tanggal_akhir');
       $emcu_keterangan = $request->getParam('emcu_keterangan');
@@ -94,8 +94,8 @@ class IzinApi
       if(!empty($emcu_tanggal_akhir)) $emcu_tanggal_akhir = Helper::formatDBDate($emcu_tanggal_akhir);
 
       $obj = Izin::find($emcu_id);
-      $obj->emcu_name = $emcu_name;
       $obj->emcu_emp_id = $emcu_emp_id;
+      $obj->emcu_sta_id = $emcu_sta_id;
       $obj->emcu_tanggal_awal = $emcu_tanggal_awal;
       $obj->emcu_tanggal_akhir = $emcu_tanggal_akhir;
       $obj->emcu_keterangan = $emcu_keterangan;
@@ -123,8 +123,8 @@ class IzinApi
         if(isset($obj->emcu_tanggal_akhir)) $obj->emcu_tanggal_akhir = Helper::formatDate($obj->emcu_tanggal_akhir);
 
         $arrData['emcu_id'] = $obj->emcu_id;
-        $arrData['emcu_name'] = $obj->emcu_name;
         $arrData['emcu_emp_id'] = $obj->emcu_emp_id;
+        $arrData['emcu_sta_id'] = $obj->emcu_sta_id;
         $arrData['emcu_tanggal_awal'] = $obj->emcu_tanggal_awal;
         $arrData['emcu_tanggal_akhir'] = $obj->emcu_tanggal_akhir;
         $arrData['emcu_keterangan'] = $obj->emcu_keterangan;

@@ -25,7 +25,7 @@ class EmployeescheduleModel extends Model
     {
       if(!is_array($data)) return 0;
 
-      $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')->where('emsc_void', 0)->whereIn('emsc_emp_id', $data)->get();
+      $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')->where('emsc_void', 0)->leftjoin('status', 'emsc_sta_id', '=', 'sta_id')->whereIn('emsc_emp_id', $data)->get();
       return $res;
     }
 

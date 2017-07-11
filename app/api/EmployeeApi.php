@@ -29,8 +29,8 @@ class EmployeeApi
               $value->emp_id,
               $value->emp_code,
               $value->emp_name,
-              $value->emp_uni_id,
-              $value->emp_jab_id,
+              (!empty($value->uni_name) ? ($value->uni_name . ' (' . $value->bag_name . ')') : ''),
+              $value->jab_name,
             );
           }
         }

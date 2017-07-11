@@ -19,17 +19,17 @@ class EmployeeModel extends Model
     {
       if(!empty($limit)) {
         // echo "string - " . $offset; exit();
-        $patient = EmployeeModel::where('emp_void', 0)->limit($limit)->offset($offset)->get();
+        $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->limit($limit)->offset($offset)->get();
       } else {
-        $patient = EmployeeModel::where('emp_void', 0)->get();
+        $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->get();
       }
-      return $patient;
+      return $res;
     }
 
     public static function getPatientByID($id)
     {
-      $patient = EmployeeModel::where('emp_id', $id)->first();
-      return $patient;
+      $res = EmployeeModel::where('emp_id', $id)->first();
+      return $res;
     }
 
     public static function getOptNonVoid()

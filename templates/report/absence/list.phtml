@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Page title -->
+    <title>REPORT ABSENCE | WebApp admin theme</title>
+</head>
+<body>
+<table width="100%">
+  <tr>
+    <td>
+      <table width="40%">
+        <tr>
+          <td colspan="3">
+            Laporan Absen Karyawan
+          </td>
+        </tr>
+        <tr>
+          <td width="30%">NIK</td>
+          <td>:</td>
+          <td>1234</td>
+        </tr>
+        <tr>
+          <td>Nama Pegawai</td>
+          <td>:</td>
+          <td>Jey Batosay</td>
+        </tr>
+        <tr>
+          <td>Departemen</td>
+          <td>:</td>
+          <td>Awesome</td>
+        </tr>
+        <tr>
+          <td>Bulan</td>
+          <td>:</td>
+          <td>Januari</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+          <th rowspan="2">No</th>
+          <th rowspan="2">Hari</th>
+          <th rowspan="2">Tanggal</th>
+          <th rowspan="2">Shif</th>
+          <th colspan="2">Jam</th>
+          <th colspan="3">Terlambat</th>
+          <th colspan="4">Tidak Masuk</th>
+          <th colspan="2">Apel</th>
+          <th rowspan="2">Keterangan</th>
+        </tr>
+        <tr>
+          <th>Masuk</th>
+          <th>Pulang</th>
+          <th>Menit</th>
+          <th>Jumlah</th>
+          <th>Dengan Izin</th>
+          <th>Izin</th>
+          <th>Sakit</th>
+          <th>Alpha</th>
+          <th>Dinas</th>
+          <th>Hadir Apel</th>
+          <th>Apel</th>
+        </tr>
+        <?php $cnt = 0; ?>
+        <?php for($i=1; $i<=$totalDay; $i++): ?>
+        <?php $dayNo = date('w', mktime(0, 0, 0, $month, $i, $year)); $tgl = ($i < 10 ? "0$i" : $i) . "/$month/$year"; ?>
+        <?php if($dayNo == 0) continue; $cnt++; ?>
+        <tr>
+          <td><?php echo $i; ?></td>
+          <td><?php echo $arrDayName[$dayNo]; ?></td>
+          <td><?php echo $tgl; ?></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <?php endfor; ?>
+        <tr>
+          <td colspan="4">Jumlah</td>
+          <td><?php echo $cnt; ?></td>
+          <td><?php echo $cnt; ?></td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr><td>&nbsp;</td></tr>
+  <tr><td>&nbsp;</td></tr>
+  <tr>
+    <td>
+      <table border="1" cellpadding="5" cellspacing="0" width="40%">
+        <tr>
+          <th>Shift</th>
+          <th>Hari Biasa</th>
+          <th>Minggu / Libur</th>
+          <th>Waktu Kerja</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>14</td>
+          <td>0</td>
+          <td>112</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>12</td>
+          <td>0</td>
+          <td>96</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td colspan="3">Total Waktu</td>
+          <td>208</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

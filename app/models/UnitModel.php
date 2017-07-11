@@ -17,25 +17,26 @@ class UnitModel extends Model
 
     public static function getAllNonVoid()
     {
-      $patient = UnitModel::where('uni_void', 0)->get();
-      return $patient;
+      $res = UnitModel::join('bagian', 'uni_bag_id', '=', 'bag_id')->where('uni_void', 0)->get();
+      return $res;
     }
 
-    public static function getPatientByID($id)
+    public static function getUnitByID($id)
     {
-      $patient = UnitModel::where('uni_id', $id)->first();
-      return $patient;
+      $res = UnitModel::where('uni_id', $id)->first();
+      return $res;
     }
 
     public static function getOptNonVoid()
     {
       $arrData = array();
 
-      $result = UnitModel::where('uni_void', 0)->get();
+      $result = UnitModel::join('bagian', 'uni_bag_id', '=', 'bag_id')->where('uni_void', 0)->get();
 
       if(!empty($result)) {
         foreach ($result as $key => $value) {
-          $arrData[$value->uni_bag_id][$value->uni_id] = array(
+          $arrData['bagian'][$value->uni_bag_id] = $value->bag_name;
+          $arrData['unit'][$value->uni_bag_id][$value->uni_id] = array(
             'key' => $value->uni_id,
             'value' => $value->uni_name,
           );

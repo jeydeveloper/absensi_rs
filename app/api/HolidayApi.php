@@ -21,7 +21,14 @@ class HolidayApi
           'data' => array()
         );
 
-        $result = Holiday::getAllNonVoid();
+        $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : '';
+
+        if(!empty($year) AND $year != 'all') {
+          $result = Holiday::getHolidayByYear($year);
+        } else {
+          $result = Holiday::getAllNonVoid();
+        }
+
         if(!empty($result)) {
           foreach ($result as $key => $value) {
             $arrData['data'][] = array(

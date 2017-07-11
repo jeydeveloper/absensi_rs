@@ -178,3 +178,7 @@ $container['MappingjadwalController'] = function($c) {
 $container['MappingjadwalApi'] = function($c) {
     return new App\Api\MappingjadwalApi($c);
 };
+
+$container['ReportabsenceController'] = function($c) {
+    return new App\Controllers\Report\ReportabsenceController($c);
+};

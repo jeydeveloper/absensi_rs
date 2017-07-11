@@ -20,10 +20,4 @@ class SettingModel extends Model
       $patient = SettingModel::where('sett_void', 0)->get();
       return $patient;
     }
-
-    public static function getPatientByID($id)
-    {
-      $patient = SettingModel::where('sett_id', $id)->first();
-      return $patient;
-    }
 }

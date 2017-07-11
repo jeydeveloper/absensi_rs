@@ -69,11 +69,11 @@ class SettingApi
       );
 
       $sett_id = $request->getParam('sett_id');
-      $sett_name = $request->getParam('sett_name');
+      //$sett_name = $request->getParam('sett_name');
       $sett_value = $request->getParam('sett_value');
 
       $obj = Setting::find($sett_id);
-      $obj->sett_name = $sett_name;
+      //$obj->sett_name = $sett_name;
       $obj->sett_value = $sett_value;
       $obj->sett_updated_at = Helper::dateNowDB();
 

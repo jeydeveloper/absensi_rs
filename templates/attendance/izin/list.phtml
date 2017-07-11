@@ -176,7 +176,7 @@
                             <th width="5%">No.</th>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Employee ID</th>
+                            <th>Employee</th>
                             <th>Tanggal Awal</th>
                             <th>Tanggal Akhir</th>
                             <th width="15%">Action</th>
@@ -214,7 +214,14 @@
             <form action="<?php echo $baseUrl; ?>api/izin/add" role="form" id="form_2">
             <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body">
-                <div class="form-group"><label for="emcu_name">Nama Izin</label> <input type="text" id="emcu_name" name="emcu_name" placeholder="Isi nama izin" class="form-control" required></div>
+                <div class="form-group"><label for="emcu_sta_id">Nama Izin</label>
+                  <select id="emcu_sta_id" name="emcu_sta_id" placeholder="Isi izin" class="form-control" required>
+                    <<option value="">-- Pilih Izin --</option>
+                    <?php foreach($optStatusKetidakhadiran as $value): ?>
+                    <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
                 <div class="form-group"><label for="emcu_emp_id">Nama Employee</label>
                   <select id="emcu_emp_id" name="emcu_emp_id" placeholder="Isi nama employee" class="form-control js-source-states" required>
                     <<option value="">-- Pilih Employee --</option>
@@ -360,7 +367,11 @@
                 $('#'+idx).attr('checked', false);
               }
             } else if($('#'+idx).is('select')) {
-              $('#'+idx).select2('val', val);
+              if($('#'+idx).hasClass('js-source-states')) {
+                $('#'+idx).select2('val', val);
+              } else {
+                $('#'+idx).val(val);
+              }
             } else {
               $('#'+idx).val(val);
             }

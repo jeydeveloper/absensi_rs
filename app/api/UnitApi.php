@@ -28,7 +28,7 @@ class UnitApi
               ($key + 1),
               $value->uni_id,
               $value->uni_name,
-              $value->uni_bag_id,
+              $value->bag_name,
             );
           }
         }

@@ -188,3 +188,7 @@ $app->group('/api/mappingjadwal', function () {
   $this->get('/lists', \MappingjadwalApi::class . ':lists')->setName('api-mappingjadwal-lists');
   $this->post('/edit', \MappingjadwalApi::class . ':doEdit')->setName('post-api-mappingjadwal-edit');
 });
+
+$app->group('/report', function () {
+  $this->get('/absence', \ReportabsenceController::class . ':lists')->setName('reportabsence-list');
+});

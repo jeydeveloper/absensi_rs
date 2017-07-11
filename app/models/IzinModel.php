@@ -17,7 +17,7 @@ class IzinModel extends Model
 
     public static function getAllNonVoid()
     {
-      $patient = IzinModel::where('emcu_void', 0)->get();
+      $patient = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')->where('emcu_void', 0)->get();
       return $patient;
     }
 
@@ -25,5 +25,13 @@ class IzinModel extends Model
     {
       $patient = IzinModel::where('emcu_id', $id)->first();
       return $patient;
+    }
+
+    public static function getAllNonVoidWhereIn($data = null)
+    {
+      if(!is_array($data)) return 0;
+
+      $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')->where('emcu_void', 0)->whereIn('emcu_emp_id', $data)->get();
+      return $res;
     }
 }
