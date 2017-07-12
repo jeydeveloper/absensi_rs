@@ -21,11 +21,22 @@ class EmployeescheduleModel extends Model
       return $res;
     }
 
-    public static function getAllNonVoidWhereIn($data = null)
+    public static function getAllNonVoidWhereIn($data = null, $dateStart = '', $dateEnd = '')
     {
       if(!is_array($data)) return 0;
 
-      $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')->where('emsc_void', 0)->leftjoin('status', 'emsc_sta_id', '=', 'sta_id')->whereIn('emsc_emp_id', $data)->get();
+      if (!empty($dateStart)) {
+        $dateEnd = !empty($dateEnd) ? $dateEnd : $dateStart;
+        $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')
+        ->leftjoin('status', 'emsc_sta_id', '=', 'sta_id')
+        ->where('emsc_void', 0)
+        ->whereIn('emsc_emp_id', $data)
+        ->whereRaw('emsc_date BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"')
+        ->get();
+      } else {
+        $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')->leftjoin('status', 'emsc_sta_id', '=', 'sta_id')->where('emsc_void', 0)->whereIn('emsc_emp_id', $data)->get();
+      }
+
       return $res;
     }
 

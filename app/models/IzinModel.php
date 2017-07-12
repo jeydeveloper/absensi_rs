@@ -27,11 +27,22 @@ class IzinModel extends Model
       return $patient;
     }
 
-    public static function getAllNonVoidWhereIn($data = null)
+    public static function getAllNonVoidWhereIn($data = null, $dateStart = '', $dateEnd = '')
     {
       if(!is_array($data)) return 0;
 
-      $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')->where('emcu_void', 0)->whereIn('emcu_emp_id', $data)->get();
+      if (!empty($dateStart)) {
+        $dateEnd = !empty($dateEnd) ? $dateEnd : $dateStart;
+        $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')
+        ->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')
+        ->where('emcu_void', 0)
+        ->whereIn('emcu_emp_id', $data)
+        ->whereRaw('emcu_tanggal_awal BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"')
+        ->get();
+      } else {
+        $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')->where('emcu_void', 0)->whereIn('emcu_emp_id', $data)->get();
+      }
+
       return $res;
     }
 }

@@ -26,9 +26,9 @@ class EmployeeModel extends Model
       return $res;
     }
 
-    public static function getPatientByID($id)
+    public static function getEmployeeByID($id)
     {
-      $res = EmployeeModel::where('emp_id', $id)->first();
+      $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_id', $id)->first();
       return $res;
     }
 

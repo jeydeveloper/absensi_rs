@@ -102,7 +102,7 @@ class JadwalkerjaApi
               ($key + 1),
               $value->emp_id,
               $value->emp_code,
-              ('<a href="'.($this->ci->get('settings')['baseUrl'] . 'report/absence?userId='.$value->emp_id.'&month='.$month.'&year='.$year).'" class="btn-link">'.$value->emp_name.'</a>'),
+              ('<a href="'.($this->ci->get('settings')['baseUrl'] . 'report/absence?empId='.$value->emp_id.'&month='.$month.'&year='.$year).'" class="btn-link">'.$value->emp_name.'</a>'),
             );
             $len = count($arrData['data'][$key]);
             $forLimit = $jumlahTanggal + $len;
