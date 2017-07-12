@@ -41,4 +41,24 @@ class JadwalkerjaController extends \App\Controllers\BaseController
 
         return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/list.phtml', $this->data);
     }
+
+    public function detail($request, $response, $args)
+    {
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /proses/jadwalkerja/detail' route");
+
+        $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
+        $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+        $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'].'-'.$this->data['selectedMonth'].'-01'));
+        $this->data['listMonth'] = $this->ci->get('settings')['dataStatic']['listMonth'];
+        $this->data['listYear'] = $this->ci->get('settings')['dataStatic']['listYear'];
+
+        $this->data['listSchedule'] = Schedule::getAllNonVoid();
+        $this->data['listStatusKehadiran'] = Status::getAllKehadiranNonVoid();
+        $this->data['listStatusKetidakhadiran'] = Status::getAllKetidakhadiranNonVoid();
+
+        $this->data['menuActived'] = 'prosesAbsensi';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+        return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/detail.phtml', $this->data);
+    }
 }

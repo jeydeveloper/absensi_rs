@@ -158,10 +158,12 @@ $app->group('/api/session', function () {
 
 $app->group('/jadwal-kerja', function () {
   $this->get('', \JadwalkerjaController::class . ':lists')->setName('jadwalkerja-list');
+  $this->get('/detail', \JadwalkerjaController::class . ':detail')->setName('jadwalkerja-detail-list');
 });
 
 $app->group('/api/jadwalkerja', function () {
   $this->get('/lists', \JadwalkerjaApi::class . ':lists')->setName('api-jadwalkerja-lists');
+  $this->get('/detail', \JadwalkerjaApi::class . ':detail')->setName('api-jadwalkerja-detail');
   $this->post('/edit', \JadwalkerjaApi::class . ':doEdit')->setName('post-api-jadwalkerja-edit');
   $this->get('/do-process', \JadwalkerjaApi::class . ':doProcess')->setName('api-jadwalkerja-doprocess');
 });

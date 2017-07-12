@@ -69,6 +69,7 @@
           <th>Apel</th>
         </tr>
         <?php $cnt = 0; $arrJumlah = [
+          'jumlahMasuk' => 0,
           'jumlahMenitTerlambat' => 0,
           'jumlahTerlambat' => 0,
           'denganIzinTerlambat' => 0,
@@ -99,10 +100,11 @@
 
           $apelSchedule = strtotime($scheduleDate . ' ' . $setting['apel_closest_schedule']);
           $apelTime = strtotime($scheduleDate . ' ' . $setting['apel_time']);
+          $apelDay = $setting['apel_day'];
 
           //echo "string - x -" . $apelSchedule;
           //echo "string - y -" . $intMinSchedule;
-          if($apelSchedule == $intMinSchedule) {
+          if($apelSchedule == $intMinSchedule AND strtolower($arrDayName[$dayNo]) == $apelDay) {
             $apel = 1;
             $arrJumlah['apel'] += 1;
             if($intMinAbsence <= $apelTime) {
@@ -122,6 +124,7 @@
           }
         }
 
+        if(!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min'])) $arrJumlah['jumlahMasuk'] += 1;
 
         ?>
         <tr>
@@ -150,8 +153,8 @@
         <?php endfor; ?>
         <tr>
           <td colspan="4">Jumlah</td>
-          <td></td>
-          <td></td>
+          <td><?php echo $arrJumlah['jumlahMasuk']; ?></td>
+          <td><?php echo $arrJumlah['jumlahMasuk']; ?></td>
           <td><?php echo $arrJumlah['jumlahMenitTerlambat']; ?></td>
           <td><?php echo $arrJumlah['jumlahTerlambat']; ?></td>
           <td><?php echo $arrJumlah['denganIzinTerlambat']; ?></td>
