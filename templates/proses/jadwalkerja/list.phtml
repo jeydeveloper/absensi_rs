@@ -442,7 +442,6 @@
         }
         $('#beforeStatusUpdate').text(label);
         $('#afterStatusUpdate').text($('#activedStatus').text());
-        // $('#myModal').modal('show');
         btnStatusToUpdate = 'btnStatusToUpdate_'+generateId;
         $('#userId').val(userId);
         $('#generateId').val(generateId);
@@ -450,7 +449,12 @@
         $('#absenceLabel').val(absenceLabel);
         $('#minAbsence').val(minAbsence);
         $('#maxAbsence').val(maxAbsence);
-        $('#btnSave').trigger('click');
+
+        if($('#idStatus').val() != '') {
+          $('#myModal').modal('show');
+        } else {
+          $('#btnSave').trigger('click');
+        }
       } else {
         swal({
             title: "Warning!!",
