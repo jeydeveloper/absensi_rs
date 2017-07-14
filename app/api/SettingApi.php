@@ -43,6 +43,8 @@ class SettingApi
           'success' => false,
       );
 
+      return $response->withJson($arrData);
+
       $sett_name = $request->getParam('sett_name');
       $sett_value = $request->getParam('sett_value');
 
