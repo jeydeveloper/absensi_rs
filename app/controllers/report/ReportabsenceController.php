@@ -111,13 +111,4 @@ class ReportabsenceController extends \App\Controllers\BaseController
       }
       return $arrData;
     }
-
-    private function getSettingDb() {
-      $arrData = [];
-      $setting = Setting::getAllNonVoid();
-      foreach ($setting as $key => $value) {
-        $arrData[$value->sett_name] = $value->sett_value;
-      }
-      return $arrData;
-    }
 }
