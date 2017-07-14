@@ -29,8 +29,7 @@ class JadwalkerjaController extends \App\Controllers\BaseController
         $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
         $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'].'-'.$this->data['selectedMonth'].'-01'));
-        $this->data['listMonth'] = $this->ci->get('settings')['dataStatic']['listMonth'];
-        $this->data['listYear'] = $this->ci->get('settings')['dataStatic']['listYear'];
+        $this->data['listMonth'] = $this->getMonthFilter();
 
         $this->data['listSchedule'] = Schedule::getAllNonVoid();
         $this->data['listStatusKehadiran'] = Status::getAllKehadiranNonVoid();
@@ -38,6 +37,8 @@ class JadwalkerjaController extends \App\Controllers\BaseController
 
         $this->data['menuActived'] = 'prosesAbsensi';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+        $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
         return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/list.phtml', $this->data);
     }
@@ -49,8 +50,7 @@ class JadwalkerjaController extends \App\Controllers\BaseController
         $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
         $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'].'-'.$this->data['selectedMonth'].'-01'));
-        $this->data['listMonth'] = $this->ci->get('settings')['dataStatic']['listMonth'];
-        $this->data['listYear'] = $this->ci->get('settings')['dataStatic']['listYear'];
+        $this->data['listMonth'] = $this->getMonthFilter();
 
         $this->data['listSchedule'] = Schedule::getAllNonVoid();
         $this->data['listStatusKehadiran'] = Status::getAllKehadiranNonVoid();
@@ -58,6 +58,8 @@ class JadwalkerjaController extends \App\Controllers\BaseController
 
         $this->data['menuActived'] = 'prosesAbsensi';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+        $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
         return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/detail.phtml', $this->data);
     }
