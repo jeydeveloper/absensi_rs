@@ -81,6 +81,7 @@ class JadwalkerjaApi
                   'color' => $value->schd_color,
                   'namaIzin' => $value->sta_name,
                   'status_reason' => $value->emsc_status_reason,
+                  'isScheduleGantiHari' => $value->schd_ganti_hari,
                 ];
               }
             }
@@ -112,6 +113,22 @@ class JadwalkerjaApi
               $tanggal = $cnt < 10 ? ('0'.$cnt) : $cnt;
               $generateId = $year . $month . $tanggal . $value->emp_id;
               $scheduleDate = $year . '-' . $month . '-' . $tanggal;
+
+              $tanggalAkhir = date('t', strtotime($scheduleDate));
+              if($tanggal == $tanggalAkhir) {
+                $newMonth = 1 + (int)$month;
+                if($newMonth > 12) {
+                  $newMonth = 1;
+                  $year += 1;
+                }
+                $newMonth = $newMonth < 10 ? "0$newMonth" : $newMonth;
+                $scheduleDateAfter = $year . '-' . $newMonth . '-01';
+              } else {
+                $newTanggal = 1 + (int)$tanggal;
+                $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
+                $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
+              }
+
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
@@ -122,15 +139,26 @@ class JadwalkerjaApi
 
               $anySchedule = $tooltip;
 
-              $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) : 'OFF';
+              if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['isScheduleGantiHari'])) {
+                $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDateAfter]['time_min']) : 'OFF';
+              } else {
+                $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) : 'OFF';
+              }
 
               $tooltip .= ' | ' . $absenceLabel . ' [ABS]';
 
               if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]) AND !empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
-                $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
-                $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min']);
-                $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['isScheduleGantiHari'])) {
+                  $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
+                  $intMaxSchedule = strtotime(($scheduleDateAfter . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
+                  $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                  $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDateAfter]['wkt_min']);
+                } else {
+                  $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
+                  $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
+                  $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min']);
+                  $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                }
 
                 if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
                   $absenceLabel = 'MATCH';
@@ -242,6 +270,7 @@ class JadwalkerjaApi
                   'color' => $value->schd_color,
                   'namaIzin' => $value->sta_name,
                   'status_reason' => $value->emsc_status_reason,
+                  'isScheduleGantiHari' => $value->schd_ganti_hari,
                 ];
               }
             }
@@ -276,6 +305,21 @@ class JadwalkerjaApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
+              $tanggalAkhir = date('t', strtotime($scheduleDate));
+              if($tanggal == $tanggalAkhir) {
+                $newMonth = 1 + (int)$month;
+                if($newMonth > 12) {
+                  $newMonth = 1;
+                  $year += 1;
+                }
+                $newMonth = $newMonth < 10 ? "0$newMonth" : $newMonth;
+                $scheduleDateAfter = $year . '-' . $newMonth . '-01';
+              } else {
+                $newTanggal = 1 + (int)$tanggal;
+                $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
+                $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
+              }
+
               $tooltip = 'OFF';
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
                 $tooltip = '[SCD] ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'] . ' - ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max'];
@@ -283,15 +327,26 @@ class JadwalkerjaApi
 
               $anySchedule = $tooltip;
 
-              $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) : 'OFF';
+              if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['isScheduleGantiHari'])) {
+                $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDateAfter]['time_min']) : 'OFF';
+              } else {
+                $absenceLabel = !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) : 'OFF';
+              }
 
               $tooltip .= ' | ' . $absenceLabel . ' [ABS]';
 
               if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]) AND !empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
-                $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
-                $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min']);
-                $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['isScheduleGantiHari'])) {
+                  $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
+                  $intMaxSchedule = strtotime(($scheduleDateAfter . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
+                  $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                  $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDateAfter]['wkt_min']);
+                } else {
+                  $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min']));
+                  $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max']));
+                  $intMinAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min']);
+                  $intMaxAbsence = strtotime($dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max']);
+                }
 
                 if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
                   if($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule) {
@@ -470,6 +525,7 @@ class JadwalkerjaApi
             'color' => $value->schd_color,
             'namaIzin' => $value->sta_name,
             'status_reason' => $value->emsc_status_reason,
+            'isScheduleGantiHari' => $value->schd_ganti_hari,
           ];
         }
       }
@@ -490,6 +546,22 @@ class JadwalkerjaApi
       $lblShift = '-';
       $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
+      list($year, $month, $tanggal) = explode('-', $scheduleDate);
+      $tanggalAkhir = date('t', strtotime($scheduleDate));
+      if($tanggal == $tanggalAkhir) {
+        $newMonth = 1 + (int)$month;
+        if($newMonth > 12) {
+          $newMonth = 1;
+          $year += 1;
+        }
+        $newMonth = $newMonth < 10 ? "0$newMonth" : $newMonth;
+        $scheduleDateAfter = $year . '-' . $newMonth . '-01';
+      } else {
+        $newTanggal = 1 + (int)$tanggal;
+        $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
+        $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
+      }
+
       $tooltip = 'OFF';
       if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) {
         $tooltip = '[SCD] ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min'] . ' - ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_max'];
@@ -497,15 +569,26 @@ class JadwalkerjaApi
 
       $anySchedule = $tooltip;
 
-      $absenceLabel = !empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) : 'OFF';
+      if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId]['isScheduleGantiHari'])) {
+        $absenceLabel = !empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) ? ($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max'].' - '.$dataEmpAbsence[$arrParam['empCode']][$scheduleDateAfter]['time_min']) : 'OFF';
+      } else {
+        $absenceLabel = !empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) : 'OFF';
+      }
 
       $tooltip .= ' | ' . $absenceLabel . ' [ABS]';
 
       if(!empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]) AND !empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) {
-        $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min']));
-        $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_max']));
-        $intMinAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min']);
-        $intMaxAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max']);
+        if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId]['isScheduleGantiHari'])) {
+          $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min']));
+          $intMaxSchedule = strtotime(($scheduleDateAfter . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_max']));
+          $intMinAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max']);
+          $intMaxAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDateAfter]['wkt_min']);
+        } else {
+          $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min']));
+          $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_max']));
+          $intMinAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min']);
+          $intMaxAbsence = strtotime($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max']);
+        }
 
         if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
           $absenceLabel = 'MATCH';
@@ -551,5 +634,14 @@ class JadwalkerjaApi
       }
 
       return '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$absenceLabel.'</button>';
+    }
+
+    public function getSettingDb() {
+      $arrData = [];
+      $setting = Setting::getAllNonVoid();
+      foreach ($setting as $key => $value) {
+        $arrData[$value->sett_name] = $value->sett_value;
+      }
+      return $arrData;
     }
 }

@@ -213,8 +213,10 @@
                     <option value="" selected="selected">-- Pilih Tipe Status --</option>
                     <option value="1">Hadir</option>
                     <option value="2">Tidak Hadir</option>
+                    <option value="3">Terlambat</option>
                   </select>
                 </div>
+                <div class="form-group"><label for="sta_flag_cuti">Potong Cuti?</label> <input type="checkbox" id="sta_flag_cuti" name="sta_flag_cuti" class="form-control" value="1"></div>
             </div>
             <div class="modal-footer">
                 <div style="display: inline-block;float: left;"><label> <input name="autoClose" id="autoClose" type="checkbox" class="i-checks"> Auto-Close Enable </label></div>
@@ -328,7 +330,22 @@
 
         var fillInputForm = function(data) {
           $.each(data, function(idx, val){
-            $('#'+idx).val(val);
+            var ckbox = $('#'+idx+'[type="checkbox"]');
+            if(ckbox.length > 0) {
+              if(val == 1) {
+                $('#'+idx).trigger('click');
+              } else {
+                $('#'+idx).attr('checked', false);
+              }
+            } else if($('#'+idx).is('select')) {
+              if($('#'+idx).hasClass('js-source-states')) {
+                $('#'+idx).select2('val', val);
+              } else {
+                $('#'+idx).val(val);
+              }
+            } else {
+              $('#'+idx).val(val);
+            }
           });
         };
 
@@ -420,6 +437,7 @@
 
         $("#myModal5").on("hidden.bs.modal", function () {
             frm.find(':input').val('');
+            frm.find('input[type="checkbox"]').attr('checked', false);
             frm.attr('action', '<?php echo $baseUrl ?>api/status/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');

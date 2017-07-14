@@ -45,4 +45,24 @@ class IzinModel extends Model
 
       return $res;
     }
+
+    public static function getUserCuti($data = null, $year = '')
+    {
+      if(!is_array($data)) return 0;
+
+      if (!empty($year)) {
+        $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')
+        ->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')
+        ->selectRaw('emcu_emp_id, DATEDIFF(emcu_tanggal_akhir, emcu_tanggal_awal) as cuti')
+        ->where('emcu_void', 0)
+        ->where('emcu_flag_cuti', 1)
+        ->whereIn('emcu_emp_id', $data)
+        ->whereRaw('DATE_FORMAT(emcu_tanggal_awal, "%Y") = "'.$year.'"')
+        ->get();
+      } else {
+        $res = IzinModel::join('employee', 'emcu_emp_id', '=', 'emp_id')->leftjoin('status', 'emcu_sta_id', '=', 'sta_id')->selectRaw('emcu_emp_id, DATEDIFF(emcu_tanggal_akhir, emcu_tanggal_awal) as cuti')->where('emcu_void', 0)->where('emcu_flag_cuti', 1)->whereIn('emcu_emp_id', $data)->get();
+      }
+
+      return $res;
+    }
 }

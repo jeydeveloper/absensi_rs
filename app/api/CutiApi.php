@@ -3,7 +3,9 @@
 namespace App\Api;
 
 use Interop\Container\ContainerInterface;
-use App\Models\CutiModel as Cuti;
+use App\Models\EmployeeModel as Employee;
+use App\Models\IzinModel as Izin;
+use App\Models\SettingModel as Setting;
 use App\Helper;
 
 class CutiApi
@@ -21,14 +23,48 @@ class CutiApi
           'data' => array()
         );
 
-        $result = Cuti::getAllNonVoid();
+        $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
+        $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
+
+        $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+
+        $resultTotal = Employee::getAllNonVoid();
+        $result = Employee::getAllNonVoid($limit, $offset);
         if(!empty($result)) {
+          $arrData['recordsTotal'] = count($resultTotal);
+          $arrData['recordsFiltered'] = count($resultTotal);
+
+          $setting = $this->getSettingDb();
+          $jumlahCuti = !empty($setting['jumlah_cuti']) ? $setting['jumlah_cuti'] : 0;
+
+          $dataEmpCuti = [];
+          $dataEmpId = [];
           foreach ($result as $key => $value) {
-            $arrData['data'][] = array(
+            $dataEmpId[$value->emp_id] = $value->emp_id;
+          }
+
+          if(!empty($dataEmpId)) {
+            $res = Izin::getUserCuti($dataEmpId, $year);
+            if(!empty($res)) {
+              foreach ($res as $key => $value) {
+                $value->cuti += 1;
+                $dataEmpCuti[$value->emcu_emp_id] = [
+                  'totalCuti' => $value->cuti,
+                  'sisaCuti' => ($jumlahCuti - $value->cuti),
+                ];
+              }
+            }
+          }
+
+          //print_r($dataEmpCuti);
+
+          foreach ($result as $key => $value) {
+            $arrData['data'][$key] = array(
               ($key + 1),
-              $value->cut_id,
-              $value->cut_name,
-              $value->cut_jumlah,
+              $value->emp_id,
+              $value->emp_code,
+              ('<a href="'.($this->ci->get('settings')['baseUrl'] . 'cuti/report?empId='.$value->emp_id.'&year='.$year).'" class="btn-link">'.$value->emp_name.'</a>'),
+              (!empty($dataEmpCuti[$value->emp_id]) ? $dataEmpCuti[$value->emp_id]['sisaCuti'] : $jumlahCuti)
             );
           }
         }
@@ -127,5 +163,14 @@ class CutiApi
       }
 
       return $response->withJson($arrData);
+    }
+
+    public function getSettingDb() {
+      $arrData = [];
+      $setting = Setting::getAllNonVoid();
+      foreach ($setting as $key => $value) {
+        $arrData[$value->sett_name] = $value->sett_value;
+      }
+      return $arrData;
     }
 }

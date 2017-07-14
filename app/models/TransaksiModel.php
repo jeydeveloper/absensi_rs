@@ -68,6 +68,22 @@ class TransaksiModel extends Model
       $dateStart = !empty($dateStart) ? $dateStart : date('Y-m-01');
       $dateEnd = !empty($dateEnd) ? $dateEnd : date('Y-m-t');
 
+      list($year, $month, $day) = explode('-', $dateEnd);
+      $lastDate = date('t', strtotime($dateEnd));
+      if($day == $lastDate) {
+        $newMonth = 1 + (int)$month;
+        if($newMonth > 12) {
+          $newMonth = 1;
+          $year += 1;
+        }
+        $newMonth = $newMonth < 10 ? "0$newMonth" : $newMonth;
+        $dateEnd = $year . '-' . $newMonth . '-01';
+      } else {
+        $newTanggal = 1 + (int)$day;
+        $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
+        $dateEnd = $year . '-' . $month . '-' . $newTanggal;
+      }
+
       $res = TransaksiModel::selectRaw("tran_cardNo, MIN(tran_time) as wkt_min, MAX(tran_time) as wkt_max, time(MIN(tran_time)) as time_min, time(MAX(tran_time)) as time_max, date(tran_time) as tgl")
       ->whereIn('tran_cardNo', $data)
       ->whereRaw('date(tran_time) BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"')

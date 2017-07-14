@@ -27,6 +27,9 @@ class CutiController extends \App\Controllers\BaseController
         $this->data['menuActived'] = 'report';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
+        $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+        $this->data['yearFilterRange'] = $this->getYearFilterRange();
+
         return $this->ci->get('renderer')->render($response, 'report/cuti/list.phtml', $this->data);
     }
 }
