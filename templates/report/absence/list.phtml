@@ -49,40 +49,51 @@
           <th rowspan="2">No</th>
           <th rowspan="2">Hari</th>
           <th rowspan="2">Tanggal</th>
-          <th rowspan="2">Shif</th>
           <th colspan="2">Jam</th>
-          <th colspan="3">Terlambat</th>
+          <th colspan="2">Dtg Lambat</th>
+          <th colspan="2">Plng Cepat</th>
+          <th rowspan="2">Shift</th>
           <th colspan="<?php echo $cntIzinTidakHadir; ?>">Tidak Masuk</th>
-          <th colspan="2">Apel</th>
+          <th rowspan="2">Hadir Apel</th>
+          <th rowspan="2">Apel</th>
           <th rowspan="2">Keterangan</th>
         </tr>
         <tr>
           <th>Masuk</th>
           <th>Pulang</th>
+          <th>Jml</th>
           <th>Menit</th>
-          <th>Jumlah</th>
-          <th>Dengan Izin</th>
+          <th>Jml</th>
+          <th>Menit</th>
           <?php foreach($izinTidakHadir as $value): ?>
           <th><?php echo $value->sta_name; ?></th>
           <?php endforeach; ?>
-          <th>Hadir Apel</th>
-          <th>Apel</th>
         </tr>
         <?php $cnt = 0; $arrJumlah = [
           'jumlahMasuk' => 0,
           'jumlahMenitTerlambat' => 0,
           'jumlahTerlambat' => 0,
+          'jumlahMenitPulangCepat' => 0,
+          'jumlahPulangCepat' => 0,
           'denganIzinTerlambat' => 0,
           'tidakMasuk' => [],
           'hadirApel' => 0,
           'apel' => 0,
-        ]; ?>
+          'jumlahShiftBiasa' => [],
+          'jumlahShiftLibur' => [],
+          'waktuKerja' => [],
+        ];
+
+        $arrShift = [];
+        ?>
         <?php for($i=1; $i<=$totalDay; $i++): ?>
         <?php $dayNo = date('w', mktime(0, 0, 0, $month, $i, $year)); $tgl = ($i < 10 ? "0$i" : $i) . "/$month/$year"; ?>
         <?php //if($dayNo == 0) continue; $cnt++; ?>
         <?php
         $statusLate = false;
         $totalMinuteLate = 0;
+        $statusEearlyOut = false;
+        $totalMinuteEearlyOut = 0;
         $hadirApel = 0;
         $apel = 0;
 
@@ -114,30 +125,63 @@
           }
 
           if(($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
+            $earlyOut = strtotime('-'.$setting['toleransi_out'].' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max'])));
             $late = strtotime('+'.$setting['toleransi_in'].' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
             if($intMinAbsence > $late) {
               $statusLate = true;
-              $totalMinuteLate = (int)date('i', ($intMinAbsence - $late));
-              $arrJumlah['jumlahMenitTerlambat'] += $totalMinuteLate;
+              $totalMinuteLate = date('h:i', ($intMinAbsence - $intMinSchedule));
+              list($hour, $minute) = explode(':', $totalMinuteLate);
+              $hour = (int)$hour;
+              $minute = (int)$minute;
+              $hour = $hour > 0 ? (($hour-1)*60) : 0;
+              $minute += $hour;
+              $totalMinuteLate = $minute;
+              $arrJumlah['jumlahMenitTerlambat'] += $minute;
               $arrJumlah['jumlahTerlambat'] += 1;
+            }
+            if($intMaxAbsence < $earlyOut) {
+              $statusEearlyOut = true;
+              $totalMinuteEearlyOut = date('h:i', ($intMaxSchedule - $intMaxAbsence));
+              list($hour, $minute) = explode(':', $totalMinuteEearlyOut);
+              $hour = (int)$hour;
+              $minute = (int)$minute;
+              $hour = $hour > 0 ? (($hour-1)*60) : 0;
+              $minute += $hour;
+              $totalMinuteEearlyOut = $minute;
+              $arrJumlah['jumlahMenitPulangCepat'] += $minute;
+              $arrJumlah['jumlahPulangCepat'] += 1;
             }
           }
         }
 
         if(!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min'])) $arrJumlah['jumlahMasuk'] += 1;
 
+        if(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code'])) {
+          $arrShift[$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = $dataEmpHasSchedule['detail'][$empId][$generateId]['code'];
+          if(empty($arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
+          $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
+
+          if(empty($arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
+          $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += $dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu'];
+
+          if($dayNo == 0) {
+            if(empty($arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
+            $arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
+          }
+        }
+
         ?>
         <tr>
           <td><?php echo $i; ?></td>
           <td><?php echo $arrDayName[$dayNo]; ?></td>
           <td><?php echo $tgl; ?></td>
-          <td><?php echo (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['code'] : ''); ?></td>
           <td><?php echo (!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) ? $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] : ''); ?></td>
           <td><?php echo (!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) ? $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] : ''); ?></td>
-          <td><?php if($statusLate) echo $totalMinuteLate; ?></td>
           <td><?php if($statusLate) echo 1; ?></td>
-          <td><?php if($statusLate AND !empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {$arrJumlah['denganIzinTerlambat'] += 1; echo 1;} ?></td>
-
+          <td><?php if($statusLate) echo $totalMinuteLate; ?></td>
+          <td><?php if($statusEearlyOut) echo 1; ?></td>
+          <td><?php if($statusEearlyOut) echo $totalMinuteEearlyOut; ?></td>
+          <td><?php echo (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['code'] : ''); ?></td>
           <?php foreach($izinTidakHadir as $value): ?>
           <td><?php if(!empty($dataEmpHasSchedule['izin'][$empId][$generateId][$value->sta_id])) {
             $arrJumlah['tidakMasuk'][$value->sta_id] = (!empty($arrJumlah['tidakMasuk'][$value->sta_id]) ? ($arrJumlah['tidakMasuk'][$value->sta_id] + 1) : 1); echo 1;
@@ -152,12 +196,14 @@
         </tr>
         <?php endfor; ?>
         <tr>
-          <td colspan="4">Jumlah</td>
+          <td colspan="3">Jumlah</td>
           <td><?php echo $arrJumlah['jumlahMasuk']; ?></td>
           <td><?php echo $arrJumlah['jumlahMasuk']; ?></td>
-          <td><?php echo $arrJumlah['jumlahMenitTerlambat']; ?></td>
           <td><?php echo $arrJumlah['jumlahTerlambat']; ?></td>
-          <td><?php echo $arrJumlah['denganIzinTerlambat']; ?></td>
+          <td><?php echo $arrJumlah['jumlahMenitTerlambat']; ?></td>
+          <td><?php echo $arrJumlah['jumlahPulangCepat']; ?></td>
+          <td><?php echo $arrJumlah['jumlahMenitPulangCepat']; ?></td>
+          <td></td>
           <?php foreach($izinTidakHadir as $value): ?>
           <td><?php echo (!empty($arrJumlah['tidakMasuk'][$value->sta_id]) ? $arrJumlah['tidakMasuk'][$value->sta_id] : 0); ?></td>
           <?php endforeach; ?>
@@ -170,7 +216,7 @@
   </tr>
   <tr><td>&nbsp;</td></tr>
   <tr><td>&nbsp;</td></tr>
-  <!--<tr>
+  <tr>
     <td>
       <table border="1" cellpadding="5" cellspacing="0" width="40%">
         <tr>
@@ -179,31 +225,21 @@
           <th>Minggu / Libur</th>
           <th>Waktu Kerja</th>
         </tr>
+        <?php foreach($arrShift as $value): ?>
         <tr>
-          <td>1</td>
-          <td>14</td>
-          <td>0</td>
-          <td>112</td>
+          <td><?php echo $value; ?></td>
+          <td><?php echo $arrJumlah['jumlahShiftBiasa'][$value]; ?></td>
+          <td><?php echo (!empty($arrJumlah['jumlahShiftLibur'][$value]) ? $arrJumlah['jumlahShiftLibur'][$value] : 0); ?></td>
+          <td><?php echo (!empty($arrJumlah['waktuKerja'][$value]) ? $arrJumlah['waktuKerja'][$value] : 0); ?></td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td>12</td>
-          <td>0</td>
-          <td>96</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>0</td>
-          <td>0</td>
-          <td>0</td>
-        </tr>
+        <?php endforeach; ?>
         <tr>
           <td colspan="3">Total Waktu</td>
-          <td>208</td>
+          <td><?php echo array_sum($arrJumlah['waktuKerja']); ?></td>
         </tr>
       </table>
     </td>
-  </tr>-->
+  </tr>
 </table>
 </body>
 </html>

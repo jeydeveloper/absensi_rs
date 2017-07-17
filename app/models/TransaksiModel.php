@@ -85,6 +85,7 @@ class TransaksiModel extends Model
       }
 
       $res = TransaksiModel::selectRaw("tran_cardNo, MIN(tran_time) as wkt_min, MAX(tran_time) as wkt_max, time(MIN(tran_time)) as time_min, time(MAX(tran_time)) as time_max, date(tran_time) as tgl")
+      ->selectRaw('TIMEDIFF(MAX(tran_time), MIN(tran_time)) as totalWaktu')
       ->whereIn('tran_cardNo', $data)
       ->whereRaw('date(tran_time) BETWEEN "'.$dateStart.'" AND "'.$dateEnd.'"')
       ->groupBy('tran_cardNo')

@@ -15,11 +15,15 @@ class EmployeeModel extends Model
         return EmployeeModel::all();
     }
 
-    public static function getAllNonVoid($limit = 0, $offset = 0)
+    public static function getAllNonVoid($limit = 0, $offset = 0, $search = null)
     {
       if(!empty($limit)) {
         // echo "string - " . $offset; exit();
-        $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->limit($limit)->offset($offset)->get();
+        if(!empty($search)) {
+          $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->limit($limit)->offset($offset)->get();
+        } else {
+          $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->limit($limit)->offset($offset)->get();
+        }
       } else {
         $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->get();
       }

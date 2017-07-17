@@ -86,11 +86,13 @@ class ReportabsenceController extends \App\Controllers\BaseController
       $res = Transaksi::getAllMinMaxTranTime($dateStart, $dateEnd, array($userCode));
       if(!empty($res)) {
         foreach ($res as $key => $value) {
+          $totalWaktu = !empty($value->totalWaktu) ? $this->calculateTime($value->totalWaktu) : 0;
           $arrData[$value->tran_cardNo][$value->tgl] = [
             'wkt_min' => $value->wkt_min,
             'wkt_max' => $value->wkt_max,
             'time_min' => $value->time_min,
             'time_max' => $value->time_max,
+            'totalWaktu' => $totalWaktu,
           ];
         }
       }
@@ -110,5 +112,15 @@ class ReportabsenceController extends \App\Controllers\BaseController
         }
       }
       return $arrData;
+    }
+
+    private function calculateTime($data = '') {
+      if(empty($data)) return '';
+      list($hour, $minute, $second) = explode(':', $data);
+      $total = (int)$hour * 3600;
+      $total += (int)$minute * 60;
+      $total += (int)$second;
+      $total = floor($total/60);
+      return $total;
     }
 }
