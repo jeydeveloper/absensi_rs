@@ -86,8 +86,25 @@
 
         $arrShift = [];
         ?>
-        <?php for($i=1; $i<=$totalDay; $i++): ?>
-        <?php $dayNo = date('w', mktime(0, 0, 0, $month, $i, $year)); $tgl = ($i < 10 ? "0$i" : $i) . "/$month/$year"; ?>
+        <?php $tanggalStart = $setting['tanggal_cutoff']; $nowMonth = $month;  ?>
+        <?php for($i=0; $i<=$totalDay; $i++): ?>
+        <?php
+
+          $month = $nowMonth;
+          $day = $tanggalStart + $i;
+          if($day > $endDay) {
+            $day = $day - $endDay;
+
+            $month = (int)$nowMonth + 1;
+
+            if($month > 12) $year += 1;
+
+            $month = $month < 9 ? "0$month" : $month;
+          }
+
+          $dayNo = date('w', mktime(0, 0, 0, $month, $day, $year));
+          $tgl = ($day < 10 ? "$day" : $day) . "/$month/$year";
+        ?>
         <?php //if($dayNo == 0) continue; $cnt++; ?>
         <?php
         $statusLate = false;
@@ -97,7 +114,7 @@
         $hadirApel = 0;
         $apel = 0;
 
-        $tanggal = $i < 10 ? ('0'.$i) : $i;
+        $tanggal = $day < 10 ? ('0'.$day) : $day;
         $generateId = $year . $month . $tanggal . $empId;
         $scheduleDate = $year . '-' . $month . '-' . $tanggal;
 
@@ -172,7 +189,7 @@
 
         ?>
         <tr>
-          <td><?php echo $i; ?></td>
+          <td><?php echo ($i+1); ?></td>
           <td><?php echo $arrDayName[$dayNo]; ?></td>
           <td><?php echo $tgl; ?></td>
           <td><?php echo (!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) ? $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] : ''); ?></td>

@@ -48,8 +48,24 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['empId'] = $empId;
         $this->data['empCode'] = $empCode;
 
-        $dateStart = $year . '-' . $month . '-01';
-        $dateEnd = $year . '-' . $month . '-' . date('t', strtotime($dateStart));
+        $this->data['setting'] = $this->getSettingDb();
+
+        // $dateStart = $year . '-' . $month . '-01';
+        // $dateEnd = $year . '-' . $month . '-' . date('t', strtotime($dateStart));
+
+        $dateStart = $year.'-'.$month.'-'.($this->data['setting']['tanggal_cutoff'] < 10 ? ('0'.$this->data['setting']['tanggal_cutoff']) : $this->data['setting']['tanggal_cutoff']);
+        $dateEnd = $this->generateNextDate($dateStart);
+
+        // echo "string - " . $dateStart;
+        // echo "string - " . $dateEnd;
+
+        $crDateStart = date_create($dateStart);
+        $crDateEnd = date_create($dateEnd);
+        $diff = date_diff($crDateEnd, $crDateStart);
+        $this->data['totalDay'] = $diff->format("%a");
+        //echo $this->data['totalDay']; exit();
+        $this->data['endDay'] = date('t', strtotime($dateStart));
+
         $this->data['dataEmpHasSchedule'] = $this->getEmployeeSchedule($empId, $dateStart, $dateEnd);
         $this->data['dataEmpAbsence'] = $this->getEmployeeTransaksi($empCode, $dateStart, $dateEnd);
         $this->data['dataEmpHasCuti'] = $this->getEmployeeCuti($empId, $dateStart, $dateEnd);
@@ -57,7 +73,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         // print_r($this->data['dataEmpAbsence']);
         // print_r($this->data['dataEmpHasCuti']);
 
-        $this->data['setting'] = $this->getSettingDb();
+
 
         return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
     }
@@ -122,5 +138,29 @@ class ReportabsenceController extends \App\Controllers\BaseController
       $total += (int)$second;
       $total = floor($total/60);
       return $total;
+    }
+
+    private function generateNextDate($date) {
+      list($year, $month, $day) = explode('-', $date);
+      $nextDay = (int)$day - 1;
+      $nextYear = $year;
+      $nextMonth = (int)$month + 1;
+
+      if($nextMonth > 12) {
+        $nextMonth = 1;
+        $nextYear += 1;
+      }
+
+      //echo "string - " . $day;
+      if($day == '01') {
+        $nextMonth = (int)$month;
+        $nextDay = (int)date('t', mktime(0, 0, 0, $month, 1, $year));
+      }
+
+      if($nextDay < 1) $nextDay = (int)date('t', mktime(0, 0, 0, $nextMonth, 1, $nextYear));
+
+      $nextDate = $year . '-' . ($nextMonth < 10 ? ("0$nextMonth") : $nextMonth) . '-' . ($nextDay < 10 ? ("$nextDay") : $nextDay);
+      // echo $nextDate; exit();
+      return $nextDate;
     }
 }
