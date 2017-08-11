@@ -120,6 +120,20 @@
 
         $absenceLabel = !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$empCode][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$empCode][$scheduleDate]['time_max']) : 'OFF';
 
+        if(empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
+          $wktMin = $setting['default_1_schedule_in'];
+          $wktMax = $setting['default_1_schedule_out'];
+          $dataEmpHasSchedule['detail'][$empId][$generateId] = [
+            'wkt_min' => $wktMin,
+            'wkt_max' => $wktMax,
+            'code' => 'NORMAL',
+            'color' => '#000000',
+            'namaIzin' => '',
+            'status_reason' => '',
+            'isScheduleGantiHari' => 0,
+          ];
+        }
+
         if(!empty($dataEmpAbsence[$empCode][$scheduleDate]) AND !empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
           $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min']));
           $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max']));
@@ -179,11 +193,28 @@
           $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
 
           if(empty($arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
-          $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += $dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu'];
+          $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += !empty($dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu']) ? $dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu'] : 0;
 
           if($dayNo == 0) {
             if(empty($arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
             $arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
+          }
+
+          if(!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] == $dataEmpAbsence[$empCode][$scheduleDate]['time_max']) {
+            $setting['batas_absen_masuk'] *= 60;
+            $batasAbsenMasuk = strtotime('+'.$setting['batas_absen_masuk'].' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
+
+            if($intMinAbsence <= $batasAbsenMasuk) {
+              $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
+              $totalMinuteEearlyOut = 225;
+              $totalMinuteLate = '';
+              $statusLate = '';
+            } else {
+              $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
+              $totalMinuteLate = 225;
+              $totalMinuteEearlyOut = '';
+              $statusEearlyOut = '';
+            }
           }
         }
 

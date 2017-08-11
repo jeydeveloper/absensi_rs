@@ -182,3 +182,11 @@ $container['MappingjadwalApi'] = function($c) {
 $container['ReportabsenceController'] = function($c) {
     return new App\Controllers\Report\ReportabsenceController($c);
 };
+
+$container['RoleaccessController'] = function($c) {
+    return new App\Controllers\Proses\RoleaccessController($c);
+};
+
+$container['RoleaccessApi'] = function($c) {
+    return new App\Api\RoleaccessApi($c);
+};

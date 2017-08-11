@@ -74,6 +74,14 @@ return [
               'key' => 'sudah_menikah',
               'value' => 'Sudah Menikah',
             ],
+            [
+              'key' => 'duda',
+              'value' => 'Duda',
+            ],
+            [
+              'key' => 'janda',
+              'value' => 'Janda',
+            ],
           ],
           'statusActived' => [
             [

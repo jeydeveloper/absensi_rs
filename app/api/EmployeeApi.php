@@ -68,8 +68,6 @@ class EmployeeApi
       $emp_acc_bank = $request->getParam('emp_acc_bank');
       $emp_acc_no = $request->getParam('emp_acc_no');
       $emp_acc_name = $request->getParam('emp_acc_name');
-      $emp_insurance = $request->getParam('emp_insurance');
-      $emp_insurance_no = $request->getParam('emp_insurance_no');
       $emp_active = $request->getParam('emp_active');
       $emp_start_date = $request->getParam('emp_start_date');
       $emp_out_date = $request->getParam('emp_out_date');
@@ -78,10 +76,16 @@ class EmployeeApi
       $emp_base_salary = $request->getParam('emp_base_salary');
       $emp_uni_id = $request->getParam('emp_uni_id');
       $emp_jab_id = $request->getParam('emp_jab_id');
+      $emp_tanggal_perkawinan = $request->getParam('emp_tanggal_perkawinan');
+      $emp_jumlah_anak = $request->getParam('emp_jumlah_anak');
+      $emp_bpjs_ketenagakerjaan = $request->getParam('emp_bpjs_ketenagakerjaan');
+      $emp_bpjs_kesehatan = $request->getParam('emp_bpjs_kesehatan');
+      $emp_npwp = $request->getParam('emp_npwp');
 
       if(!empty($emp_birthdate)) $emp_birthdate = Helper::formatDBDate($emp_birthdate);
       if(!empty($emp_start_date)) $emp_start_date = Helper::formatDBDate($emp_start_date);
       if(!empty($emp_out_date)) $emp_out_date = Helper::formatDBDate($emp_out_date);
+      if(!empty($emp_tanggal_perkawinan)) $emp_tanggal_perkawinan = Helper::formatDBDate($emp_tanggal_perkawinan);
       if(!empty($emp_base_salary)) $emp_base_salary = Helper::formatDBCurrency($emp_base_salary);
 
       $obj = new Employee;
@@ -108,8 +112,6 @@ class EmployeeApi
       $obj->emp_acc_bank = $emp_acc_bank;
       $obj->emp_acc_no = $emp_acc_no;
       $obj->emp_acc_name = $emp_acc_name;
-      $obj->emp_insurance = $emp_insurance;
-      $obj->emp_insurance_no = $emp_insurance_no;
       $obj->emp_active = $emp_active;
       $obj->emp_start_date = $emp_start_date;
       $obj->emp_out_date = $emp_out_date;
@@ -118,6 +120,11 @@ class EmployeeApi
       $obj->emp_base_salary = $emp_base_salary;
       $obj->emp_uni_id = $emp_uni_id;
       $obj->emp_jab_id = $emp_jab_id;
+      $obj->emp_tanggal_perkawinan = $emp_tanggal_perkawinan;
+      $obj->emp_jumlah_anak = $emp_jumlah_anak;
+      $obj->emp_bpjs_ketenagakerjaan = $emp_bpjs_ketenagakerjaan;
+      $obj->emp_bpjs_kesehatan = $emp_bpjs_kesehatan;
+      $obj->emp_npwp = $emp_npwp;
       $obj->emp_created_at = Helper::dateNowDB();
 
       if($obj->save()) {
@@ -161,8 +168,6 @@ class EmployeeApi
       $emp_acc_bank = $request->getParam('emp_acc_bank');
       $emp_acc_no = $request->getParam('emp_acc_no');
       $emp_acc_name = $request->getParam('emp_acc_name');
-      $emp_insurance = $request->getParam('emp_insurance');
-      $emp_insurance_no = $request->getParam('emp_insurance_no');
       $emp_active = $request->getParam('emp_active');
       $emp_start_date = $request->getParam('emp_start_date');
       $emp_out_date = $request->getParam('emp_out_date');
@@ -171,10 +176,16 @@ class EmployeeApi
       $emp_base_salary = $request->getParam('emp_base_salary');
       $emp_uni_id = $request->getParam('emp_uni_id');
       $emp_jab_id = $request->getParam('emp_jab_id');
+      $emp_tanggal_perkawinan = $request->getParam('emp_tanggal_perkawinan');
+      $emp_jumlah_anak = $request->getParam('emp_jumlah_anak');
+      $emp_bpjs_ketenagakerjaan = $request->getParam('emp_bpjs_ketenagakerjaan');
+      $emp_bpjs_kesehatan = $request->getParam('emp_bpjs_kesehatan');
+      $emp_npwp = $request->getParam('emp_npwp');
 
       if(!empty($emp_birthdate)) $emp_birthdate = Helper::formatDBDate($emp_birthdate);
       if(!empty($emp_start_date)) $emp_start_date = Helper::formatDBDate($emp_start_date);
       if(!empty($emp_out_date)) $emp_out_date = Helper::formatDBDate($emp_out_date);
+      if(!empty($emp_tanggal_perkawinan)) $emp_tanggal_perkawinan = Helper::formatDBDate($emp_tanggal_perkawinan);
       if(!empty($emp_base_salary)) $emp_base_salary = Helper::formatDBCurrency($emp_base_salary);
 
       $obj = Employee::find($emp_id);
@@ -201,8 +212,6 @@ class EmployeeApi
       $obj->emp_acc_bank = $emp_acc_bank;
       $obj->emp_acc_no = $emp_acc_no;
       $obj->emp_acc_name = $emp_acc_name;
-      $obj->emp_insurance = $emp_insurance;
-      $obj->emp_insurance_no = $emp_insurance_no;
       $obj->emp_active = $emp_active;
       $obj->emp_start_date = $emp_start_date;
       $obj->emp_out_date = $emp_out_date;
@@ -211,6 +220,11 @@ class EmployeeApi
       $obj->emp_base_salary = $emp_base_salary;
       $obj->emp_uni_id = $emp_uni_id;
       $obj->emp_jab_id = $emp_jab_id;
+      $obj->emp_tanggal_perkawinan = $emp_tanggal_perkawinan;
+      $obj->emp_jumlah_anak = $emp_jumlah_anak;
+      $obj->emp_bpjs_ketenagakerjaan = $emp_bpjs_ketenagakerjaan;
+      $obj->emp_bpjs_kesehatan = $emp_bpjs_kesehatan;
+      $obj->emp_npwp = $emp_npwp;
       $obj->emp_updated_at = Helper::dateNowDB();
 
       if($obj->save()) {
@@ -233,6 +247,7 @@ class EmployeeApi
         if(isset($obj->emp_birthdate)) $obj->emp_birthdate = Helper::formatDate($obj->emp_birthdate);
         if(isset($obj->emp_start_date)) $obj->emp_start_date = Helper::formatDate($obj->emp_start_date);
         if(isset($obj->emp_out_date)) $obj->emp_out_date = Helper::formatDate($obj->emp_out_date);
+        if(isset($obj->emp_tanggal_perkawinan)) $obj->emp_tanggal_perkawinan = Helper::formatDate($obj->emp_tanggal_perkawinan);
         if(isset($obj->emp_base_salary)) $obj->emp_base_salary = Helper::formatCurrency($obj->emp_base_salary);
 
         $arrData['emp_id'] = $obj->emp_id;
@@ -259,8 +274,6 @@ class EmployeeApi
         $arrData['emp_acc_bank'] = $obj->emp_acc_bank;
         $arrData['emp_acc_no'] = $obj->emp_acc_no;
         $arrData['emp_acc_name'] = $obj->emp_acc_name;
-        $arrData['emp_insurance'] = $obj->emp_insurance;
-        $arrData['emp_insurance_no'] = $obj->emp_insurance_no;
         $arrData['emp_active'] = $obj->emp_active;
         $arrData['emp_start_date'] = $obj->emp_start_date;
         $arrData['emp_out_date'] = $obj->emp_out_date;
@@ -269,6 +282,11 @@ class EmployeeApi
         $arrData['emp_base_salary'] = $obj->emp_base_salary;
         $arrData['emp_uni_id'] = $obj->emp_uni_id;
         $arrData['emp_jab_id'] = $obj->emp_jab_id;
+        $arrData['emp_tanggal_perkawinan'] = $obj->emp_tanggal_perkawinan;
+        $arrData['emp_jumlah_anak'] = $obj->emp_jumlah_anak;
+        $arrData['emp_bpjs_ketenagakerjaan'] = $obj->emp_bpjs_ketenagakerjaan;
+        $arrData['emp_bpjs_kesehatan'] = $obj->emp_bpjs_kesehatan;
+        $arrData['emp_npwp'] = $obj->emp_npwp;
       }
 
       return $response->withJson($arrData);

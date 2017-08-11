@@ -194,3 +194,17 @@ $app->group('/api/mappingjadwal', function () {
 $app->group('/report', function () {
   $this->get('/absence', \ReportabsenceController::class . ':lists')->setName('reportabsence-list');
 });
+
+$app->group('/role-access', function () {
+  $this->get('', \RoleaccessController::class . ':lists')->setName('roleaccess-list');
+  $this->get('/add', \RoleaccessController::class . ':add')->setName('roleaccess-add');
+  $this->get('/edit', \RoleaccessController::class . ':edit')->setName('roleaccess-edit');
+});
+
+$app->group('/api/roleaccess', function () {
+  $this->get('/lists', \RoleaccessApi::class . ':lists')->setName('api-roleaccess-lists');
+  $this->post('/add', \RoleaccessApi::class . ':doAdd')->setName('post-api-roleaccess-add');
+  $this->post('/edit', \RoleaccessApi::class . ':doEdit')->setName('post-api-roleaccess-edit');
+  $this->get('/edit', \RoleaccessApi::class . ':edit')->setName('api-roleaccess-edit');
+  $this->post('/delete', \RoleaccessApi::class . ':doDelete')->setName('post-api-roleaccess-delete');
+});

@@ -7,6 +7,7 @@ use App\Models\MappingjadwalModel as Mappingjadwal;
 use App\Models\EmployeeModel as Employee;
 use App\Models\ScheduleModel as Schedule;
 use App\Models\EmployeescheduleModel as Employeeschedule;
+use App\Models\SettingModel as Setting;
 use App\Helper;
 
 class MappingjadwalApi
@@ -23,6 +24,8 @@ class MappingjadwalApi
         $arrData = array(
           'data' => array()
         );
+
+        $setting = $this->getSettingDb();
 
         // echo $request->getParam('start'); exit();
 
@@ -75,6 +78,21 @@ class MappingjadwalApi
               $scheduleDate = $year . '-' . $month . '-' . $tanggal;
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
+
+              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                $wktMin = $setting['default_1_schedule_in'];
+                $wktMax = $setting['default_1_schedule_out'];
+                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                  'wkt_min' => $wktMin,
+                  'wkt_max' => $wktMax,
+                  'code' => 'NORM',
+                  'color' => '#000000',
+                  'namaIzin' => '',
+                  'status_reason' => '',
+                  'isScheduleGantiHari' => 0,
+                ];
+              }
+
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
                 $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm" style="width:60px;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'\', \''.$scheduleDate.'\')">'.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'</button>';
               } else {
@@ -135,5 +153,14 @@ class MappingjadwalApi
       }
 
       return $response->withJson($arrData);
+    }
+
+    public function getSettingDb() {
+      $arrData = [];
+      $setting = Setting::getAllNonVoid();
+      foreach ($setting as $key => $value) {
+        $arrData[$value->sett_name] = $value->sett_value;
+      }
+      return $arrData;
     }
 }

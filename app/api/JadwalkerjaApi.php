@@ -10,6 +10,7 @@ use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\TransaksiModel as Transaksi;
 use App\Models\TransaksiprosesModel as Transaksiproses;
 use App\Models\IzinModel as Izin;
+use App\Models\SettingModel as Setting;
 use App\Helper;
 
 class JadwalkerjaApi
@@ -28,6 +29,8 @@ class JadwalkerjaApi
         $arrData = array(
           'data' => array()
         );
+
+        $setting = $this->getSettingDb();
 
         // echo $request->getParam('start'); exit();
 
@@ -133,6 +136,20 @@ class JadwalkerjaApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
+              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                $wktMin = $setting['default_1_schedule_in'];
+                $wktMax = $setting['default_1_schedule_out'];
+                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                  'wkt_min' => $wktMin,
+                  'wkt_max' => $wktMax,
+                  'code' => 'NORM',
+                  'color' => '#000000',
+                  'namaIzin' => '',
+                  'status_reason' => '',
+                  'isScheduleGantiHari' => 0,
+                ];
+              }
+
               $tooltip = 'OFF';
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
                 $tooltip = '[SCD] ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'] . ' - ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_max'];
@@ -218,6 +235,8 @@ class JadwalkerjaApi
         $arrData = array(
           'data' => array()
         );
+
+        $setting = $this->getSettingDb();
 
         // echo $request->getParam('start'); exit();
 
@@ -319,6 +338,20 @@ class JadwalkerjaApi
                 $newTanggal = 1 + (int)$tanggal;
                 $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
                 $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
+              }
+
+              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                $wktMin = $setting['default_1_schedule_in'];
+                $wktMax = $setting['default_1_schedule_out'];
+                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                  'wkt_min' => $wktMin,
+                  'wkt_max' => $wktMax,
+                  'code' => 'NORM',
+                  'color' => '#ff0000',
+                  'namaIzin' => '',
+                  'status_reason' => '',
+                  'isScheduleGantiHari' => 0,
+                ];
               }
 
               $tooltip = 'OFF';
