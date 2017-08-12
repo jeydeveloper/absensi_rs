@@ -120,18 +120,26 @@
 
         $absenceLabel = !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) ? ($dataEmpAbsence[$empCode][$scheduleDate]['time_min'].' - '.$dataEmpAbsence[$empCode][$scheduleDate]['time_max']) : 'OFF';
 
-        if(empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
-          $wktMin = $setting['default_1_schedule_in'];
-          $wktMax = $setting['default_1_schedule_out'];
-          $dataEmpHasSchedule['detail'][$empId][$generateId] = [
-            'wkt_min' => $wktMin,
-            'wkt_max' => $wktMax,
-            'code' => 'NORMAL',
-            'color' => '#000000',
-            'namaIzin' => '',
-            'status_reason' => '',
-            'isScheduleGantiHari' => 0,
-          ];
+        if(!in_array($dayNo, [6,0])) {
+          if(empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
+            if($dayNo == 5) { //hari jumat
+              $wktMin = $setting['default_2_schedule_in'];
+              $wktMax = $setting['default_2_schedule_out'];
+            } else {
+              $wktMin = $setting['default_1_schedule_in'];
+              $wktMax = $setting['default_1_schedule_out'];
+            }
+
+            $dataEmpHasSchedule['detail'][$empId][$generateId] = [
+              'wkt_min' => $wktMin,
+              'wkt_max' => $wktMax,
+              'code' => 'NORM',
+              'color' => '#000000',
+              'namaIzin' => '',
+              'status_reason' => '',
+              'isScheduleGantiHari' => 0,
+            ];
+          }
         }
 
         if(!empty($dataEmpAbsence[$empCode][$scheduleDate]) AND !empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
@@ -201,8 +209,8 @@
           }
 
           if(!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] == $dataEmpAbsence[$empCode][$scheduleDate]['time_max']) {
-            $setting['batas_absen_masuk'] *= 60;
-            $batasAbsenMasuk = strtotime('+'.$setting['batas_absen_masuk'].' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
+            $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+            $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
 
             if($intMinAbsence <= $batasAbsenMasuk) {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
@@ -216,6 +224,11 @@
               $statusEearlyOut = '';
             }
           }
+        }
+
+        if(in_array($dayNo, [6,0]) AND (!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) OR !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']))) {
+          $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = 'PIKET';
+          $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = 'PIKET';
         }
 
         ?>

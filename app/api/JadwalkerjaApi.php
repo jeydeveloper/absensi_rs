@@ -118,6 +118,8 @@ class JadwalkerjaApi
               $generateId = $year . $month . $tanggal . $value->emp_id;
               $scheduleDate = $year . '-' . $month . '-' . $tanggal;
 
+              $dayNo = date('w', mktime(0, 0, 0, $month, $tanggal, $year));
+
               $tanggalAkhir = date('t', strtotime($scheduleDate));
               if($tanggal == $tanggalAkhir) {
                 $newMonth = 1 + (int)$month;
@@ -136,18 +138,26 @@ class JadwalkerjaApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
-              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $wktMin = $setting['default_1_schedule_in'];
-                $wktMax = $setting['default_1_schedule_out'];
-                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
-                  'wkt_min' => $wktMin,
-                  'wkt_max' => $wktMax,
-                  'code' => 'NORM',
-                  'color' => '#000000',
-                  'namaIzin' => '',
-                  'status_reason' => '',
-                  'isScheduleGantiHari' => 0,
-                ];
+              if(!in_array($dayNo, [6,0])) {
+                if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                  if($dayNo == 5) { //hari jumat
+                    $wktMin = $setting['default_2_schedule_in'];
+                    $wktMax = $setting['default_2_schedule_out'];
+                  } else {
+                    $wktMin = $setting['default_1_schedule_in'];
+                    $wktMax = $setting['default_1_schedule_out'];
+                  }
+
+                  $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                    'wkt_min' => $wktMin,
+                    'wkt_max' => $wktMax,
+                    'code' => 'NORM',
+                    'color' => '#000000',
+                    'namaIzin' => '',
+                    'status_reason' => '',
+                    'isScheduleGantiHari' => 0,
+                  ];
+                }
               }
 
               $tooltip = 'OFF';
@@ -195,22 +205,22 @@ class JadwalkerjaApi
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) $lblShift = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
 
               if($absenceLabel == "OFF") {
-                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
               } elseif($absenceLabel == "ALPHA") {
-                $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
-                $absenceLabel = '<span style="padding:4px;border-radius: 50px;;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
+                $absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } elseif($absenceLabel == "LEMBUR") {
-                $btnCss = 'class="btn btn-block btn-sm btn-default" style="color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm btn-default" style="position:relative;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">L</span>';
               } elseif($absenceLabel == "ERROR") {
-                $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } else {
-                $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
               }
@@ -221,7 +231,24 @@ class JadwalkerjaApi
                 $tooltip .= ' | ' . $dataEmpHasCuti[$value->emp_id][$generateId]['namaIzin'] . ' - ' . $dataEmpHasCuti[$value->emp_id][$generateId]['keterangan'] . ' [REASON]';
               }
 
-              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$absenceLabel.'</button>';
+              $spanVertical = '';
+
+              if(!in_array($dayNo, [6,0])) {
+                if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) AND $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] == $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) {
+                  $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+                  $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));
+
+                  if($intMinAbsence <= $batasAbsenMasuk) {
+                    $tooltip = $this->explodeLabelAbsen($tooltip, 2);
+                    $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;right: 0;top: 0;bottom: 0;">&nbsp;</span>';
+                  } else {
+                    $tooltip = $this->explodeLabelAbsen($tooltip, 1);
+                    $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;left: 0;top: 0;bottom: 0;">&nbsp;</span>';
+                  }
+                }
+              }
+
+              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$spanVertical. ' '.$absenceLabel.'</button>';
               $cnt++;
             }
           }
@@ -325,6 +352,8 @@ class JadwalkerjaApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
+              $dayNo = date('w', mktime(0, 0, 0, $month, $tanggal, $year));
+
               $tanggalAkhir = date('t', strtotime($scheduleDate));
               if($tanggal == $tanggalAkhir) {
                 $newMonth = 1 + (int)$month;
@@ -340,18 +369,26 @@ class JadwalkerjaApi
                 $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
               }
 
-              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $wktMin = $setting['default_1_schedule_in'];
-                $wktMax = $setting['default_1_schedule_out'];
-                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
-                  'wkt_min' => $wktMin,
-                  'wkt_max' => $wktMax,
-                  'code' => 'NORM',
-                  'color' => '#ff0000',
-                  'namaIzin' => '',
-                  'status_reason' => '',
-                  'isScheduleGantiHari' => 0,
-                ];
+              if(!in_array($dayNo, [6,0])) {
+                if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                  if($dayNo == 5) { //hari jumat
+                    $wktMin = $setting['default_2_schedule_in'];
+                    $wktMax = $setting['default_2_schedule_out'];
+                  } else {
+                    $wktMin = $setting['default_1_schedule_in'];
+                    $wktMax = $setting['default_1_schedule_out'];
+                  }
+
+                  $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                    'wkt_min' => $wktMin,
+                    'wkt_max' => $wktMax,
+                    'code' => 'NORM',
+                    'color' => '#000000',
+                    'namaIzin' => '',
+                    'status_reason' => '',
+                    'isScheduleGantiHari' => 0,
+                  ];
+                }
               }
 
               $tooltip = 'OFF';
@@ -424,7 +461,7 @@ class JadwalkerjaApi
               } elseif($absenceLabel == "ALPHA") {
                 $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
-                //$absenceLabel = '<span style="padding:4px;border-radius: 50px;;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
+                //$absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } elseif($absenceLabel == "LEMBUR") {
                 $btnCss = 'class="btn btn-block btn-sm btn-default"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
@@ -445,7 +482,24 @@ class JadwalkerjaApi
                 $tooltip .= ' | ' . $dataEmpHasCuti[$value->emp_id][$generateId]['namaIzin'] . ' - ' . $dataEmpHasCuti[$value->emp_id][$generateId]['keterangan'] . ' [REASON]';
               }
 
-              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$absenceLabel.'</button>';
+              $spanVertical = '';
+
+              if(!in_array($dayNo, [6,0])) {
+                if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) AND $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] == $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) {
+                  $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+                  $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));
+
+                  if($intMinAbsence <= $batasAbsenMasuk) {
+                    $tooltip = $this->explodeLabelAbsen($tooltip, 2);
+                    $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;right: 0;top: 0;bottom: 0;">&nbsp;</span>';
+                  } else {
+                    $tooltip = $this->explodeLabelAbsen($tooltip, 1);
+                    $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;left: 0;top: 0;bottom: 0;">&nbsp;</span>';
+                  }
+                }
+              }
+
+              $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$spanVertical.' '.$absenceLabel.'</button>';
               $cnt++;
             }
           }
@@ -536,6 +590,8 @@ class JadwalkerjaApi
     private function getButtonJadwal($arrParam = null) {
       if(!is_array($arrParam)) return 0;
 
+      $setting = $this->getSettingDb();
+
       $dataEmpAbsence = [];
       $dataEmpHasSchedule = [];
       $dataEmpHasCuti = [];
@@ -599,6 +655,30 @@ class JadwalkerjaApi
         $scheduleDateAfter = $year . '-' . $month . '-' . $newTanggal;
       }
 
+      $dayNo = date('w', mktime(0, 0, 0, $month, $tanggal, $year));
+
+      if(!in_array($dayNo, [6,0])) {
+        if(empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) {
+          if($dayNo == 5) { //hari jumat
+            $wktMin = $setting['default_2_schedule_in'];
+            $wktMax = $setting['default_2_schedule_out'];
+          } else {
+            $wktMin = $setting['default_1_schedule_in'];
+            $wktMax = $setting['default_1_schedule_out'];
+          }
+
+          $dataEmpHasSchedule[$arrParam['empId']][$generateId] = [
+            'wkt_min' => $wktMin,
+            'wkt_max' => $wktMax,
+            'code' => 'NORM',
+            'color' => '#000000',
+            'namaIzin' => '',
+            'status_reason' => '',
+            'isScheduleGantiHari' => 0,
+          ];
+        }
+      }
+
       $tooltip = 'OFF';
       if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) {
         $tooltip = '[SCD] ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min'] . ' - ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_max'];
@@ -649,7 +729,7 @@ class JadwalkerjaApi
       } elseif($absenceLabel == "ALPHA") {
         $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
-        $absenceLabel = '<span style="padding:4px;border-radius: 50px;;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
+        $absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
       } elseif($absenceLabel == "LEMBUR") {
         $btnCss = 'class="btn btn-block btn-sm btn-default" style="color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
@@ -670,7 +750,24 @@ class JadwalkerjaApi
         $tooltip .= ' | ' . $dataEmpHasCuti[$arrParam['empId']][$generateId]['namaIzin'] . ' - ' . $dataEmpHasCuti[$arrParam['empId']][$generateId]['keterangan'] . ' [REASON]';
       }
 
-      return '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$absenceLabel.'</button>';
+      $spanVertical = '';
+
+      if(!in_array($dayNo, [6,0])) {
+        if(!empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) AND $dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min'] == $dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) {
+          $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+          $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min'])));
+
+          if($intMinAbsence <= $batasAbsenMasuk) {
+            $tooltip = $this->explodeLabelAbsen($tooltip, 2);
+            $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;right: 0;top: 0;bottom: 0;">&nbsp;</span>';
+          } else {
+            $tooltip = $this->explodeLabelAbsen($tooltip, 1);
+            $spanVertical = '<span style="padding: 2px;background-color:#e74c3c;color:#fff;position: absolute;left: 0;top: 0;bottom: 0;">&nbsp;</span>';
+          }
+        }
+      }
+
+      return '<button id="'.$lblButtonStatusToUpdate.'" type="button" '.$btnCss.'" data-toggle="tooltip" data-placement="top" title="'.$tooltip.'" '.$onClick.'>'.$spanVertical.' '.$absenceLabel.'</button>';
     }
 
     public function getSettingDb() {
@@ -680,5 +777,23 @@ class JadwalkerjaApi
         $arrData[$value->sett_name] = $value->sett_value;
       }
       return $arrData;
+    }
+
+    private function explodeLabelAbsen($txt = '', $type = 1) {
+      if(empty($txt)) return '';
+      $tmp = explode(' | ', $txt);
+      $tmp2 = explode(' - ', $tmp[1]);
+      $tmp3 = explode(' ', $tmp2[1]);
+      $absenMasuk = $tmp2[0];
+      $absenPulang = $tmp3[0];
+      if($type == 1) { //tidak absen masuk
+        $tmp2 = $tmp2[1] . ' [ABSEN KELUAR]';
+        $tmp[1] = $tmp2;
+      } else { //tidak absen pulang
+        $tmp2 = $tmp2[0] . ' [ABSEN MASUK]';
+        $tmp[1] = $tmp2;
+      }
+      $tmp = implode(' | ', $tmp);
+      return $tmp;
     }
 }

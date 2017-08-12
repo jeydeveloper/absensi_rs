@@ -79,18 +79,22 @@ class MappingjadwalApi
               $lblShift = '-';
               $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
 
-              if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $wktMin = $setting['default_1_schedule_in'];
-                $wktMax = $setting['default_1_schedule_out'];
-                $dataEmpHasSchedule[$value->emp_id][$generateId] = [
-                  'wkt_min' => $wktMin,
-                  'wkt_max' => $wktMax,
-                  'code' => 'NORM',
-                  'color' => '#000000',
-                  'namaIzin' => '',
-                  'status_reason' => '',
-                  'isScheduleGantiHari' => 0,
-                ];
+              $dayNo = date('w', mktime(0, 0, 0, $month, $tanggal, $year));
+
+              if(!in_array($dayNo, [6,0])) {
+                if(empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
+                  $wktMin = $setting['default_1_schedule_in'];
+                  $wktMax = $setting['default_1_schedule_out'];
+                  $dataEmpHasSchedule[$value->emp_id][$generateId] = [
+                    'wkt_min' => $wktMin,
+                    'wkt_max' => $wktMax,
+                    'code' => 'NORM',
+                    'color' => '#000000',
+                    'namaIzin' => '',
+                    'status_reason' => '',
+                    'isScheduleGantiHari' => 0,
+                  ];
+                }
               }
 
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
