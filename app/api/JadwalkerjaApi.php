@@ -729,25 +729,28 @@ class JadwalkerjaApi
       $lblShift = '-';
       if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) $lblShift = $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'];
 
+      $hasVerticalSpan = false;
+
       if($absenceLabel == "OFF") {
-        $btnCss = 'class="btn btn-block btn-sm btn-danger" style="color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
       } elseif($absenceLabel == "ALPHA") {
-        $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
         $absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
       } elseif($absenceLabel == "LEMBUR") {
-        $btnCss = 'class="btn btn-block btn-sm btn-default" style="color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm btn-default" style="position:relative;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">L</span>';
       } elseif($absenceLabel == "ERROR") {
-        $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
       } else {
-        $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'];
+        $hasVerticalSpan = true;
       }
 
       if(!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId]['status_reason'])) {
@@ -758,7 +761,7 @@ class JadwalkerjaApi
 
       $spanVertical = '';
 
-      if(!in_array($dayNo, [6,0])) {
+      if(!in_array($dayNo, [6,0]) AND $hasVerticalSpan) {
         if(!empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) AND $dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_min'] == $dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['time_max']) {
           $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
           $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['wkt_min'])));

@@ -422,6 +422,8 @@
 </script>
 
 <script>
+    $.fn.tooltip.Constructor.DEFAULTS.trigger = 'hover';
+
     var btnStatusToUpdate = '';
     var userIdUpdate = '';
     var idChangeStatus = '';
@@ -595,6 +597,7 @@
                   var prt = $('#'+btnStatusToUpdate).closest('td');
                   $('#'+btnStatusToUpdate).remove();
                   prt.append(data.button);
+                  $('[role=tooltip]').hide();
                 } else {
                   toastr.error('Oops.. ' + data.message);
                 }
