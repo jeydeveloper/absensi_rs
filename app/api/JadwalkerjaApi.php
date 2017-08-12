@@ -204,6 +204,8 @@ class JadwalkerjaApi
               $lblShift = '-';
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) $lblShift = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
 
+              $hasVerticalSpan = false;
+
               if($absenceLabel == "OFF") {
                 $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
@@ -223,6 +225,7 @@ class JadwalkerjaApi
                 $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
+                $hasVerticalSpan = true;
               }
 
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['status_reason'])) {
@@ -233,7 +236,7 @@ class JadwalkerjaApi
 
               $spanVertical = '';
 
-              if(!in_array($dayNo, [6,0])) {
+              if(!in_array($dayNo, [6,0]) AND $hasVerticalSpan) {
                 if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) AND $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] == $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) {
                   $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
                   $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));
@@ -454,6 +457,8 @@ class JadwalkerjaApi
               $lblShift = '-';
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) $lblShift = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
 
+              $hasVerticalSpan = false;
+
               $onClick = '';
               if($absenceLabel == "OFF") {
                 $btnCss = 'class="btn btn-block btn-sm btn-danger" style="color:#ffffff;"';
@@ -474,6 +479,7 @@ class JadwalkerjaApi
                 $btnCss = 'class="btn btn-block btn-sm" style="background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 //$absenceLabel = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
+                $hasVerticalSpan = true;
               }
 
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['status_reason'])) {
@@ -484,7 +490,7 @@ class JadwalkerjaApi
 
               $spanVertical = '';
 
-              if(!in_array($dayNo, [6,0])) {
+              if(!in_array($dayNo, [6,0]) AND $hasVerticalSpan) {
                 if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) AND $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] == $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) {
                   $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
                   $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));
@@ -787,7 +793,8 @@ class JadwalkerjaApi
       $absenMasuk = $tmp2[0];
       $absenPulang = $tmp3[0];
       if($type == 1) { //tidak absen masuk
-        $tmp2 = $tmp2[1] . ' [ABSEN KELUAR]';
+        $tmp4 = explode(' ', $tmp2[1]);
+        $tmp2 = $tmp4[0] . ' [ABSEN KELUAR]';
         $tmp[1] = $tmp2;
       } else { //tidak absen pulang
         $tmp2 = $tmp2[0] . ' [ABSEN MASUK]';
