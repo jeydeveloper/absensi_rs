@@ -229,9 +229,14 @@
                             <div class="col-md-2 sChoice" id="sUnit" style="display:none;">
                               <select class="form-control" name="unitId">
                                 <option value="">-- Pilih Unit --</option>
-                                <?php foreach($optUnit as $value): ?>
-                                  <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                <?php foreach($optUnit['unit'] as $key1 => $value1): ?>
+                                  <optgroup label="<?php echo $optUnit['bagian'][$key1]; ?>">
+                                  <?php foreach($value1 as $value2): ?>
+                                  <option value="<?php echo $value2['key']; ?>"><?php echo $value2['value']; ?></option>
+                                  <?php endforeach; ?>
+                                  </optgroup>
                                 <?php endforeach; ?>
+                              </select>
                               </select>
                             </div>
                             <div class="col-md-2">

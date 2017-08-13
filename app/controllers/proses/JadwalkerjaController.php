@@ -64,7 +64,7 @@ class JadwalkerjaController extends \App\Controllers\BaseController
         $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
         $this->data['optBagian'] = Bagian::getOptNonVoid();
-        $this->data['optUnit'] = Unit::getSingleOptNonVoid();
+        $this->data['optUnit'] = Unit::getOptNonVoid();
 
         return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/detail.phtml', $this->data);
     }
