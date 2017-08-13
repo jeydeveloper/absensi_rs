@@ -42,7 +42,7 @@ class EmployeescheduleModel extends Model
 
     public static function getByUniqCode($uniqCode)
     {
-      $res = EmployeescheduleModel::where('emsc_uniq_code', $uniqCode)->first();
+      $res = EmployeescheduleModel::leftjoin('status', 'emsc_sta_id', '=', 'sta_id')->where('emsc_uniq_code', $uniqCode)->first();
       return $res;
     }
 }
