@@ -237,6 +237,11 @@ class JadwalkerjaApi
               $spanVertical = '';
 
               if(!in_array($dayNo, [6,0]) AND $hasVerticalSpan) {
+                if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId]['isScheduleGantiHari'])) {
+                  $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] = $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max'];
+                  $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max'] = $dataEmpAbsence[$value->emp_code][$scheduleDateAfter]['time_min'];
+                }
+
                 if(!empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) AND $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_min'] == $dataEmpAbsence[$value->emp_code][$scheduleDate]['time_max']) {
                   $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
                   $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule[$value->emp_id][$generateId]['wkt_min'])));

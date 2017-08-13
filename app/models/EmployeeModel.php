@@ -53,4 +53,16 @@ class EmployeeModel extends Model
 
       return $arrData;
     }
+
+    public static function getEmployeeByBagian($id = '')
+    {
+      $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('bag_id', $id)->get();
+      return $res;
+    }
+
+    public static function getEmployeeByUnit($id = '')
+    {
+      $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('uni_id', $id)->get();
+      return $res;
+    }
 }

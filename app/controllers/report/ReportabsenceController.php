@@ -33,47 +33,52 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $month = !empty($request->getParam('month')) ? $request->getParam('month') : date('m');
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
-        $this->data['month'] = $month;
-        $this->data['year'] = $year;
-        $this->data['arrDayName'] = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        $this->data['arrMonthName'] = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        $this->data['totalDay'] = date('t', mktime(0, 0, 0, $month, 1, $year));
+        $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
+        $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
 
-        $this->data['izinTidakHadir'] = Status::getAllKetidakhadiranNonVoid();
-        $this->data['cntIzinTidakHadir'] = count($this->data['izinTidakHadir']);
-        $this->data['employee'] = Employee::getEmployeeByID($empId);
+        $arrEmpId = [];
+        if(!empty($empId)) {
+          $emp = new \stdClass();
+          $emp->emp_id = $empId;
+          $arrEmpId[0] = $emp;
+        }
+        if(!empty($bagianId)) {
+          $arrEmpId = Employee::getEmployeeByBagian($bagianId);
+        }
+        if(!empty($unitId)) {
+          $arrEmpId = Employee::getEmployeeByUnit($unitId);
+        }
 
-        $empCode = !empty($this->data['employee']->emp_code) ? $this->data['employee']->emp_code : '-';
+        foreach ($arrEmpId as $key => $value) {
+          $this->data['data'][$key]['month'] = $month;
+          $this->data['data'][$key]['year'] = $year;
+          $this->data['data'][$key]['arrDayName'] = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+          $this->data['data'][$key]['arrMonthName'] = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+          $this->data['data'][$key]['totalDay'] = date('t', mktime(0, 0, 0, $month, 1, $year));
 
-        $this->data['empId'] = $empId;
-        $this->data['empCode'] = $empCode;
+          $this->data['data'][$key]['izinTidakHadir'] = Status::getAllKetidakhadiranNonVoid();
+          $this->data['data'][$key]['cntIzinTidakHadir'] = count($this->data['data'][$key]['izinTidakHadir']);
+          $this->data['data'][$key]['employee'] = Employee::getEmployeeByID($value->emp_id);
 
-        $this->data['setting'] = $this->getSettingDb();
+          $empCode = !empty($this->data['data'][$key]['employee']->emp_code) ? $this->data['data'][$key]['employee']->emp_code : '-';
 
-        // $dateStart = $year . '-' . $month . '-01';
-        // $dateEnd = $year . '-' . $month . '-' . date('t', strtotime($dateStart));
+          $this->data['data'][$key]['empId'] = $value->emp_id;
+          $this->data['data'][$key]['empCode'] = $empCode;
 
-        $dateStart = $year.'-'.$month.'-'.($this->data['setting']['tanggal_cutoff'] < 10 ? ('0'.$this->data['setting']['tanggal_cutoff']) : $this->data['setting']['tanggal_cutoff']);
-        $dateEnd = $this->generateNextDate($dateStart);
+          $this->data['data'][$key]['setting'] = $this->getSettingDb();
 
-        // echo "string - " . $dateStart;
-        // echo "string - " . $dateEnd;
+          $dateStart = $year.'-'.$month.'-'.($this->data['data'][$key]['setting']['tanggal_cutoff'] < 10 ? ('0'.$this->data['data'][$key]['setting']['tanggal_cutoff']) : $this->data['data'][$key]['setting']['tanggal_cutoff']);
+          $dateEnd = $this->generateNextDate($dateStart);
+          $crDateStart = date_create($dateStart);
+          $crDateEnd = date_create($dateEnd);
+          $diff = date_diff($crDateEnd, $crDateStart);
+          $this->data['data'][$key]['totalDay'] = $diff->format("%a");
+          $this->data['data'][$key]['endDay'] = date('t', strtotime($dateStart));
 
-        $crDateStart = date_create($dateStart);
-        $crDateEnd = date_create($dateEnd);
-        $diff = date_diff($crDateEnd, $crDateStart);
-        $this->data['totalDay'] = $diff->format("%a");
-        //echo $this->data['totalDay']; exit();
-        $this->data['endDay'] = date('t', strtotime($dateStart));
-
-        $this->data['dataEmpHasSchedule'] = $this->getEmployeeSchedule($empId, $dateStart, $dateEnd);
-        $this->data['dataEmpAbsence'] = $this->getEmployeeTransaksi($empCode, $dateStart, $dateEnd);
-        $this->data['dataEmpHasCuti'] = $this->getEmployeeCuti($empId, $dateStart, $dateEnd);
-        // print_r($this->data['dataEmpHasSchedule']);
-        // print_r($this->data['dataEmpAbsence']);
-        // print_r($this->data['dataEmpHasCuti']);
-
-
+          $this->data['data'][$key]['dataEmpHasSchedule'] = $this->getEmployeeSchedule($value->emp_id, $dateStart, $dateEnd);
+          $this->data['data'][$key]['dataEmpAbsence'] = $this->getEmployeeTransaksi($empCode, $dateStart, $dateEnd);
+          $this->data['data'][$key]['dataEmpHasCuti'] = $this->getEmployeeCuti($value->emp_id, $dateStart, $dateEnd);
+        }
 
         return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
     }

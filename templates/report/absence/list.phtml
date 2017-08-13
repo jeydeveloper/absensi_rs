@@ -8,8 +8,15 @@
 
     <!-- Page title -->
     <title>REPORT ABSENCE | WebApp admin theme</title>
+    <style type="text/css">
+        table { page-break-inside:auto }
+        tr    { page-break-inside:avoid; page-break-after:auto }
+    </style>
 </head>
 <body>
+<?php foreach($data as $key => $value): ?>
+<?php if(empty($value)) continue; ?>
+<?php extract($value); ?>
 <table width="100%">
   <tr>
     <td>
@@ -217,11 +224,15 @@
               $totalMinuteEearlyOut = 225;
               $totalMinuteLate = '';
               $statusLate = '';
+              $arrJumlah['jumlahMenitTerlambat'] -= $minute;
+              $arrJumlah['jumlahTerlambat'] -= 1;
             } else {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
               $totalMinuteLate = 225;
               $totalMinuteEearlyOut = '';
               $statusEearlyOut = '';
+              $arrJumlah['jumlahMenitPulangCepat'] -= $minute;
+              $arrJumlah['jumlahPulangCepat'] -= 1;
             }
           }
         }
@@ -302,5 +313,6 @@
     </td>
   </tr>
 </table>
+<?php endforeach; ?>
 </body>
 </html>
