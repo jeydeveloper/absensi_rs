@@ -31,13 +31,14 @@ class MappingjadwalApi
 
         $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
         $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
+        $search = !empty($request->getParam('search')) ? $request->getParam('search') : '';
 
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
         // $result = Mappingjadwal::getAllNonVoid();
         $resultTotal = Employee::getAllNonVoid();
-        $result = Employee::getAllNonVoid($limit, $offset);
+        $result = Employee::getAllNonVoid($limit, $offset, $search);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
           $arrData['recordsFiltered'] = count($resultTotal);

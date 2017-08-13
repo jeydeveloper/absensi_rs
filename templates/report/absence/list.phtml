@@ -14,6 +14,7 @@
     </style>
 </head>
 <body>
+<?php if(!empty($data)): ?>
 <?php foreach($data as $key => $value): ?>
 <?php if(empty($value)) continue; ?>
 <?php extract($value); ?>
@@ -314,5 +315,8 @@
   </tr>
 </table>
 <?php endforeach; ?>
+<?php else: ?>
+<p>Oops.. data kosong</p>
+<?php endif; ?>
 </body>
 </html>
