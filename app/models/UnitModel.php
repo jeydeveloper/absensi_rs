@@ -45,4 +45,22 @@ class UnitModel extends Model
 
       return $arrData;
     }
+
+    public static function getSingleOptNonVoid()
+    {
+      $arrData = array();
+
+      $result = UnitModel::where('uni_void', 0)->get();
+
+      if(!empty($result)) {
+        foreach ($result as $key => $value) {
+          $arrData[] = array(
+            'key' => $value->uni_id,
+            'value' => $value->uni_name,
+          );
+        }
+      }
+
+      return $arrData;
+    }
 }

@@ -190,6 +190,58 @@
                     Datatables
                 </div>
                 <div class="panel-body tooltip-demo">
+                  <div class="row" style="margin-bottom:20px;">
+                    <form action="<?php echo $baseUrl ?>report/absence" role="form" method="get" target="_blank">
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <select class="form-control" name="slMonth">
+                                <option value="">-- Pilih Bulan --</option>
+                                <?php foreach($listMonth as $key => $value): ?>
+                                  <option value="<?php echo $key; ?>" <?php echo ($selectedMonth == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <select class="form-control" name="slYear">
+                                <option value="">-- Pilih Tahun --</option>
+                                <?php foreach($yearFilterRange as $key => $value): ?>
+                                  <option value="<?php echo $key; ?>" <?php echo ($selectedYear == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <select class="form-control" name="cari" id="cari">
+                                <option value="">-- Cari --</option>
+                                <option value="sBagian">Bagian</option>
+                                <option value="sUnit">Unit</option>
+                              </select>
+                            </div>
+                            <div class="col-md-2 sChoice" id="sBagian" style="display:none;">
+                              <select class="form-control" name="bagianId">
+                                <option value="">-- Pilih Bagian --</option>
+                                <?php foreach($optBagian as $value): ?>
+                                  <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-2 sChoice" id="sUnit" style="display:none;">
+                              <select class="form-control" name="unitId">
+                                <option value="">-- Pilih Unit --</option>
+                                <?php foreach($optUnit as $value): ?>
+                                  <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <button class="btn btn-success" id="btnPrint" disabled>Print</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                     <div class="row" style="margin-bottom:20px;">
                       <form action="" role="form" method="get">
                         <div class="form-group">
@@ -423,7 +475,7 @@
 
 <script>
     $.fn.tooltip.Constructor.DEFAULTS.trigger = 'hover';
-    
+
     var btnStatusToUpdate = '';
     var userIdUpdate = '';
     var idChangeStatus = '';
@@ -616,6 +668,30 @@
               selector: "[data-toggle=tooltip]"
           });
         }, 200);
+
+        $('#cari').change(function(){
+          var attrId = $(this).val();
+          if(attrId == '') {
+            $('#btnPrint').attr('disabled', true);
+          }
+
+          $('.sChoice').find('select').attr('disabled', true);
+          $('.sChoice').hide();
+
+          $('#'+attrId).find('select').val('');
+          $('#'+attrId).show();
+          $('#'+attrId).find('select').attr('disabled', false);
+          $('#btnPrint').attr('disabled', true);
+        });
+
+        $('.sChoice select').change(function(){
+          var attrId = $(this).val();
+          if(attrId == '') {
+            $('#btnPrint').attr('disabled', true);
+          } else {
+            $('#btnPrint').attr('disabled', false);
+          }
+        });
 
     });
 

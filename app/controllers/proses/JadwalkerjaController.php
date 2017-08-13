@@ -6,6 +6,8 @@ use Interop\Container\ContainerInterface;
 use Gettext\Translator;
 use App\Models\ScheduleModel as Schedule;
 use App\Models\StatusModel as Status;
+use App\Models\BagianModel as Bagian;
+use App\Models\UnitModel as Unit;
 
 class JadwalkerjaController extends \App\Controllers\BaseController
 {
@@ -60,6 +62,9 @@ class JadwalkerjaController extends \App\Controllers\BaseController
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
         $this->data['yearFilterRange'] = $this->getYearFilterRange();
+
+        $this->data['optBagian'] = Bagian::getOptNonVoid();
+        $this->data['optUnit'] = Unit::getSingleOptNonVoid();
 
         return $this->ci->get('renderer')->render($response, 'proses/jadwalkerja/detail.phtml', $this->data);
     }
