@@ -184,9 +184,17 @@ $container['ReportabsenceController'] = function($c) {
 };
 
 $container['RoleaccessController'] = function($c) {
-    return new App\Controllers\Proses\RoleaccessController($c);
+    return new App\Controllers\Master\RoleaccessController($c);
 };
 
 $container['RoleaccessApi'] = function($c) {
     return new App\Api\RoleaccessApi($c);
+};
+
+$container['UseradminController'] = function($c) {
+    return new App\Controllers\Master\UseradminController($c);
+};
+
+$container['UseradminApi'] = function($c) {
+    return new App\Api\UseradminApi($c);
 };

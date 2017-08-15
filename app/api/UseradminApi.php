@@ -3,10 +3,10 @@
 namespace App\Api;
 
 use Interop\Container\ContainerInterface;
-use App\Models\RoleaccessModel as Roleaccess;
+use App\Models\UseradminModel as Useradmin;
 use App\Helper;
 
-class RoleaccessApi
+class UseradminApi
 {
     protected $ci;
 
@@ -21,14 +21,14 @@ class RoleaccessApi
           'data' => array()
         );
 
-        $result = Roleaccess::getAllNonVoid();
+        $result = Useradmin::getAllNonVoid();
         if(!empty($result)) {
           foreach ($result as $key => $value) {
             $arrData['data'][] = array(
               ($key + 1),
-              $value->role_id,
+              $value->usr_id,
+              $value->usr_username,
               $value->role_name,
-              $value->role_privilege,
             );
           }
         }
@@ -43,14 +43,15 @@ class RoleaccessApi
           'success' => false,
       );
 
-      $role_name = $request->getParam('role_name');
-      $role_privilege = $request->getParam('role_privilege');
-      $role_privilege = join(',', $role_privilege);
+      $usr_username = $request->getParam('usr_username');
+      $usr_password = $request->getParam('usr_password');
+      $usr_role_id = $request->getParam('usr_role_id');
 
-      $obj = new Roleaccess;
-      $obj->role_name = $role_name;
-      $obj->role_privilege = $role_privilege;
-      $obj->role_created_at = Helper::dateNowDB();
+      $obj = new Useradmin;
+      $obj->usr_username = $usr_username;
+      $obj->usr_password = $usr_password;
+      $obj->usr_role_id = $usr_role_id;
+      $obj->usr_created_at = Helper::dateNowDB();
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -69,15 +70,16 @@ class RoleaccessApi
           'success' => false,
       );
 
-      $role_id = $request->getParam('role_id');
-      $role_name = $request->getParam('role_name');
-      $role_privilege = $request->getParam('role_privilege');
-      $role_privilege = join(',', $role_privilege);
+      $usr_id = $request->getParam('usr_id');
+      $usr_username = $request->getParam('usr_username');
+      $usr_password = $request->getParam('usr_password');
+      $usr_role_id = $request->getParam('usr_role_id');
 
-      $obj = Roleaccess::find($role_id);
-      $obj->role_name = $role_name;
-      $obj->role_privilege = $role_privilege;
-      $obj->role_updated_at = Helper::dateNowDB();
+      $obj = Useradmin::find($usr_id);
+      $obj->usr_username = $usr_username;
+      if(!empty($usr_password)) $obj->usr_password = $usr_password;
+      $obj->usr_role_id = $usr_role_id;
+      $obj->usr_updated_at = Helper::dateNowDB();
 
       if($obj->save()) {
         $arrData['success'] = true;
@@ -93,12 +95,12 @@ class RoleaccessApi
     {
       $arrData = array();
 
-      $role_id = $request->getParam('role_id');
-      $obj = Roleaccess::find($role_id);
+      $usr_id = $request->getParam('usr_id');
+      $obj = Useradmin::find($usr_id);
       if(!empty($obj)) {
-        $arrData['role_id'] = $obj->role_id;
-        $arrData['role_name'] = $obj->role_name;
-        $arrData['role_privilege'] = !empty($obj->role_privilege) ? explode(',', $obj->role_privilege) : [];
+        $arrData['usr_id'] = $obj->usr_id;
+        $arrData['usr_username'] = $obj->usr_username;
+        $arrData['usr_role_id'] = $obj->usr_role_id;
       }
 
       return $response->withJson($arrData);
@@ -111,9 +113,9 @@ class RoleaccessApi
           'success' => false,
       );
 
-      $role_id = $request->getParam('role_id');
-      $obj = Roleaccess::find($role_id);
-      $obj->role_void = 1;
+      $usr_id = $request->getParam('usr_id');
+      $obj = Useradmin::find($usr_id);
+      $obj->usr_void = 1;
 
       if($obj->save()) {
         $arrData['success'] = true;

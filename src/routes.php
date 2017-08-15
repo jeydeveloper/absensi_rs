@@ -208,3 +208,17 @@ $app->group('/api/roleaccess', function () {
   $this->get('/edit', \RoleaccessApi::class . ':edit')->setName('api-roleaccess-edit');
   $this->post('/delete', \RoleaccessApi::class . ':doDelete')->setName('post-api-roleaccess-delete');
 });
+
+$app->group('/user-admin', function () {
+  $this->get('', \UseradminController::class . ':lists')->setName('useradmin-list');
+  $this->get('/add', \UseradminController::class . ':add')->setName('useradmin-add');
+  $this->get('/edit', \UseradminController::class . ':edit')->setName('useradmin-edit');
+});
+
+$app->group('/api/useradmin', function () {
+  $this->get('/lists', \UseradminApi::class . ':lists')->setName('api-useradmin-lists');
+  $this->post('/add', \UseradminApi::class . ':doAdd')->setName('post-api-useradmin-add');
+  $this->post('/edit', \UseradminApi::class . ':doEdit')->setName('post-api-useradmin-edit');
+  $this->get('/edit', \UseradminApi::class . ':edit')->setName('api-useradmin-edit');
+  $this->post('/delete', \UseradminApi::class . ':doDelete')->setName('post-api-useradmin-delete');
+});
