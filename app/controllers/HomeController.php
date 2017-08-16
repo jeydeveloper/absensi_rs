@@ -14,28 +14,30 @@ class HomeController extends BaseController
     {
         parent::__construct();
         $this->ci = $ci;
+
+        if(!empty($_SESSION['USERID'])) $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function index($request, $response, $args)
     {
         $this->ci->get('logger')->info("Slim-Skeleton '/home/index' route");
 
-        $data['login'] = User::getUserByID($_SESSION['USERID']);
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+        $this->data['login'] = User::getUserByID($_SESSION['USERID']);
+        $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
-        $data['menuActived'] = 'home';
-        $data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $data);
+        $this->data['menuActived'] = 'home';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
-        return $this->ci->get('renderer')->render($response, 'index.phtml', $data);
+        return $this->ci->get('renderer')->render($response, 'index.phtml', $this->data);
     }
 
     public function login($request, $response, $args)
     {
         $this->ci->get('logger')->info("Slim-Skeleton '/home/login' route");
 
-        $data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+        $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
-        return $this->ci->get('renderer')->render($response, 'login.phtml', $data);
+        return $this->ci->get('renderer')->render($response, 'login.phtml', $this->data);
     }
 
     public function logout($request, $response, $args)

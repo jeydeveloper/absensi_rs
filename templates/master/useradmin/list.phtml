@@ -25,6 +25,9 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
 
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-bootstrap/select2-bootstrap.css" />
+
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
@@ -183,8 +186,9 @@
                         <tr>
                             <th width="5%">No.</th>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Username</th>
                             <th>Role Access</th>
+                            <th>Employee</th>
                             <th width="15%">Action</th>
                         </tr>
                         </thead>
@@ -221,13 +225,21 @@
             <input type="hidden" id="<?php echo $primaryKey; ?>" name="<?php echo $primaryKey; ?>">
             <div class="modal-body custom">
                 <div class="form-group"><label for="usr_username">Nama User</label> <input type="text" id="usr_username" name="usr_username" placeholder="Isi nama username" class="form-control" required></div>
-                <div class="form-group"><label for="usr_password">Password</label> <input type="password" id="usr_password" name="usr_password" placeholder="Isi password" class="form-control" required></div>
+                <div class="form-group"><label for="usr_password">Password</label> <input type="password" id="usr_password" name="usr_password" placeholder="Isi password" class="form-control"></div>
             </div>
             <div class="modal-body custom">
                 <div class="form-group"><label for="usr_username">Nama Role Access</label>
                   <select id="usr_role_id" name="usr_role_id" placeholder="Isi nama role access" class="form-control" required>
                     <<option value="">-- Pilih Role Access --</option>
                     <?php foreach($optRoleAccess as $value): ?>
+                    <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group"><label for="usr_emp_id">Nama Employee</label>
+                  <select id="usr_emp_id" name="usr_emp_id" placeholder="Isi nama employee" class="form-control js-source-states" required>
+                    <<option value="">-- Pilih Employee --</option>
+                    <?php foreach($optEmployee as $value): ?>
                     <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
                     <?php endforeach; ?>
                   </select>
@@ -275,6 +287,8 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.min.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.min.js"></script>
 
 <!-- App scripts -->
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
@@ -345,7 +359,22 @@
 
         var fillInputForm = function(data) {
           $.each(data, function(idx, val){
-            $('#'+idx).val(val);
+            var ckbox = $('#'+idx+'[type="checkbox"]');
+            if(ckbox.length > 0) {
+              if(val == 1) {
+                $('#'+idx).trigger('click');
+              } else {
+                $('#'+idx).attr('checked', false);
+              }
+            } else if($('#'+idx).is('select')) {
+              if($('#'+idx).hasClass('js-source-states')) {
+                $('#'+idx).select2('val', val);
+              } else {
+                $('#'+idx).val(val);
+              }
+            } else {
+              $('#'+idx).val(val);
+            }
           });
         };
 
@@ -436,11 +465,15 @@
         });
 
         $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
-            frm.attr('action', '<?php echo $baseUrl ?>api/useradmin/add');
+            frm.find('input[type="text"]').val('');
+            frm.find("select").select2('val', '');
+            frm.find('input[type="checkbox"]').attr('checked', false);
+            frm.attr('action', '<?php echo $baseUrl ?>api/izin/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');
         });
+
+        $(".js-source-states").select2();
 
     });
 

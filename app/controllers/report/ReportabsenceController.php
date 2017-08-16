@@ -23,6 +23,8 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->ci = $ci;
 
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+
+        $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function lists($request, $response, $args)

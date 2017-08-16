@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Gettext\Translator;
 use App\Models\SettingModel as Setting;
+use App\Models\UseradminModel as Useradmin;
 
 class BaseController
 {
@@ -55,5 +56,14 @@ class BaseController
             '11' => 'September',
             '12' => 'Desember',
       ];
+    }
+
+    public function getRoleAccess($id) {
+      $arrData = [];
+      $res = Useradmin::getUserByID($id);
+      if(!empty($res) AND !empty($res->role_privilege)) {
+        $arrData = explode(',', $res->role_privilege);
+      }
+      return $arrData;
     }
 }

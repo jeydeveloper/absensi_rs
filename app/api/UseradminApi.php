@@ -29,6 +29,7 @@ class UseradminApi
               $value->usr_id,
               $value->usr_username,
               $value->role_name,
+              $value->emp_name,
             );
           }
         }
@@ -46,11 +47,13 @@ class UseradminApi
       $usr_username = $request->getParam('usr_username');
       $usr_password = $request->getParam('usr_password');
       $usr_role_id = $request->getParam('usr_role_id');
+      $usr_emp_id = $request->getParam('usr_emp_id');
 
       $obj = new Useradmin;
       $obj->usr_username = $usr_username;
-      $obj->usr_password = $usr_password;
+      $obj->usr_password = md5($usr_password);
       $obj->usr_role_id = $usr_role_id;
+      $obj->usr_emp_id = $usr_emp_id;
       $obj->usr_created_at = Helper::dateNowDB();
 
       if($obj->save()) {
@@ -74,11 +77,13 @@ class UseradminApi
       $usr_username = $request->getParam('usr_username');
       $usr_password = $request->getParam('usr_password');
       $usr_role_id = $request->getParam('usr_role_id');
+      $usr_emp_id = $request->getParam('usr_emp_id');
 
       $obj = Useradmin::find($usr_id);
       $obj->usr_username = $usr_username;
-      if(!empty($usr_password)) $obj->usr_password = $usr_password;
+      if(!empty($usr_password)) $obj->usr_password = md5($usr_password);
       $obj->usr_role_id = $usr_role_id;
+      $obj->usr_emp_id = $usr_emp_id;
       $obj->usr_updated_at = Helper::dateNowDB();
 
       if($obj->save()) {
@@ -101,6 +106,7 @@ class UseradminApi
         $arrData['usr_id'] = $obj->usr_id;
         $arrData['usr_username'] = $obj->usr_username;
         $arrData['usr_role_id'] = $obj->usr_role_id;
+        $arrData['usr_emp_id'] = $obj->usr_emp_id;
       }
 
       return $response->withJson($arrData);

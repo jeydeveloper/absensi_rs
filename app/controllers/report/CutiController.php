@@ -18,6 +18,8 @@ class CutiController extends \App\Controllers\BaseController
         $this->data['primaryKey'] = 'cut_id';
         $this->data['inputFocus'] = 'cut_name';
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+
+        $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function lists($request, $response, $args)

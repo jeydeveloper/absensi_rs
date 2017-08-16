@@ -17,13 +17,13 @@ class UseradminModel extends Model
 
     public static function getAllNonVoid()
     {
-      $result = UseradminModel::leftjoin('role_access', 'usr_role_id', '=', 'role_id')->where('usr_void', 0)->where('usr_id', '!=', 1)->get();
+      $result = UseradminModel::leftjoin('role_access', 'usr_role_id', '=', 'role_id')->leftjoin('employee', 'usr_emp_id', '=', 'emp_id')->where('usr_void', 0)->where('usr_id', '!=', 1)->get();
       return $result;
     }
 
     public static function getUserByID($id)
     {
-      $result = UseradminModel::where('usr_id', $id)->first();
+      $result = UseradminModel::leftjoin('role_access', 'usr_role_id', '=', 'role_id')->leftjoin('employee', 'usr_emp_id', '=', 'emp_id')->where('usr_void', 0)->where('usr_id', '!=', 1)->where('usr_id', $id)->first();
       return $result;
     }
 }

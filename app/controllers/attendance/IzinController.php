@@ -20,6 +20,8 @@ class IzinController extends \App\Controllers\BaseController
         $this->data['primaryKey'] = 'emcu_id';
         $this->data['inputFocus'] = 'emcu_name';
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+
+        $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function lists($request, $response, $args)
