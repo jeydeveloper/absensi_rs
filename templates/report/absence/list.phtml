@@ -155,6 +155,9 @@
           }
         }
 
+        $totalMinuteLate = 0;
+        $totalMinuteEearlyOut = 0;
+
         if(!empty($dataEmpAbsence[$empCode][$scheduleDate]) AND !empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
           $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min']));
           $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max']));
@@ -225,20 +228,25 @@
             $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
             $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
 
+            if(!empty($totalMinuteLate)) $arrJumlah['jumlahMenitTerlambat'] -= $totalMinuteLate;
+            if(!empty($totalMinuteLate)) $arrJumlah['jumlahTerlambat'] -= 1;
+            if(!empty($totalMinuteEearlyOut)) $arrJumlah['jumlahMenitPulangCepat'] -= $totalMinuteEearlyOut;
+            if(!empty($totalMinuteEearlyOut)) $arrJumlah['jumlahPulangCepat'] -= 1;
+
             if($intMinAbsence <= $batasAbsenMasuk) {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
               $totalMinuteEearlyOut = 225;
               $totalMinuteLate = '';
               $statusLate = '';
-              $arrJumlah['jumlahMenitTerlambat'] -= $minute;
-              $arrJumlah['jumlahTerlambat'] -= 1;
+              $arrJumlah['jumlahMenitPulangCepat'] += $totalMinuteEearlyOut;
+              $arrJumlah['jumlahPulangCepat'] += 1;
             } else {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
               $totalMinuteLate = 225;
               $totalMinuteEearlyOut = '';
               $statusEearlyOut = '';
-              $arrJumlah['jumlahMenitPulangCepat'] -= $minute;
-              $arrJumlah['jumlahPulangCepat'] -= 1;
+              $arrJumlah['jumlahMenitTerlambat'] += $totalMinuteLate;
+              $arrJumlah['jumlahTerlambat'] += 1;
             }
           }
         }
