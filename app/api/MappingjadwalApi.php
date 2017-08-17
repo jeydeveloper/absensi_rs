@@ -37,7 +37,7 @@ class MappingjadwalApi
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
         // $result = Mappingjadwal::getAllNonVoid();
-        $resultTotal = Employee::getAllNonVoid();
+        $resultTotal = Employee::getAllNonVoid('', '', $search);
         $result = Employee::getAllNonVoid($limit, $offset, $search);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);

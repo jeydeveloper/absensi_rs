@@ -24,6 +24,8 @@ class EmployeeModel extends Model
         } else {
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->limit($limit)->offset($offset)->get();
         }
+      } elseif(!empty($search)) {
+        $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->get();
       } else {
         $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->get();
       }

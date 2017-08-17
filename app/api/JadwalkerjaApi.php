@@ -13,13 +13,15 @@ use App\Models\IzinModel as Izin;
 use App\Models\SettingModel as Setting;
 use App\Helper;
 
-class JadwalkerjaApi
+class JadwalkerjaApi extends \App\Api\BaseApi
 {
     protected $ci;
     protected $minuteLate;
 
     public function __construct(ContainerInterface $ci)
     {
+        parent::__construct();
+
         $this->ci = $ci;
         $this->minuteLate = 15;
     }
@@ -41,7 +43,7 @@ class JadwalkerjaApi
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
-        $resultTotal = Employee::getAllNonVoid();
+        $resultTotal = Employee::getAllNonVoid('', '', $search);
         $result = Employee::getAllNonVoid($limit, $offset, $search);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
@@ -283,7 +285,7 @@ class JadwalkerjaApi
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
-        $resultTotal = Employee::getAllNonVoid();
+        $resultTotal = Employee::getAllNonVoid('', '', $search);
         $result = Employee::getAllNonVoid($limit, $offset, $search);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);

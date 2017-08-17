@@ -3,12 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UseradminModel as Useradmin;
 
 class EmployeescheduleModel extends Model
 {
     protected $table      = 'employee_schedule';   // it's always better to specify it
     protected $primaryKey = 'emsc_id';     // must be defined if different from 'id'
     public    $timestamps = false;     // to get rid of created_at and updated_at
+
+    public function __construct()
+    {
+      $this->myRoleAccess = $this->getRoleAccess();
+    }
 
     public static function getAll()
     {
@@ -44,5 +50,14 @@ class EmployeescheduleModel extends Model
     {
       $res = EmployeescheduleModel::leftjoin('status', 'emsc_sta_id', '=', 'sta_id')->where('emsc_uniq_code', $uniqCode)->first();
       return $res;
+    }
+
+    private function getRoleAccess() {
+      $arrData = [];
+      $res = Useradmin::getUserByID($_SESSION['USERID']);
+      if(!empty($res) AND !empty($res->role_privilege)) {
+        $arrData = explode(',', $res->role_privilege);
+      }
+      return $arrData;
     }
 }

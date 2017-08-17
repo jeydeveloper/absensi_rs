@@ -127,6 +127,8 @@ return [
             14 => 'Module Proses Absensi Penyesuaian Jadwal',
             15 => 'Module Report Cuti',
             16 => 'Module Report Holiday',
+            17 => 'Only Bagian',
+            18 => 'Only Unit',
           ],
         ],
     ],
