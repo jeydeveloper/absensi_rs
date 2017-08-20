@@ -32,8 +32,13 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/absence/list' route");
 
         $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : 0;
-        $month = !empty($request->getParam('month')) ? $request->getParam('month') : date('m');
+        $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
+
+        if(empty($month)) {
+          $response = $response->withRedirect($this->data['baseUrl'] . 'report/tahunan?year='.$year.'&empId='.$empId);
+          return $response;
+        }
 
         $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
         $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
@@ -87,6 +92,71 @@ class ReportabsenceController extends \App\Controllers\BaseController
         }
 
         return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
+    }
+
+    public function listsYearly($request, $response, $args)
+    {
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/absence/list' route");
+
+        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : 0;
+        $month = !empty($request->getParam('month')) ? $request->getParam('month') : date('m');
+        $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
+
+        $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
+        $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
+
+        $arrEmpId = [];
+        if(!empty($empId)) {
+          $emp = new \stdClass();
+          $emp->emp_id = $empId;
+          $arrEmpId[0] = $emp;
+        }
+        if(!empty($bagianId)) {
+          $arrEmpId = Employee::getEmployeeByBagian($bagianId);
+        }
+        if(!empty($unitId)) {
+          $arrEmpId = Employee::getEmployeeByUnit($unitId);
+        }
+
+        $this->data['data'] = [];
+
+        if(!empty($arrEmpId)) {
+          foreach ($arrEmpId as $key => $value) {
+            for ($i=1; $i <= 12 ; $i++) {
+              $month = $i < 10 ? "0$i" : $i;
+              $this->data['data'][$key][$i]['month'] = $month;
+              $this->data['data'][$key][$i]['year'] = $year;
+              $this->data['data'][$key][$i]['arrDayName'] = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+              $this->data['data'][$key][$i]['arrMonthName'] = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+              $this->data['data'][$key][$i]['totalDay'] = date('t', mktime(0, 0, 0, $month, 1, $year));
+
+              $this->data['data'][$key][$i]['izinTidakHadir'] = Status::getAllKetidakhadiranNonVoid();
+              $this->data['data'][$key][$i]['cntIzinTidakHadir'] = count($this->data['data'][$key][$i]['izinTidakHadir']);
+              $this->data['data'][$key][$i]['employee'] = Employee::getEmployeeByID($value->emp_id);
+
+              $empCode = !empty($this->data['data'][$key][$i]['employee']->emp_code) ? $this->data['data'][$key][$i]['employee']->emp_code : '-';
+
+              $this->data['data'][$key][$i]['empId'] = $value->emp_id;
+              $this->data['data'][$key][$i]['empCode'] = $empCode;
+
+              $this->data['data'][$key][$i]['setting'] = $this->getSettingDb();
+
+              $dateStart = $year.'-'.$month.'-'.($this->data['data'][$key][$i]['setting']['tanggal_cutoff'] < 10 ? ('0'.$this->data['data'][$key][$i]['setting']['tanggal_cutoff']) : $this->data['data'][$key][$i]['setting']['tanggal_cutoff']);
+              $dateEnd = $this->generateNextDate($dateStart);
+              $crDateStart = date_create($dateStart);
+              $crDateEnd = date_create($dateEnd);
+              $diff = date_diff($crDateEnd, $crDateStart);
+              $this->data['data'][$key][$i]['totalDay'] = $diff->format("%a");
+              $this->data['data'][$key][$i]['endDay'] = date('t', strtotime($dateStart));
+
+              $this->data['data'][$key][$i]['dataEmpHasSchedule'] = $this->getEmployeeSchedule($value->emp_id, $dateStart, $dateEnd);
+              $this->data['data'][$key][$i]['dataEmpAbsence'] = $this->getEmployeeTransaksi($empCode, $dateStart, $dateEnd);
+              $this->data['data'][$key][$i]['dataEmpHasCuti'] = $this->getEmployeeCuti($value->emp_id, $dateStart, $dateEnd);
+            }
+          }
+        }
+
+        return $this->ci->get('renderer')->render($response, 'report/absence/list_tahunan.phtml', $this->data);
     }
 
     private function getEmployeeSchedule($empId = '', $dateStart = '', $dateEnd = '') {
@@ -173,5 +243,23 @@ class ReportabsenceController extends \App\Controllers\BaseController
       $nextDate = $year . '-' . ($nextMonth < 10 ? ("0$nextMonth") : $nextMonth) . '-' . ($nextDay < 10 ? ("$nextDay") : $nextDay);
       // echo $nextDate; exit();
       return $nextDate;
+    }
+
+    public function form($request, $response, $args) {
+      $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/bagian/list' route");
+
+      $this->data['menuActived'] = 'report';
+      $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+      $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
+      $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+      $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'].'-'.$this->data['selectedMonth'].'-01'));
+      $this->data['listMonth'] = $this->getMonthFilter();
+
+      $this->data['yearFilterRange'] = $this->getYearFilterRange();
+
+      $this->data['optEmployee'] = Employee::getOptNonVoid();
+
+      return $this->ci->get('renderer')->render($response, 'report/absence/form.phtml', $this->data);
     }
 }

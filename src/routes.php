@@ -193,6 +193,8 @@ $app->group('/api/mappingjadwal', function () {
 
 $app->group('/report', function () {
   $this->get('/absence', \ReportabsenceController::class . ':lists')->setName('reportabsence-list');
+  $this->get('/tahunan', \ReportabsenceController::class . ':listsYearly')->setName('reportabsence-listyearly');
+  $this->get('/form', \ReportabsenceController::class . ':form')->setName('reportabsence-form');
 });
 
 $app->group('/role-access', function () {
