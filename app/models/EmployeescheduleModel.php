@@ -13,7 +13,7 @@ class EmployeescheduleModel extends Model
 
     public function __construct()
     {
-      $this->myRoleAccess = $this->getRoleAccess();
+      // $this->myRoleAccess = $this->getRoleAccess();
     }
 
     public static function getAll()
