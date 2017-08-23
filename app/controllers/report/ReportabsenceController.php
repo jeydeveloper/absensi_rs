@@ -163,17 +163,31 @@ class ReportabsenceController extends \App\Controllers\BaseController
       $arrData = [
         'detail' => [],
         'izin' => [],
+        'shift' => [],
       ];
       $res = Employeeschedule::getAllNonVoidWhereIn(array($empId), $dateStart, $dateEnd);
       if(!empty($res)) {
         foreach ($res as $key => $value) {
+          $minTime = strtotime($value->schd_waktu_awal);
+          $maxTime = strtotime($value->schd_waktu_akhir);
+
+          $tmp = date('h:i', ($maxTime - $minTime));
+
+          list($hour, $minute) = explode(':', $tmp);
+          $hour = (int)$hour;
+          $minute = (int)$minute;
+          $hour = $hour > 0 ? (($hour-1)*60) : 0;
+          $minute += $hour;
+
           $arrData['detail'][$value->emsc_emp_id][$value->emsc_uniq_code] = [
             'wkt_min' => $value->schd_waktu_awal,
             'wkt_max' => $value->schd_waktu_akhir,
             'code' => $value->schd_code,
             'keterangan' => $value->emsc_status_reason,
+            'total_waktu' => $minute,
           ];
           if(!empty($value->sta_id)) $arrData['izin'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = 1;
+          if(!empty($value->schd_code)) $arrData['shift'][$value->schd_code] = $minute;
         }
       }
       return $arrData;

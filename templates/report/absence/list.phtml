@@ -50,7 +50,7 @@
         <tr>
           <td>Bulan</td>
           <td>:</td>
-          <td><?php echo $arrMonthName[(int)$month]; ?></td>
+          <td><?php echo $setting['tanggal_cutoff'] . ' ' . $arrMonthName[(int)$month]; ?></td>
         </tr>
       </table>
     </td>
@@ -143,6 +143,16 @@
               $wktMax = $setting['default_1_schedule_out'];
             }
 
+            $minTime = strtotime($setting['default_1_schedule_in']);
+            $maxTime = strtotime($setting['default_1_schedule_out']);
+
+            $tmp = date('h:i', ($maxTime - $minTime));
+            list($hour, $minute) = explode(':', $tmp);
+            $hour = (int)$hour;
+            $minute = (int)$minute;
+            $hour = $hour > 0 ? (($hour-1)*60) : 0;
+            $minute += $hour;
+
             $dataEmpHasSchedule['detail'][$empId][$generateId] = [
               'wkt_min' => $wktMin,
               'wkt_max' => $wktMax,
@@ -152,7 +162,10 @@
               'status_reason' => '',
               'isScheduleGantiHari' => 0,
               'keterangan' => (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan'] : ''),
+              'total_waktu' => $minute,
             ];
+
+            $dataEmpHasSchedule['detail']['NORM'] = $minute;
           }
         }
 
@@ -316,17 +329,21 @@
           <th>Minggu / Libur</th>
           <th>Waktu Kerja</th>
         </tr>
-        <?php foreach($arrShift as $value): ?>
+        <?php $totalWaktuKerja = 0; foreach($arrShift as $value): ?>
+          <?php if(empty($arrJumlah['jumlahShiftBiasa'][$value])) $arrJumlah['jumlahShiftBiasa'][$value] = 0; ?>
+          <?php if(empty($arrJumlah['jumlahShiftLibur'][$value])) $arrJumlah['jumlahShiftLibur'][$value] = 0; ?>
+          <?php $waktuKerja = round((($arrJumlah['jumlahShiftBiasa'][$value] + $arrJumlah['jumlahShiftLibur'][$value]) * $dataEmpHasSchedule['detail'][$value])/60, 1); $totalWaktuKerja += $waktuKerja; ?>
         <tr>
           <td><?php echo $value; ?></td>
           <td><?php echo $arrJumlah['jumlahShiftBiasa'][$value]; ?></td>
           <td><?php echo (!empty($arrJumlah['jumlahShiftLibur'][$value]) ? $arrJumlah['jumlahShiftLibur'][$value] : 0); ?></td>
-          <td><?php echo (!empty($arrJumlah['waktuKerja'][$value]) ? $arrJumlah['waktuKerja'][$value] : 0); ?></td>
+          <!-- <td><?php echo (!empty($arrJumlah['waktuKerja'][$value]) ? $arrJumlah['waktuKerja'][$value] : 0); ?></td> -->
+          <td><?php echo $waktuKerja; ?></td>
         </tr>
         <?php endforeach; ?>
         <tr>
           <td colspan="3">Total Waktu</td>
-          <td><?php echo array_sum($arrJumlah['waktuKerja']); ?></td>
+          <td><?php echo $totalWaktuKerja; ?></td>
         </tr>
       </table>
     </td>
