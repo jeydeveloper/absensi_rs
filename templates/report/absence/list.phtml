@@ -159,21 +159,22 @@
         $totalMinuteLate = 0;
         $totalMinuteEearlyOut = 0;
 
+        $apelSchedule = strtotime($scheduleDate . ' ' . $setting['apel_closest_schedule']);
+        $apelTime = strtotime($scheduleDate . ' ' . $setting['apel_time']);
+        $apelDay = $setting['apel_day'];
+
+        if(strtolower($arrDayName[$dayNo]) == $apelDay) {
+          $apel = 1;
+          $arrJumlah['apel'] += 1;
+        }
+
         if(!empty($dataEmpAbsence[$empCode][$scheduleDate]) AND !empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
           $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min']));
           $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max']));
           $intMinAbsence = strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_min']);
           $intMaxAbsence = strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_max']);
 
-          $apelSchedule = strtotime($scheduleDate . ' ' . $setting['apel_closest_schedule']);
-          $apelTime = strtotime($scheduleDate . ' ' . $setting['apel_time']);
-          $apelDay = $setting['apel_day'];
-
-          //echo "string - x -" . $apelSchedule;
-          //echo "string - y -" . $intMinSchedule;
-          if($apelSchedule == $intMinSchedule AND strtolower($arrDayName[$dayNo]) == $apelDay) {
-            $apel = 1;
-            $arrJumlah['apel'] += 1;
+          if(strtolower($arrDayName[$dayNo]) == $apelDay) {
             if($intMinAbsence <= $apelTime) {
               $hadirApel = 1;
               $arrJumlah['hadirApel'] += 1;
