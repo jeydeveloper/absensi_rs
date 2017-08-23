@@ -226,9 +226,12 @@
             $arrJumlah['jumlahShiftLibur'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
           }
 
+          $isSameSchedule = false;
           if(!empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND !empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] == $dataEmpAbsence[$empCode][$scheduleDate]['time_max']) {
             $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
             $batasAbsenMasuk = strtotime('+'.$settingBatasAbsenMasuk.' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
+
+            $isSameSchedule = true;
 
             if(!empty($totalMinuteLate)) $arrJumlah['jumlahMenitTerlambat'] -= $totalMinuteLate;
             if(!empty($totalMinuteLate)) $arrJumlah['jumlahTerlambat'] -= 1;
@@ -268,7 +271,7 @@
           <td><?php if(!empty($totalMinuteLate)) echo 1; ?></td>
           <td><?php if(!empty($totalMinuteLate)) echo $totalMinuteLate; ?></td>
           <td><?php if(!empty($totalMinuteEearlyOut)) echo 1; ?></td>
-          <td><?php if(!empty($totalMinuteEearlyOut)) {$arrJumlah['jumlahMenitPulangCepat'] += 1; echo ($totalMinuteEearlyOut + 1);} ?></td>
+          <td><?php if(!empty($totalMinuteEearlyOut)) {if($isSameSchedule){echo $totalMinuteEearlyOut;}else{$arrJumlah['jumlahMenitPulangCepat'] += 1; echo ($totalMinuteEearlyOut + 1);}} ?></td>
           <td><?php echo (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['code'] : ''); ?></td>
           <?php foreach($izinTidakHadir as $value): ?>
           <td><?php if(!empty($dataEmpHasSchedule['izin'][$empId][$generateId][$value->sta_id])) {
