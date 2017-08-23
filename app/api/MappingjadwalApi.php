@@ -99,9 +99,9 @@ class MappingjadwalApi
               }
 
               if(!empty($dataEmpHasSchedule[$value->emp_id][$generateId])) {
-                $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm" style="width:60px;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'\', \''.$scheduleDate.'\')">'.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'</button>';
+                $arrData['data'][$key][$i] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm" style="width:80px;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'\', \''.$scheduleDate.'\')">'.$dataEmpHasSchedule[$value->emp_id][$generateId]['code'].'</button>';
               } else {
-                $arrData['data'][$key][$i] = '<button style="width:60px;" id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-default btn-sm" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
+                $arrData['data'][$key][$i] = '<button style="width:80px;" id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-default btn-sm" onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
               }
               $cnt++;
             }

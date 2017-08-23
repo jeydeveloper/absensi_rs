@@ -210,22 +210,22 @@ class JadwalkerjaApi extends \App\Api\BaseApi
               $hasVerticalSpan = false;
 
               if($absenceLabel == "OFF") {
-                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="width:80px;position:relative;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
               } elseif($absenceLabel == "ALPHA") {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
                 $absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } elseif($absenceLabel == "LEMBUR") {
-                $btnCss = 'class="btn btn-block btn-sm btn-default" style="position:relative;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm btn-default" style="width:80px;position:relative;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">L</span>';
               } elseif($absenceLabel == "ERROR") {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } else {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
                 $hasVerticalSpan = true;
@@ -471,10 +471,10 @@ class JadwalkerjaApi extends \App\Api\BaseApi
 
               $onClick = '';
               if($absenceLabel == "OFF") {
-                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm btn-danger" style="width:80px;position:relative;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
               } elseif($absenceLabel == "ALPHA") {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
                 //$absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } elseif($absenceLabel == "LEMBUR") {
@@ -482,11 +482,11 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 $absenceLabel = 'L';
               } elseif($absenceLabel == "ERROR") {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 //$absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">' . $dataEmpHasSchedule[$value->emp_id][$generateId]['code'] . '</span>';
               } else {
-                $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
+                $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$value->emp_id][$generateId]['color'].' !important;color:#ffffff;"';
                 //$onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$value->emp_id.'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$value->emp_code][$scheduleDate]['wkt_max'].'\')"';
                 //$absenceLabel = $dataEmpHasSchedule[$value->emp_id][$generateId]['code'];
                 $hasVerticalSpan = true;
@@ -742,22 +742,22 @@ class JadwalkerjaApi extends \App\Api\BaseApi
       $hasVerticalSpan = false;
 
       if($absenceLabel == "OFF") {
-        $btnCss = 'class="btn btn-block btn-sm btn-danger" style="position:relative;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm btn-danger" style="width:80px;position:relative;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
       } elseif($absenceLabel == "ALPHA") {
-        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \'\', \'\')"';
         $absenceLabel = '<span style="padding:4px;border-radius: 50px;background-color:#e74c3c;color:#fff;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
       } elseif($absenceLabel == "LEMBUR") {
-        $btnCss = 'class="btn btn-block btn-sm btn-default" style="position:relative;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm btn-default" style="width:80px;position:relative;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">L</span>';
       } elseif($absenceLabel == "ERROR") {
-        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = '<span style="padding:4px;background-color:#fff;color:#000;">' . $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'] . '</span>';
       } else {
-        $btnCss = 'class="btn btn-block btn-sm" style="position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
+        $btnCss = 'class="btn btn-block btn-sm" style="width:80px;position:relative;background-color:'.$dataEmpHasSchedule[$arrParam['empId']][$generateId]['color'].' !important;color:#ffffff;"';
         $onClick = 'onclick="doAlert(\''.$generateId.'\', \''.$arrParam['empId'].'\', \''.$lblShift.'\', \''.$scheduleDate.'\', \''.$absenceLabel.'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_min'].'\', \''.$dataEmpAbsence[$arrParam['empCode']][$scheduleDate]['wkt_max'].'\')"';
         $absenceLabel = $dataEmpHasSchedule[$arrParam['empId']][$generateId]['code'];
         $hasVerticalSpan = true;
