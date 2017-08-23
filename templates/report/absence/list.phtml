@@ -238,7 +238,7 @@
         if(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code'])) {
           $arrShift[$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = $dataEmpHasSchedule['detail'][$empId][$generateId]['code'];
           if(empty($arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
-          $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
+          if($absenceLabel != 'OFF') $arrJumlah['jumlahShiftBiasa'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += 1;
 
           if(empty($arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']])) $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] = 0;
           $arrJumlah['waktuKerja'][$dataEmpHasSchedule['detail'][$empId][$generateId]['code']] += !empty($dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu']) ? $dataEmpAbsence[$empCode][$scheduleDate]['totalWaktu'] : 0;
