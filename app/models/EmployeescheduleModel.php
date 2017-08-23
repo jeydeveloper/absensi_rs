@@ -33,7 +33,7 @@ class EmployeescheduleModel extends Model
 
       if (!empty($dateStart)) {
         $dateEnd = !empty($dateEnd) ? $dateEnd : $dateStart;
-        $res = EmployeescheduleModel::join('schedule', 'emsc_schd_id', '=', 'schd_id')
+        $res = EmployeescheduleModel::leftjoin('schedule', 'emsc_schd_id', '=', 'schd_id')
         ->leftjoin('status', 'emsc_sta_id', '=', 'sta_id')
         ->where('emsc_void', 0)
         ->whereIn('emsc_emp_id', $data)
