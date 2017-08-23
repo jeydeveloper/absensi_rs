@@ -2,7 +2,7 @@
 // Routes
 
 $app->group('/', function () {
-  $this->get('', \HomeController::class . ':index');
+  $this->get('', \BagianController::class . ':lists')->setName('bagian-list');
   $this->get('home', \HomeController::class . ':index');
   $this->get('login', \HomeController::class . ':login')->setName('login');
   $this->get('logout', \HomeController::class . ':logout');
