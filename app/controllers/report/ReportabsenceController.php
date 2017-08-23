@@ -171,6 +171,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
             'wkt_min' => $value->schd_waktu_awal,
             'wkt_max' => $value->schd_waktu_akhir,
             'code' => $value->schd_code,
+            'keterangan' => $value->emsc_status_reason,
           ];
           if(!empty($value->sta_id)) $arrData['izin'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = 1;
         }

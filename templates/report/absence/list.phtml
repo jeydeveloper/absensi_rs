@@ -151,6 +151,7 @@
               'namaIzin' => '',
               'status_reason' => '',
               'isScheduleGantiHari' => 0,
+              'keterangan' => (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan'] : ''),
             ];
           }
         }
@@ -278,7 +279,7 @@
 
           <td><?php echo (!empty($hadirApel) ? $hadirApel : ''); ?></td>
           <td><?php echo (!empty($apel) ? $apel : ''); ?></td>
-          <td></td>
+          <td><?php echo (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['keterangan'] : ''); ?></td>
         </tr>
         <?php endfor; ?>
         <tr>
