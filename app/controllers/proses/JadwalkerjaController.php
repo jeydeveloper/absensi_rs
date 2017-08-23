@@ -60,7 +60,7 @@ class JadwalkerjaController extends \App\Controllers\BaseController
         $this->data['listStatusKehadiran'] = Status::getAllKehadiranNonVoid();
         $this->data['listStatusKetidakhadiran'] = Status::getAllKetidakhadiranNonVoid();
 
-        $this->data['menuActived'] = 'prosesAbsensi';
+        $this->data['menuActived'] = 'report';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
         $this->data['yearFilterRange'] = $this->getYearFilterRange();
