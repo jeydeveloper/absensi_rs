@@ -24,6 +24,8 @@ class JadwalkerjaApi extends \App\Api\BaseApi
 
         $this->ci = $ci;
         $this->minuteLate = 15;
+
+        $this->myRoleAccess = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function lists($request, $response, $args)
@@ -43,8 +45,31 @@ class JadwalkerjaApi extends \App\Api\BaseApi
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
-        $resultTotal = Employee::getAllNonVoid('', '', $search);
-        $result = Employee::getAllNonVoid($limit, $offset, $search);
+        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
+        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
+
+        $arrUnitId = [];
+        if($onlyUnit) {
+          $res = Employee::getAllUnit($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+          }
+          if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+          // print_r($arrUnitId);
+        }
+
+        $arrDivisiId = [];
+        if($onlyDivisi) {
+          $res = Employee::getAllDivisi($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+          }
+          if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+          // print_r($arrDivisiId);
+        }
+
+        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId);
+        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
           $arrData['recordsFiltered'] = count($resultTotal);
@@ -285,8 +310,31 @@ class JadwalkerjaApi extends \App\Api\BaseApi
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
-        $resultTotal = Employee::getAllNonVoid('', '', $search);
-        $result = Employee::getAllNonVoid($limit, $offset, $search);
+        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
+        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
+
+        $arrUnitId = [];
+        if($onlyUnit) {
+          $res = Employee::getAllUnit($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+          }
+          if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+          // print_r($arrUnitId);
+        }
+
+        $arrDivisiId = [];
+        if($onlyDivisi) {
+          $res = Employee::getAllDivisi($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+          }
+          if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+          // print_r($arrDivisiId);
+        }
+
+        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId);
+        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
           $arrData['recordsFiltered'] = count($resultTotal);
@@ -351,7 +399,7 @@ class JadwalkerjaApi extends \App\Api\BaseApi
               ($key + 1),
               $value->emp_id,
               $value->emp_code,
-              ('<a href="'.($this->ci->get('settings')['baseUrl'] . 'report/absence?empId='.$value->emp_id.'&month='.$month.'&year='.$year).'" class="btn-link">'.$value->emp_name.'</a>'),
+              ('<a target="_blank" href="'.($this->ci->get('settings')['baseUrl'] . 'report/absence?empId='.$value->emp_id.'&month='.$month.'&year='.$year).'" class="btn-link">'.$value->emp_name.'</a>'),
             );
             $len = count($arrData['data'][$key]);
             $forLimit = $jumlahTanggal + $len;

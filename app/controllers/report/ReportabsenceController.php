@@ -44,16 +44,39 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
 
         $arrEmpId = [];
+
         if(!empty($empId)) {
           $emp = new \stdClass();
           $emp->emp_id = $empId;
           $arrEmpId[0] = $emp;
-        }
-        if(!empty($bagianId)) {
-          $arrEmpId = Employee::getEmployeeByBagian($bagianId);
-        }
-        if(!empty($unitId)) {
-          $arrEmpId = Employee::getEmployeeByUnit($unitId);
+        } else {
+          if(!empty($bagianId)) {
+            $arrEmpId = Employee::getEmployeeByBagian($bagianId);
+          }
+          if(!empty($unitId)) {
+            $arrEmpId = Employee::getEmployeeByUnit($unitId);
+          }
+
+          $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->data['myRoleAccess'])) ? true : false;
+          $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->data['myRoleAccess'])) ? true : false;
+
+          $arrUnitId = [];
+          $arrDivisiId = [];
+          if($onlyUnit) {
+            $res = Employee::getAllUnit($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+              if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+            }
+            if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+            $arrEmpId = Employee::getEmployeeByUnit($arrUnitId);
+          } elseif($onlyDivisi) {
+            $res = Employee::getAllDivisi($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+              if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+            }
+            if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+            $arrEmpId = Employee::getEmployeeByBagian($arrDivisiId);
+          }
         }
 
         $this->data['data'] = [];
@@ -106,16 +129,39 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
 
         $arrEmpId = [];
+
         if(!empty($empId)) {
           $emp = new \stdClass();
           $emp->emp_id = $empId;
           $arrEmpId[0] = $emp;
-        }
-        if(!empty($bagianId)) {
-          $arrEmpId = Employee::getEmployeeByBagian($bagianId);
-        }
-        if(!empty($unitId)) {
-          $arrEmpId = Employee::getEmployeeByUnit($unitId);
+        } else {
+          if(!empty($bagianId)) {
+            $arrEmpId = Employee::getEmployeeByBagian($bagianId);
+          }
+          if(!empty($unitId)) {
+            $arrEmpId = Employee::getEmployeeByUnit($unitId);
+          }
+
+          $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->data['myRoleAccess'])) ? true : false;
+          $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->data['myRoleAccess'])) ? true : false;
+
+          $arrUnitId = [];
+          $arrDivisiId = [];
+          if($onlyUnit) {
+            $res = Employee::getAllUnit($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+              if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+            }
+            if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+            $arrEmpId = Employee::getEmployeeByUnit($arrUnitId);
+          } elseif($onlyDivisi) {
+            $res = Employee::getAllDivisi($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+              if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+            }
+            if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+            $arrEmpId = Employee::getEmployeeByBagian($arrDivisiId);
+          }
         }
 
         $this->data['data'] = [];
@@ -273,7 +319,30 @@ class ReportabsenceController extends \App\Controllers\BaseController
 
       $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
-      $this->data['optEmployee'] = Employee::getOptNonVoid();
+      $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->data['myRoleAccess'])) ? true : false;
+      $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->data['myRoleAccess'])) ? true : false;
+
+      $arrUnitId = [];
+      if($onlyUnit) {
+        $res = Employee::getAllUnit($_SESSION['EMPID']);
+        foreach ($res as $key => $value) {
+          if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+        }
+        if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+        // print_r($arrUnitId);
+      }
+
+      $arrDivisiId = [];
+      if($onlyDivisi) {
+        $res = Employee::getAllDivisi($_SESSION['EMPID']);
+        foreach ($res as $key => $value) {
+          if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+        }
+        if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+        // print_r($arrDivisiId);
+      }
+
+      $this->data['optEmployee'] = Employee::getOptNonVoid($arrUnitId, $arrDivisiId);
 
       return $this->ci->get('renderer')->render($response, 'report/absence/form.phtml', $this->data);
     }

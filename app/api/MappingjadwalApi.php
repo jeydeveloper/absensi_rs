@@ -10,13 +10,15 @@ use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\SettingModel as Setting;
 use App\Helper;
 
-class MappingjadwalApi
+class MappingjadwalApi extends \App\Api\BaseApi
 {
     protected $ci;
 
     public function __construct(ContainerInterface $ci)
     {
         $this->ci = $ci;
+
+        $this->myRoleAccess = $this->getRoleAccess($_SESSION['USERID']);
     }
 
     public function lists($request, $response, $args)
@@ -36,9 +38,32 @@ class MappingjadwalApi
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
 
+        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
+        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
+
+        $arrUnitId = [];
+        if($onlyUnit) {
+          $res = Employee::getAllUnit($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+          }
+          if(empty($arrUnitId)) $arrUnitId[0] = 123456789;
+          // print_r($arrUnitId);
+        }
+
+        $arrDivisiId = [];
+        if($onlyDivisi) {
+          $res = Employee::getAllDivisi($_SESSION['EMPID']);
+          foreach ($res as $key => $value) {
+            if(!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+          }
+          if(empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+          // print_r($arrDivisiId);
+        }
+
         // $result = Mappingjadwal::getAllNonVoid();
-        $resultTotal = Employee::getAllNonVoid('', '', $search);
-        $result = Employee::getAllNonVoid($limit, $offset, $search);
+        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId);
+        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId);
         if(!empty($result)) {
           $arrData['recordsTotal'] = count($resultTotal);
           $arrData['recordsFiltered'] = count($resultTotal);

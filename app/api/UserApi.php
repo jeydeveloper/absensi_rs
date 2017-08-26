@@ -43,6 +43,7 @@ class UserApi
 
         if($data['count'] > 0) {
           $_SESSION['USERID'] = $users->usr_id;
+          $_SESSION['EMPID'] = $users->usr_emp_id;
         }
 
         return $response
