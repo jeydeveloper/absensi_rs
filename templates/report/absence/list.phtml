@@ -262,18 +262,18 @@
 
             if($intMinAbsence <= $batasAbsenMasuk) {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
-              $totalMinuteEearlyOut = 225;
+              if(empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $totalMinuteEearlyOut = 225;
               $totalMinuteLate = '';
               $statusLate = '';
               $arrJumlah['jumlahMenitPulangCepat'] += $totalMinuteEearlyOut;
-              $arrJumlah['jumlahPulangCepat'] += 1;
+              if(empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $arrJumlah['jumlahPulangCepat'] += 1;
             } else {
               $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
-              $totalMinuteLate = 225;
+              if(empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $totalMinuteLate = 225;
               $totalMinuteEearlyOut = '';
               $statusEearlyOut = '';
               $arrJumlah['jumlahMenitTerlambat'] += $totalMinuteLate;
-              $arrJumlah['jumlahTerlambat'] += 1;
+              if(empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $arrJumlah['jumlahTerlambat'] += 1;
             }
           }
         }
