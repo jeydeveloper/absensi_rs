@@ -590,8 +590,35 @@ class JadwalkerjaApi extends \App\Api\BaseApi
       $intMaxAbsence = !empty($maxAbsence) ? strtotime($maxAbsence) : 0;
       $txtAlasan = !empty($request->getParam('txtAlasan')) ? $request->getParam('txtAlasan') : '';
       $idStatus = !empty($request->getParam('idStatus')) ? $request->getParam('idStatus') : '';
+      $isDelete = !empty($request->getParam('isDelete')) ? $request->getParam('isDelete') : '';
 
       $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
+
+      if($isDelete) {
+        $objEs = Employeeschedule::getByUniqCode($generateId);
+        $objEs->delete();
+
+        $resEmployee = Employee::find($userId);
+        $empCode = !empty($resEmployee->emp_code) ? $resEmployee->emp_code : '-';
+
+        $arrParam = [
+          'dateStart' => $scheduleDate,
+          'dateEnd' => $scheduleDate,
+          'dataEmp' => array($empCode),
+          'dataEmpId' => array($userId),
+          'empId' => $userId,
+          'empCode' => $empCode,
+          'generateId' => $generateId,
+          'scheduleDate' => $scheduleDate,
+        ];
+
+        $arrData['button'] = $this->getButtonJadwal($arrParam);
+
+        $arrData['success'] = true;
+        $arrData['message'] = 'Delete data success';
+
+        return $response->withJson($arrData);
+      }
 
       if(!empty($idStatus)) {
         $obj = Status::find($idStatus);

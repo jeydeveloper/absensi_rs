@@ -263,6 +263,12 @@
                               <td><?php echo $value->schd_waktu_akhir; ?></td>
                           </tr>
                           <?php endforeach; ?>
+                          <tr>
+                              <td><button data-id="0" data-isdelete="1" type="button" class="btn btn-block btn-sm btnStatus" style="background-color:red;color:white; ?> !important;color:#ffffff;">DELETE</button></td>
+                              <td>DELETE SCHEDULE</td>
+                              <td>-</td>
+                              <td>-</td>
+                          </tr>
                         </tbody>
                       </table>
                     </div>
@@ -342,6 +348,7 @@
             <input type="hidden" name="minAbsence" id="minAbsence" value="">
             <input type="hidden" name="maxAbsence" id="maxAbsence" value="">
             <input type="hidden" name="idStatus" id="idStatus" value="">
+            <input type="hidden" name="isDelete" id="isDelete" value="">
             <div class="modal-body">
               <div class="form-group">
                 <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control" id="txtAlasan"></textarea>
@@ -423,6 +430,7 @@
     var userIdUpdate = '';
     var idChangeStatus = '';
     var idStatus = '';
+    var isDelete = '';
     function doAlert(generateId, userId, label, scheduleDate, absenceLabel, minAbsence, maxAbsence) {
       if($('#ck').is(':checked')) {
         var activedStatus = $('#activedStatus').text();
@@ -554,8 +562,17 @@
         $('.btnStatus').click(function(){
           var me = $(this);
           idChangeStatus = me.data('id');
+          isDelete = me.data('isdelete');
+
+          if(isDelete == 1) {
+            $('#isDelete').val(1);
+          } else {
+            $('#isDelete').val('');
+          }
+
           $('#idChangeStatus').val(idChangeStatus);
           $('#idStatus').val('');
+
           var txt = me.text();
           var valStatusActived = txt;
           $('#activedStatus').text(valStatusActived);
@@ -569,6 +586,7 @@
           idStatus = me.data('id');
           $('#idStatus').val(idStatus);
           $('#idChangeStatus').val('');
+          $('#isDelete').val('');
           var txt = me.text();
           var valStatusActived = txt;
           $('#activedStatus').text(valStatusActived);

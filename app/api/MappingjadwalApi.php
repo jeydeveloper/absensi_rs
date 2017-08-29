@@ -149,8 +149,32 @@ class MappingjadwalApi extends \App\Api\BaseApi
       $generateId = $request->getParam('generateId');
       $userId = $request->getParam('userId');
       $scheduleDate = $request->getParam('scheduleDate');
+      $isDelete = !empty($request->getParam('isDelete')) ? $request->getParam('isDelete') : '';
 
       $lblButtonStatusToUpdate = "btnStatusToUpdate_$generateId";
+
+      if($isDelete) {
+        $objEs = Employeeschedule::getByUniqCode($generateId);
+        $objEs->delete();
+
+        $resEmployee = Employee::find($userId);
+        $empId = !empty($resEmployee->emp_id) ? $resEmployee->emp_id : '-';
+
+        list($year, $month, $tanggal) = explode('-', $scheduleDate);
+        $dayNo = date('w', mktime(0, 0, 0, $month, $tanggal, $year));
+        if(!in_array($dayNo, [6,0])) {
+          $lblShift = 'NORM';
+          $arrData['button'] = '<button id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-block btn-sm" style="width:80px;background-color:#000 !important;color:#ffffff;" onclick="doAlert(\''.$generateId.'\', \''.$empId.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
+        } else {
+          $lblShift = '-';
+          $arrData['button'] = '<button style="width:80px;" id="'.$lblButtonStatusToUpdate.'" type="button" class="btn btn-default btn-sm" onclick="doAlert(\''.$generateId.'\', \''.$empId.'\', \''.$lblShift.'\', \''.$scheduleDate.'\')">'.$lblShift.'</button>';
+        }
+
+        $arrData['success'] = true;
+        $arrData['message'] = 'Delete data success';
+
+        return $response->withJson($arrData);
+      }
 
       $obj = Schedule::find($idChangeStatus);
       if(!empty($obj)) {
