@@ -13,45 +13,64 @@
     <!--<link rel="shortcut icon" type="<?php echo $baseUrl; ?>assets/image//ico" href="favicon.ico" />-->
 
     <!-- Vendor styles -->
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/fontawesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/metisMenu/dist/metisMenu.css" />
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/animate.css/animate.css" />
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/datatables.net-bs/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/fontawesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/metisMenu/dist/metisMenu.css"/>
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/animate.css/animate.css"/>
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet"
+          href="<?php echo $baseUrl; ?>assets/vendor/datatables.net-bs/css/dataTables.bootstrap.min.css"/>
 
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/ladda-themeless.min.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/ladda/dist/ladda-themeless.min.css"/>
 
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/toastr/build/toastr.min.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/toastr/build/toastr.min.css"/>
 
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/sweetalert/lib/sweet-alert.css"/>
 
     <!-- App styles -->
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
-    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css"/>
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css"/>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.2.2/css/fixedColumns.dataTables.min.css">
+
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-bootstrap/select2-bootstrap.css" />
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/styles/style.css">
 
     <style media="screen">
-    .table-striped > tbody > tr:nth-of-type(even) {
-      background-color: #fff;
-    }
-    .DTFC_LeftBodyWrapper{
-      top: -13px !important;
-    }
-    .dt-buttons{
-      display: none;
-    }
+        .table-striped > tbody > tr:nth-of-type(even) {
+            background-color: #fff;
+        }
+
+        .DTFC_LeftBodyWrapper {
+            top: -13px !important;
+        }
+
+        .dt-buttons {
+            display: none;
+        }
     </style>
 
 </head>
 <body class="fixed-navbar sidebar-scroll">
 
 <!-- Simple splash screen-->
-<div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>Homer - Responsive Admin Theme</h1><p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"><h1>Homer - Responsive Admin Theme</h1>
+        <p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p>
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+</div>
 <!--[if lt IE 7]>
-<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a
+        href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <!-- Header -->
@@ -69,7 +88,8 @@
             <span class="text-primary">HOMER APP</span>
         </div>
         <div class="mobile-menu">
-            <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse" data-target="#mobile-collapse">
+            <button type="button" class="navbar-toggle mobile-menu-toggle" data-toggle="collapse"
+                    data-target="#mobile-collapse">
                 <i class="fa fa-chevron-down"></i>
             </button>
             <div class="collapse mobile-navbar" id="mobile-collapse">
@@ -140,134 +160,164 @@
 <!-- Main Wrapper -->
 <div id="wrapper">
 
-  <div class="small-header">
-      <div class="hpanel">
-          <div class="panel-body">
-              <div id="hbreadcrumb" class="pull-right">
-                  <ol class="hbreadcrumb breadcrumb">
-                      <li><a href="index.html">Dashboard</a></li>
-                      <li>
-                          <span>Forms</span>
-                      </li>
-                      <li class="active">
-                          <span>Validation </span>
-                      </li>
-                  </ol>
-              </div>
-              <h2 class="font-light m-b-xs">
-                  Proses Mapping Jadwal
-              </h2>
-              <small>Build a form with validation functionality</small>
-          </div>
-      </div>
-  </div>
-
-
-  <div class="content">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="hpanel">
-                <div class="panel-heading">
-                    <div class="panel-tools">
-                        <a class="showhide"><i class="fa fa-chevron-up"></i></a>
-                        <a class="closebox"><i class="fa fa-times"></i></a>
-                    </div>
-                    Datatables
-                </div>
-                <div class="panel-body">
-                    <div class="row" style="margin-bottom:20px;">
-                      <form action="" role="form" method="get">
-                        <div class="form-group">
-                          <div class="col-md-12">
-                            <div class="row">
-                              <div class="col-md-4">
-                                <select class="form-control" name="slMonth">
-                                  <option value="">-- Pilih Bulan --</option>
-                                  <?php foreach($listMonth as $key => $value): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($selectedMonth == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
-                                  <?php endforeach; ?>
-                                </select>
-                              </div>
-                              <div class="col-md-4">
-                                <select class="form-control" name="slYear">
-                                  <option value="">-- Pilih Tahun --</option>
-                                  <?php foreach($yearFilterRange as $key => $value): ?>
-                                    <option value="<?php echo $key; ?>" <?php echo ($selectedYear == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
-                                  <?php endforeach; ?>
-                                </select>
-                              </div>
-                              <div class="col-md-4">
-                                <button class="btn btn-primary">Process</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
-                        <thead>
-                        <tr>
-                            <th width="5%">No.</th>
-                            <th>ID</th>
-                            <th>NPK</th>
-                            <th>Name</th>
-                            <?php for($i=1; $i <= $totalDay; $i++): ?>
-                              <th><?php echo $i; ?></th>
-                            <?php endfor; ?>
-                        </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-    <div class="col-lg-12">
+    <div class="small-header">
         <div class="hpanel">
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#tab-1"> Daftar Shift</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="panel-body">
-                  <label for="ck"><input type="checkbox" name="ck" id="ck" value="1" class="i-checks"> Aktifkan mode klik [ <span id="activedStatus"></span> ]</label>
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li>
+                            <span>Forms</span>
+                        </li>
+                        <li class="active">
+                            <span>Validation </span>
+                        </li>
+                    </ol>
                 </div>
-                <div id="tab-1" class="tab-pane active">
+                <h2 class="font-light m-b-xs">
+                    Proses Mapping Jadwal
+                </h2>
+                <small>Build a form with validation functionality</small>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel">
+                    <div class="panel-heading">
+                        <div class="panel-tools">
+                            <a class="showhide"><i class="fa fa-chevron-up"></i></a>
+                            <a class="closebox"><i class="fa fa-times"></i></a>
+                        </div>
+                        Datatables
+                    </div>
                     <div class="panel-body">
-                      <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped">
-                        <thead>
-                          <tr>
-                              <th width="10%">Kode</th>
-                              <th>Nama Shift</th>
-                              <th>Masuk</th>
-                              <th>Keluar</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach($listSchedule as $value): ?>
-                          <tr>
-                              <td><button data-id="<?php echo $value->schd_id; ?>" type="button" class="btn btn-block btn-sm btnStatus" style="background-color:<?php echo $value->schd_color; ?> !important;color:#ffffff;"><?php echo $value->schd_code; ?></button></td>
-                              <td><?php echo $value->schd_name; ?></td>
-                              <td><?php echo $value->schd_waktu_awal; ?></td>
-                              <td><?php echo $value->schd_waktu_akhir; ?></td>
-                          </tr>
-                          <?php endforeach; ?>
-                          <tr>
-                              <td><button data-id="0" data-isdelete="1" type="button" class="btn btn-block btn-sm btnStatus" style="background-color:red;color:white; ?> !important;color:#ffffff;">DELETE</button></td>
-                              <td>DELETE SCHEDULE</td>
-                              <td>-</td>
-                              <td>-</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                        <div class="row" style="margin-bottom:20px;">
+                            <form action="" role="form" method="get">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="slMonth">
+                                                <option value="">-- Pilih Bulan --</option>
+                                                <?php foreach ($listMonth as $key => $value): ?>
+                                                    <option value="<?php echo $key; ?>" <?php echo($selectedMonth == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="slYear">
+                                                <option value="">-- Pilih Tahun --</option>
+                                                <?php foreach ($yearFilterRange as $key => $value): ?>
+                                                    <option value="<?php echo $key; ?>" <?php echo($selectedYear == $key ? 'selected="selected"' : ''); ?>><?php echo $value; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select id="empId" name="empId" placeholder="Isi nama employee"
+                                                    class="form-control js-source-states">
+                                                <
+                                                <option value="">-- Pilih Employee --</option>
+                                                <?php foreach ($optEmployee as $value): ?>
+                                                    <option value="<?php echo $value['key']; ?>" <?php echo($empId == $value['key'] ? 'selected="selected"' : ''); ?>><?php echo $value['value']; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary" name="process" value="1">
+                                                VIEW
+                                            </button>
+<!--                                            <button type="submit" class="btn btn-default" name="importDefault"-->
+<!--                                                    value="1">SET JADWAL DEFAULT-->
+<!--                                            </button>-->
+                                            <button type="submit" class="btn btn-warning" name="import" value="1">PROSES DATA
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <table id="example1" class="table table-striped table-bordered table-hover" width="100%">
+                            <thead>
+                            <tr>
+                                <th width="5%">No.</th>
+                                <th>ID</th>
+                                <th>NPK</th>
+                                <th>Name</th>
+                                <?php for ($i = 1; $i <= $totalDay; $i++): ?>
+                                    <th><?php echo $i; ?></th>
+                                <?php endfor; ?>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hpanel">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1"> Daftar Shift</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="panel-body">
+                            <label for="ck"><input type="checkbox" name="ck" id="ck" value="1" class="i-checks">
+                                Aktifkan mode klik [ <span id="activedStatus"></span> ]</label>
+                        </div>
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <table cellpadding="1" cellspacing="1" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th width="10%">Kode</th>
+                                        <th>Nama Shift</th>
+                                        <th>Masuk</th>
+                                        <th>Keluar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($listSchedule as $value): ?>
+                                        <tr>
+                                            <td>
+                                                <button data-id="<?php echo $value->schd_id; ?>" type="button"
+                                                        class="btn btn-block btn-sm btnStatus"
+                                                        style="background-color:<?php echo $value->schd_color; ?> !important;color:#ffffff;"><?php echo $value->schd_code; ?></button>
+                                            </td>
+                                            <td><?php echo $value->schd_name; ?></td>
+                                            <td><?php echo $value->schd_waktu_awal; ?></td>
+                                            <td><?php echo $value->schd_waktu_akhir; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td>
+                                            <button data-id="0" data-isdelete="1" type="button"
+                                                    class="btn btn-block btn-sm btnStatus"
+                                                    style="background-color:red;color:white; ?> !important;color:#ffffff;">
+                                                DELETE
+                                            </button>
+                                        </td>
+                                        <td>DELETE SCHEDULE</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
 
+                </div>
+            </div>
         </div>
     </div>
-</div>
-  </div>
 
     <!-- Footer-->
     <footer class="footer">
@@ -279,29 +329,34 @@
 
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="color-line"></div>
             <div class="modal-header">
-                <small class="font-bold">Update status dari [<span id="beforeStatusUpdate"></span>] menjadi <span id="afterStatusUpdate"></span>?</small>
+                <small class="font-bold">Update status dari [<span id="beforeStatusUpdate"></span>] menjadi <span
+                            id="afterStatusUpdate"></span>?
+                </small>
             </div>
             <form action="<?php echo $baseUrl; ?>api/mappingjadwal/edit" role="form" id="form_2">
-            <input type="hidden" name="hdStatus" id="hdStatus" value="">
-            <input type="hidden" name="idChangeStatus" id="idChangeStatus" value="">
-            <input type="hidden" name="userId" id="userId" value="">
-            <input type="hidden" name="generateId" id="generateId" value="">
-            <input type="hidden" name="scheduleDate" id="scheduleDate" value="">
-            <input type="hidden" name="isDelete" id="isDelete" value="">
-            <div class="modal-body">
-              <div class="form-group">
-                <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control" id="txtAlasan"></textarea>
-              </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right" id="btnSave">Save</button>
-            </div>
+                <input type="hidden" name="hdStatus" id="hdStatus" value="">
+                <input type="hidden" name="idChangeStatus" id="idChangeStatus" value="">
+                <input type="hidden" name="userId" id="userId" value="">
+                <input type="hidden" name="generateId" id="generateId" value="">
+                <input type="hidden" name="scheduleDate" id="scheduleDate" value="">
+                <input type="hidden" name="isDelete" id="isDelete" value="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <textarea name="txtAlasan" rows="8" placeholder="Isi alasan di sini" class="form-control"
+                                  id="txtAlasan"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right"
+                            id="btnSave">Save
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -338,6 +393,8 @@
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/iCheck/icheck.min.js"></script>
 
+<script src="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.min.js"></script>
+
 
 <script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
 
@@ -345,26 +402,25 @@
 <script src="<?php echo $baseUrl; ?>assets/scripts/homer.js"></script>
 
 <script type="text/javascript">
-  function session_checking()
-  {
-    $.post( '<?php echo $baseUrl ?>api/session/check', function( data ) {
-        if(data.loggedIn == 0)
-        {
-            swal({
-                title: "Session Expired!!",
-                text: "Your will be redirect to the login page",
-                type: "warning",
-                showCancelButton: false,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "OK"
-            },
-            function () {
-                location.reload();
-            });
-        }
-    }, 'json');
-  }
-  var validateSession = setInterval(session_checking, 5000);
+    function session_checking() {
+        $.post('<?php echo $baseUrl ?>api/session/check', function (data) {
+            if (data.loggedIn == 0) {
+                swal({
+                        title: "Session Expired!!",
+                        text: "Your will be redirect to the login page",
+                        type: "warning",
+                        showCancelButton: false,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "OK"
+                    },
+                    function () {
+                        location.reload();
+                    });
+            }
+        }, 'json');
+    }
+
+    var validateSession = setInterval(session_checking, 5000);
 </script>
 
 <script>
@@ -372,152 +428,159 @@
     var userIdUpdate = '';
     var idChangeStatus = '';
     var isDelete = '';
+
     function doAlert(generateId, userId, label, scheduleDate) {
-      if($('#ck').is(':checked')) {
-        var activedStatus = $('#activedStatus').text();
-        if(activedStatus == '') {
-          swal({
-              title: "Warning!!",
-              text: "Status mode klik belum dipilih!",
-              type: "warning",
-              showCancelButton: false,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "OK"
-          });
-          return false;
+        if ($('#ck').is(':checked')) {
+            var activedStatus = $('#activedStatus').text();
+            if (activedStatus == '') {
+                swal({
+                    title: "Warning!!",
+                    text: "Status mode klik belum dipilih!",
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "OK"
+                });
+                return false;
+            }
+            $('#beforeStatusUpdate').text(label);
+            $('#afterStatusUpdate').text($('#activedStatus').text());
+            // $('#myModal').modal('show');
+            btnStatusToUpdate = 'btnStatusToUpdate_' + generateId;
+            $('#userId').val(userId);
+            $('#generateId').val(generateId);
+            $('#scheduleDate').val(scheduleDate);
+            $('#btnSave').trigger('click');
+        } else {
+            swal({
+                title: "Warning!!",
+                text: "Aktifkan mode klik dahulu!",
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "OK"
+            });
         }
-        $('#beforeStatusUpdate').text(label);
-        $('#afterStatusUpdate').text($('#activedStatus').text());
-        // $('#myModal').modal('show');
-        btnStatusToUpdate = 'btnStatusToUpdate_'+generateId;
-        $('#userId').val(userId);
-        $('#generateId').val(generateId);
-        $('#scheduleDate').val(scheduleDate);
-        $('#btnSave').trigger('click');
-      } else {
-        swal({
-            title: "Warning!!",
-            text: "Aktifkan mode klik dahulu!",
-            type: "warning",
-            showCancelButton: false,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "OK"
-        });
-      }
     }
 
     $(function () {
-      var l = $( '.ladda-button-demo' ).ladda();
-      var frm = $('#form_2');
+        var l = $('.ladda-button-demo').ladda();
+        var frm = $('#form_2');
 
-      // Toastr options
-      toastr.options = {
-          "debug": false,
-          "newestOnTop": false,
-          "positionClass": "toast-top-center",
-          "closeButton": true,
-          "toastClass": "animated fadeInDown",
-      };
+        // Toastr options
+        toastr.options = {
+            "debug": false,
+            "newestOnTop": false,
+            "positionClass": "toast-top-center",
+            "closeButton": true,
+            "toastClass": "animated fadeInDown",
+        };
 
         // Initialize Example 1
-        var table = $('#example1').DataTable( {
+        var table = $('#example1').DataTable({
             "processing": true,
             "serverSide": true,
-            "ajax": '<?php echo $baseUrl; ?>api/mappingjadwal/lists?slMonth=<?php echo $selectedMonth; ?>&slYear=<?php echo $selectedYear; ?>',
+            "ajax": '<?php echo $baseUrl; ?>api/mappingjadwal/lists?slMonth=<?php echo $selectedMonth; ?>&slYear=<?php echo $selectedYear; ?>&empId=<?php echo $empId; ?>',
             dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
-            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
             buttons: [
-                {extend: 'copy',className: 'btn-sm'},
-                {extend: 'csv',title: 'ExampleFile', className: 'btn-sm'},
+                {extend: 'copy', className: 'btn-sm'},
+                {extend: 'csv', title: 'ExampleFile', className: 'btn-sm'},
                 {extend: 'pdf', title: 'ExampleFile', className: 'btn-sm'},
-                {extend: 'print',className: 'btn-sm'}
+                {extend: 'print', className: 'btn-sm'}
             ],
             "columnDefs": [
-              {
-                "targets": [ 1 ],
-                "visible": false,
-                "searchable": false
-              },
+                {
+                    "targets": [1],
+                    "visible": false,
+                    "searchable": false
+                },
             ],
             "scrollX": true,
             "scrollY": '100vh',
             "scrollCollapse": true,
             "fixedColumns": {
-              "leftColumns": 4
+                "leftColumns": 4
             }
         });
 
         $('div.dataTables_filter input').unbind();
-        $('div.dataTables_filter input').bind('keyup', function(e) {
-            if(e.keyCode == 13) {
+        $('div.dataTables_filter input').bind('keyup', function (e) {
+            if (e.keyCode == 13) {
                 table.search(this.value).draw();
             }
         });
 
         //$('.dataTables_scrollBody').css('height', '200px');
 
-        $('.btnStatus').click(function(){
-          var me = $(this);
-          idChangeStatus = me.data('id');
-          isDelete = me.data('isdelete');
+        $('.btnStatus').click(function () {
+            var me = $(this);
+            idChangeStatus = me.data('id');
+            isDelete = me.data('isdelete');
 
-          if(isDelete == 1) {
-            $('#isDelete').val(1);
-          } else {
-            $('#isDelete').val('');
-          }
+            if (isDelete == 1) {
+                $('#isDelete').val(1);
+            } else {
+                $('#isDelete').val('');
+            }
 
-          $('#idChangeStatus').val(idChangeStatus);
-          var txt = me.text();
-          var valStatusActived = txt;
-          $('#activedStatus').text(valStatusActived);
-          //$('#ck').attr('checked', true);
-          if($('#ck').is(':checked')) return;
-          $('.iCheck-helper').trigger('click');
+            $('#idChangeStatus').val(idChangeStatus);
+            var txt = me.text();
+            var valStatusActived = txt;
+            $('#activedStatus').text(valStatusActived);
+            //$('#ck').attr('checked', true);
+            if ($('#ck').is(':checked')) return;
+            $('.iCheck-helper').trigger('click');
         });
 
         var validator = frm.validate({
-            submitHandler: function(form) {
-              // Start loading
-              l.ladda( 'start' );
+            submitHandler: function (form) {
+                // Start loading
+                l.ladda('start');
 
-              $('#hdStatus').val($('#activedStatus').text());
+                $('#hdStatus').val($('#activedStatus').text());
 
-              $.ajax({
-                url: frm.attr('action'),
-                method: "POST",
-                data: frm.serializeArray(),
-                dataType: "json"
-              }).done(function( data ) {
-                if(data.success == true) {
-                  toastr.success(data.message);
-                  $("#myModal").modal('hide');
-                  validator.resetForm();
-                  $('.form-control.error').removeClass('error');
-                  $('#txtAlasan').val('');
-                  var prt = $('#'+btnStatusToUpdate).closest('td');
-                  $('#'+btnStatusToUpdate).remove();
-                  prt.append(data.button);
-                } else {
-                  toastr.error('Oops.. ' + data.message);
-                }
-                l.ladda('stop');
-              }).fail(function( jqXHR, textStatus ) {
-                toastr.error('Request data failed!');
-                l.ladda('stop');
-              })
+                $.ajax({
+                    url: frm.attr('action'),
+                    method: "POST",
+                    data: frm.serializeArray(),
+                    dataType: "json"
+                }).done(function (data) {
+                    if (data.success == true) {
+                        toastr.success(data.message);
+                        $("#myModal").modal('hide');
+                        validator.resetForm();
+                        $('.form-control.error').removeClass('error');
+                        $('#txtAlasan').val('');
+                        var prt = $('#' + btnStatusToUpdate).closest('td');
+                        $('#' + btnStatusToUpdate).remove();
+                        prt.append(data.button);
+                    } else {
+                        toastr.error('Oops.. ' + data.message);
+                    }
+                    l.ladda('stop');
+                }).fail(function (jqXHR, textStatus) {
+                    toastr.error('Request data failed!');
+                    l.ladda('stop');
+                })
             },
-            errorPlacement: function(error, element) {
-                $( element )
-                        .closest( "form" )
-                        .find( "label[for='" + element.attr( "id" ) + "']" )
-                        .append( error );
+            errorPlacement: function (error, element) {
+                $(element)
+                    .closest("form")
+                    .find("label[for='" + element.attr("id") + "']")
+                    .append(error);
             },
             errorElement: "span",
         });
 
     });
 
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        $(".js-source-states").select2();
+    });
 </script>
 
 </body>

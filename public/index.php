@@ -9,6 +9,9 @@ if (PHP_SAPI == 'cli-server') {
     }
 }
 
+//ini_set("memory_limit", "-1");
+//error_reporting(0);
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();

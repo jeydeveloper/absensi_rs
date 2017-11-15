@@ -26,4 +26,10 @@ class TransaksiprosesModel extends Model
       $res = TransaksiprosesModel::where('trpr_uniq_code', $uniqCode)->first();
       return $res;
     }
+
+    public static function doMultipleInsert($data = null) {
+        if(empty($data) OR !is_array($data)) return 0;
+        $res = TransaksiprosesModel::insert($data);
+        return $res;
+    }
 }

@@ -26,4 +26,22 @@ class ScheduleModel extends Model
       $patient = ScheduleModel::where('schd_id', $id)->first();
       return $patient;
     }
+
+    public static function getOptNonVoid()
+    {
+        $arrData = array();
+
+        $result = ScheduleModel::where('schd_void', 0)->get();
+
+        if(!empty($result)) {
+            foreach ($result as $key => $value) {
+                $arrData[$value->schd_code] = array(
+                    'schd_code' => $value->schd_code,
+                    'schd_color' => $value->schd_color,
+                );
+            }
+        }
+
+        return $arrData;
+    }
 }

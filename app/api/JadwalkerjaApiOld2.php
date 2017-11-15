@@ -8,6 +8,7 @@ use App\Models\ScheduleModel as Schedule;
 use App\Models\StatusModel as Status;
 use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\TransaksiModel as Transaksi;
+use App\Models\TransaksiprosesModel as Transaksiproses;
 use App\Models\IzinModel as Izin;
 use App\Models\SettingModel as Setting;
 use App\Helper;
@@ -35,13 +36,14 @@ class JadwalkerjaApi extends \App\Api\BaseApi
 
         $setting = $this->getSettingDb();
 
+        // echo $request->getParam('start'); exit();
+
         $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
         $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
         $search = !empty($request->getParam('search')) ? $request->getParam('search') : '';
 
         $month = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
         $year = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
-        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : '';
 
         $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
         $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
@@ -53,6 +55,7 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                 if (!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
             }
             if (empty($arrUnitId)) $arrUnitId[0] = 123456789;
+            // print_r($arrUnitId);
         }
 
         $arrDivisiId = [];
@@ -62,11 +65,11 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                 if (!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
             }
             if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+            // print_r($arrDivisiId);
         }
 
-
-        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId, $empId);
-        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId, $empId);
+        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId);
+        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId);
         if (!empty($result)) {
             $arrData['recordsTotal'] = count($resultTotal);
             $arrData['recordsFiltered'] = count($resultTotal);
@@ -78,36 +81,39 @@ class JadwalkerjaApi extends \App\Api\BaseApi
             $dataEmp = [];
             $dataEmpId = [];
             foreach ($result as $key => $value) {
-                $dataEmp[$value->emp_code] = $value->emp_code;
+                $dataEmp[$value->emp_id] = $value->emp_code;
                 $dataEmpId[$value->emp_id] = $value->emp_id;
             }
 
             if (!empty($dataEmp)) {
-                $dateStart = "$year-$month-01";
-                $dateEnd = date('Y-m-t', strtotime($dateStart));
-                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp, $dateStart, $dateEnd);
+                $dateStart = $year . '-' . $month . '-01';
+                $dateEnd = date('Y-m-t', strtotime($year . '-' . $month . '-01'));
+                $res = Transaksi::getAllMinMaxTranTime($dateStart, $dateEnd, $dataEmp);
                 if (!empty($res)) {
                     foreach ($res as $key => $value) {
-                        if(!empty($value->emsc_schd_id)) {
-                            $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
-                                'wkt_min' => $value->schd_waktu_awal,
-                                'wkt_max' => $value->schd_waktu_akhir,
-                                'code' => $value->schd_code,
-                                'color' => $value->schd_color,
-                                'namaIzin' => $value->sta_name,
-                                'status_reason' => $value->emsc_status_reason,
-                                'isScheduleGantiHari' => $value->schd_ganti_hari,
-                            ];
-                        }
+                        $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
+                            'wkt_min' => $value->wkt_min,
+                            'wkt_max' => $value->wkt_max,
+                            'time_min' => $value->time_min,
+                            'time_max' => $value->time_max,
+                        ];
+                    }
+                }
+            }
 
-                        if(!empty($value->wkt_min) AND $value->wkt_min != '0000-00-00 00:00:00') {
-                            $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
-                                'wkt_min' => $value->wkt_min,
-                                'wkt_max' => $value->wkt_max,
-                                'time_min' => $value->time_min,
-                                'time_max' => $value->time_max,
-                            ];
-                        }
+            if (!empty($dataEmpId)) {
+                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmpId);
+                if (!empty($res)) {
+                    foreach ($res as $key => $value) {
+                        $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
+                            'wkt_min' => $value->schd_waktu_awal,
+                            'wkt_max' => $value->schd_waktu_akhir,
+                            'code' => $value->schd_code,
+                            'color' => $value->schd_color,
+                            'namaIzin' => $value->sta_name,
+                            'status_reason' => $value->emsc_status_reason,
+                            'isScheduleGantiHari' => $value->schd_ganti_hari,
+                        ];
                     }
                 }
 
@@ -453,7 +459,21 @@ class JadwalkerjaApi extends \App\Api\BaseApi
             if (!empty($dataEmp)) {
                 $dateStart = $year . '-' . $month . '-01';
                 $dateEnd = date('Y-m-t', strtotime($year . '-' . $month . '-01'));
-                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp, $dateStart, $dateEnd);
+                $res = Transaksi::getAllMinMaxTranTime($dateStart, $dateEnd, $dataEmp);
+                if (!empty($res)) {
+                    foreach ($res as $key => $value) {
+                        $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
+                            'wkt_min' => $value->wkt_min,
+                            'wkt_max' => $value->wkt_max,
+                            'time_min' => $value->time_min,
+                            'time_max' => $value->time_max,
+                        ];
+                    }
+                }
+            }
+
+            if (!empty($dataEmpId)) {
+                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmpId);
                 if (!empty($res)) {
                     foreach ($res as $key => $value) {
                         $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
@@ -464,13 +484,6 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                             'namaIzin' => $value->sta_name,
                             'status_reason' => $value->emsc_status_reason,
                             'isScheduleGantiHari' => $value->schd_ganti_hari,
-                        ];
-
-                        $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
-                            'wkt_min' => $value->wkt_min,
-                            'wkt_max' => $value->wkt_max,
-                            'time_min' => $value->time_min,
-                            'time_max' => $value->time_max,
                         ];
                     }
                 }
@@ -675,6 +688,18 @@ class JadwalkerjaApi extends \App\Api\BaseApi
         $dataEmpHasSchedule = [];
         $dataEmpHasCuti = [];
 
+        $res = Transaksi::getAllMinMaxTranTime($arrParam['dateStart'], $arrParam['dateEnd'], $arrParam['dataEmp']);
+        if (!empty($res)) {
+            foreach ($res as $key => $value) {
+                $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
+                    'wkt_min' => $value->wkt_min,
+                    'wkt_max' => $value->wkt_max,
+                    'time_min' => $value->time_min,
+                    'time_max' => $value->time_max,
+                ];
+            }
+        }
+
         $res = Employeeschedule::getAllNonVoidWhereIn($arrParam['dataEmpId']);
         if (!empty($res)) {
             foreach ($res as $key => $value) {
@@ -686,13 +711,6 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                     'namaIzin' => $value->sta_name,
                     'status_reason' => $value->emsc_status_reason,
                     'isScheduleGantiHari' => $value->schd_ganti_hari,
-                ];
-
-                $dataEmpAbsence[$value->tran_cardNo][$value->tgl] = [
-                    'wkt_min' => $value->wkt_min,
-                    'wkt_max' => $value->wkt_max,
-                    'time_min' => $value->time_min,
-                    'time_max' => $value->time_max,
                 ];
             }
         }

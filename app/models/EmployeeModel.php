@@ -15,7 +15,7 @@ class EmployeeModel extends Model
         return EmployeeModel::all();
     }
 
-    public static function getAllNonVoid($limit = 0, $offset = 0, $search = null, $arrUnitId = null, $arrDivisiId = null)
+    public static function getAllNonVoid($limit = 0, $offset = 0, $search = null, $arrUnitId = null, $arrDivisiId = null, $empId = '')
     {
       if(!empty($limit)) {
         // echo "string - " . $offset; exit();
@@ -24,6 +24,8 @@ class EmployeeModel extends Model
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->whereIn('uni_id', $arrUnitId)->limit($limit)->offset($offset)->get();
           } elseif(!empty($arrDivisiId)) {
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->whereIn('bag_id', $arrDivisiId)->limit($limit)->offset($offset)->get();
+          } elseif(!empty($empId)) {
+              $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->where('emp_id', $empId)->limit($limit)->offset($offset)->get();
           } else {
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->limit($limit)->offset($offset)->get();
           }
@@ -32,6 +34,8 @@ class EmployeeModel extends Model
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->whereIn('uni_id', $arrUnitId)->limit($limit)->offset($offset)->get();
           } elseif(!empty($arrDivisiId)) {
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->whereIn('bag_id', $arrDivisiId)->limit($limit)->offset($offset)->get();
+          } elseif(!empty($empId)) {
+              $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_id', $empId)->limit($limit)->offset($offset)->get();
           } else {
             $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->limit($limit)->offset($offset)->get();
           }
@@ -41,6 +45,8 @@ class EmployeeModel extends Model
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->whereIn('uni_id', $arrUnitId)->get();
         } elseif(!empty($arrDivisiId)) {
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->whereIn('bag_id', $arrDivisiId)->get();
+        } elseif(!empty($empId)) {
+            $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->where('emp_id', $empId)->get();
         } else {
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_name', 'LIKE', '%' . $search['value'] . '%')->get();
         }
@@ -49,6 +55,8 @@ class EmployeeModel extends Model
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->whereIn('uni_id', $arrUnitId)->get();
         } elseif(!empty($arrDivisiId)) {
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->whereIn('bag_id', $arrDivisiId)->get();
+        } elseif(!empty($empId)) {
+            $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->where('emp_id', $empId)->get();
         } else {
           $res = EmployeeModel::leftjoin('unit', 'emp_uni_id', '=', 'uni_id')->leftjoin('bagian', 'uni_bag_id', '=', 'bag_id')->leftjoin('jabatan', 'emp_jab_id', '=', 'jab_id')->where('emp_void', 0)->get();
         }
