@@ -5,11 +5,13 @@ $app->group('/', function () {
   $this->get('', \BagianController::class . ':lists')->setName('bagian-list');
   $this->get('home', \HomeController::class . ':index');
   $this->get('login', \HomeController::class . ':login')->setName('login');
-  $this->get('logout', \HomeController::class . ':logout');
+  $this->get('change-password', \HomeController::class . ':changePassword')->setName('change-password');
+  $this->get('logout', \HomeController::class . ':logout')->setName('logout');
 });
 
 $app->group('/api', function () {
   $this->post('/login', \UserApi::class . ':login')->setName('post-login');
+    $this->post('/change-password', \UserApi::class . ':changePassword')->setName('post-change-password');
 });
 
 $app->group('/bagian', function () {
@@ -80,6 +82,7 @@ $app->group('/api/employee', function () {
   $this->post('/edit', \EmployeeApi::class . ':doEdit')->setName('post-api-employee-edit');
   $this->get('/edit', \EmployeeApi::class . ':edit')->setName('api-employee-edit');
   $this->post('/delete', \EmployeeApi::class . ':doDelete')->setName('post-api-employee-delete');
+  $this->post('/reset-password', \EmployeeApi::class . ':doResetPassword')->setName('post-api-employee-reset-password');
 });
 
 $app->group('/holiday', function () {
@@ -195,6 +198,7 @@ $app->group('/report', function () {
   $this->get('/absence', \ReportabsenceController::class . ':lists')->setName('reportabsence-list');
   $this->get('/tahunan', \ReportabsenceController::class . ':listsYearly')->setName('reportabsence-listyearly');
   $this->get('/form', \ReportabsenceController::class . ':form')->setName('reportabsence-form');
+  $this->get('/form-individual', \ReportabsenceController::class . ':formIndividual')->setName('reportabsence-formindividual');
 });
 
 $app->group('/role-access', function () {

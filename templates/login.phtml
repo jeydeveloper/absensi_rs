@@ -13,25 +13,38 @@
     <!--<link rel="shortcut icon" type="image/ico" href="favicon.ico" />-->
 
     <!-- Vendor styles -->
-    <link rel="stylesheet" href="../public/assets/vendor/fontawesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="../public/assets/vendor/metisMenu/dist/metisMenu.css" />
-    <link rel="stylesheet" href="../public/assets/vendor/animate.css/animate.css" />
-    <link rel="stylesheet" href="../public/assets/vendor/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="../public/assets/vendor/fontawesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="../public/assets/vendor/metisMenu/dist/metisMenu.css"/>
+    <link rel="stylesheet" href="../public/assets/vendor/animate.css/animate.css"/>
+    <link rel="stylesheet" href="../public/assets/vendor/bootstrap/dist/css/bootstrap.css"/>
 
-    <link rel="stylesheet" href="../public/assets/vendor/sweetalert/lib/sweet-alert.css" />
+    <link rel="stylesheet" href="../public/assets/vendor/sweetalert/lib/sweet-alert.css"/>
 
     <!-- App styles -->
-    <link rel="stylesheet" href="../public/assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
-    <link rel="stylesheet" href="../public/assets/fonts/pe-icon-7-stroke/css/helper.css" />
+    <link rel="stylesheet" href="../public/assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css"/>
+    <link rel="stylesheet" href="../public/assets/fonts/pe-icon-7-stroke/css/helper.css"/>
     <link rel="stylesheet" href="../public/assets/styles/style.css">
 
 </head>
 <body class="blank">
 
 <!-- Simple splash screen-->
-<div class="splash"> <div class="color-line"></div><div class="splash-title"><h1>Homer - Responsive Admin Theme</h1><p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p><div class="spinner"> <div class="rect1"></div> <div class="rect2"></div> <div class="rect3"></div> <div class="rect4"></div> <div class="rect5"></div> </div> </div> </div>
+<div class="splash">
+    <div class="color-line"></div>
+    <div class="splash-title"><h1>Homer - Responsive Admin Theme</h1>
+        <p>Special Admin Theme for small and medium webapp with very clean and aesthetic style and feel. </p>
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+    </div>
+</div>
 <!--[if lt IE 7]>
-<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<p class="alert alert-danger">You are using an <strong>outdated</strong> browser. Please <a
+        href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <div class="color-line"></div>
@@ -45,24 +58,26 @@
             </div>
             <div class="hpanel">
                 <div class="panel-body">
-                        <form action="<?php echo $baseUrl; ?>api/login" method="post" id="frm">
-                            <div class="form-group">
-                                <label class="control-label" for="username">Username</label>
-                                <input type="text" placeholder="username" title="Please enter you username" required="" value="" name="usr_username" id="usr_username" class="form-control">
-                                <span class="help-block small">Your unique username to app</span>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="password">Password</label>
-                                <input type="password" title="Please enter your password" placeholder="******" required="" value="" name="usr_password" id="usr_password" class="form-control">
-                                <span class="help-block small">Yur strong password</span>
-                            </div>
-                            <div class="checkbox">
-                                <input type="checkbox" class="i-checks" checked>
-                                     Remember login
-                                <p class="help-block small">(if this is a private computer)</p>
-                            </div>
-                            <button id="btnLogin" type="submit" class="btn btn-success btn-block">Login</button>
-                        </form>
+                    <form action="<?php echo $baseUrl; ?>api/login" method="post" id="frm">
+                        <div class="form-group">
+                            <label class="control-label" for="username">Username</label>
+                            <input type="text" placeholder="username" title="Please enter you username" required=""
+                                   value="" name="usr_username" id="usr_username" class="form-control">
+                            <span class="help-block small">Your unique username to app</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="password">Password</label>
+                            <input type="password" title="Please enter your password" placeholder="******" required=""
+                                   value="" name="usr_password" id="usr_password" class="form-control">
+                            <span class="help-block small">Yur strong password</span>
+                        </div>
+                        <!--<div class="checkbox">
+                            <input type="checkbox" class="i-checks" checked>
+                            Remember login
+                            <p class="help-block small">(if this is a private computer)</p>
+                        </div>-->
+                        <button id="btnLogin" type="submit" class="btn btn-success btn-block">Login</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -84,35 +99,37 @@
 <script src="../public/assets/scripts/homer.js"></script>
 
 <script type="text/javascript">
-  $(function(){
-      var frm = $('#frm');
-      $('#btnLogin').click(function(e){
-        e.preventDefault();
-        $.ajax({
-      		url: frm.attr('action'),
-      		method: "POST",
-      		data: frm.serializeArray(),
-      		dataType: "json"
-      	}).done(function( data ) {
-          if(data.count > 0) {
-            swal({
-                title: "Good job!",
-                text: "Login success!",
-                type: "success"
-            });
-            setTimeout(function(){ window.location.href = "<?php echo $baseUrl; ?>"; }, 2000);
-          } else {
-            swal({
-                title: "Oops..",
-                text: "Username or password is wrong!",
-                type: "error"
-            });
-          }
-      	}).fail(function( jqXHR, textStatus ) {
-      		alert( "Request failed: " + textStatus );
-      	})
-      });
-  });
+    $(function () {
+        var frm = $('#frm');
+        $('#btnLogin').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: frm.attr('action'),
+                method: "POST",
+                data: frm.serializeArray(),
+                dataType: "json"
+            }).done(function (data) {
+                if (data.count > 0) {
+                    swal({
+                        title: "Good job!",
+                        text: "Login success!",
+                        type: "success"
+                    });
+                    setTimeout(function () {
+                        window.location.href = data.redirectUrl;
+                    }, 2000);
+                } else {
+                    swal({
+                        title: "Oops..",
+                        text: "Username or password is wrong!",
+                        type: "error"
+                    });
+                }
+            }).fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            })
+        });
+    });
 </script>
 
 </body>

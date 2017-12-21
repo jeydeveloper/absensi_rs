@@ -1,76 +1,90 @@
-<ul class="nav" id="side-menu">
-    <!-- <li <?php echo($menuActived == 'home' ? 'class="active"' : ''); ?>>
+<?php if (!empty($_SESSION['GUEST'])): ?>
+    <ul class="nav" id="side-menu">
+        <li class="active">
+            <a href="#"><span class="nav-label">Report</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <li><a href="<?php echo $baseUrl; ?>report/form-individual">Individual Report</a></li>
+            </ul>
+        </li>
+    </ul>
+<?php else: ?>
+    <ul class="nav" id="side-menu">
+        <!-- <li <?php echo($menuActived == 'home' ? 'class="active"' : ''); ?>>
         <a href="index.html"> <span class="nav-label">Dashboard</span> <span class="label label-success pull-right">v.1</span> </a>
     </li> -->
-    <li <?php echo($menuActived == 'master' ? 'class="active"' : ''); ?>>
-        <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
-        <ul class="nav nav-second-level">
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(1, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(2, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(3, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(4, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(5, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(6, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>setting">Setting</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(7, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>user-admin">User Admin</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(8, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>role-access">Role Access</a></li>
-            <?php endif; ?>
-        </ul>
-    </li>
-    <li <?php echo($menuActived == 'attendance' ? 'class="active"' : ''); ?>>
-        <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
-        <ul class="nav nav-second-level">
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(9, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(10, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>izin">Izin</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(11, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>overtime">Overtime</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(12, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>schedule">Schedule</a></li>
-            <?php endif; ?>
-        </ul>
-    </li>
-    <li <?php echo($menuActived == 'prosesAbsensi' ? 'class="active"' : ''); ?>>
-        <a href="#"><span class="nav-label">Proses Absensi</span><span class="fa arrow"></span> </a>
-        <ul class="nav nav-second-level">
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(13, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>mapping-jadwal">Pengaturan Jadwal</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(14, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>jadwal-kerja">Penyesuaian Jadwal</a></li>
-            <?php endif; ?>
-        </ul>
-    </li>
-    <li <?php echo($menuActived == 'report' ? 'class="active"' : ''); ?>>
-        <a href="#"><span class="nav-label">Report</span><span class="fa arrow"></span> </a>
-        <ul class="nav nav-second-level">
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(15, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(16, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>jadwal-kerja/detail">Kehadiran</a></li>
-            <?php endif; ?>
-            <?php if ($_SESSION['USERID'] == 1 OR in_array(19, $myRoleAccess)): ?>
-                <li><a href="<?php echo $baseUrl; ?>report/form">Form Report</a></li>
-            <?php endif; ?>
-        </ul>
-    </li>
-</ul>
+        <li <?php echo($menuActived == 'master' ? 'class="active"' : ''); ?>>
+            <a href="#"><span class="nav-label">Master</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(1, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>bagian">Bagian</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(2, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>unit">Unit</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(3, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>jabatan">Jabatan</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(4, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(5, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(6, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>setting">Setting</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(7, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>user-admin">User Admin</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(8, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>role-access">Role Access</a></li>
+                <?php endif; ?>
+            </ul>
+        </li>
+        <li <?php echo($menuActived == 'attendance' ? 'class="active"' : ''); ?>>
+            <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(9, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(10, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>izin">Izin</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(11, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>overtime">Overtime</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(12, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>schedule">Schedule</a></li>
+                <?php endif; ?>
+            </ul>
+        </li>
+        <li <?php echo($menuActived == 'prosesAbsensi' ? 'class="active"' : ''); ?>>
+            <a href="#"><span class="nav-label">Proses Absensi</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(13, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>mapping-jadwal">Pengaturan Jadwal</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(14, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>jadwal-kerja">Penyesuaian Jadwal</a></li>
+                <?php endif; ?>
+            </ul>
+        </li>
+        <li <?php echo($menuActived == 'report' ? 'class="active"' : ''); ?>>
+            <a href="#"><span class="nav-label">Report</span><span class="fa arrow"></span> </a>
+            <ul class="nav nav-second-level">
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(15, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(16, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>jadwal-kerja/detail">Kehadiran</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(19, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>report/form">Form Report</a></li>
+                <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(20, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>report/form-individual">Individual Report</a></li>
+                <?php endif; ?>
+            </ul>
+        </li>
+    </ul>
+<?php endif; ?>

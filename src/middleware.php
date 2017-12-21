@@ -27,9 +27,33 @@ $loggedInMiddleware = function ($request, $response, $next) {
         'post-api-session-check',
     );
 
+    $publicRoutesArray2 = array(
+        'change-password',
+        'post-change-password',
+        'post-api-session-check',
+        'logout',
+    );
+
+    $publicRoutesArray3 = array(
+        'reportabsence-formindividual',
+        'post-change-password',
+        'post-api-session-check',
+        'logout',
+        'reportabsence-list',
+        'reportabsence-listyearly'
+    );
+
     if (!isset($_SESSION['USERID']) && !in_array($routeName, $publicRoutesArray))
     {
         $response = $response->withRedirect($this->get('settings')['baseUrl'] . 'login');
+    }
+    elseif(isset($_SESSION['GUEST']) && $_SESSION['GUEST'] == 2 && !in_array($routeName, $publicRoutesArray3))
+    {
+        $response = $response->withRedirect($this->get('settings')['baseUrl'] . 'report/form-individual');
+    }
+    elseif(isset($_SESSION['GUEST']) && $_SESSION['GUEST'] == 1 && !in_array($routeName, $publicRoutesArray2))
+    {
+        $response = $response->withRedirect($this->get('settings')['baseUrl'] . 'change-password');
     }
     elseif(isset($_SESSION['USERID']) && in_array($routeName, $publicRoutesArray))
     {

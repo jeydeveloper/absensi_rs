@@ -312,4 +312,26 @@ class EmployeeApi
 
       return $response->withJson($arrData);
     }
+
+    public function doResetPassword($request, $response, $args)
+    {
+        $arrData = array(
+            'message' => '',
+            'success' => false,
+        );
+
+        $emp_id = $request->getParam('emp_id');
+        $obj = Employee::find($emp_id);
+        $obj->emp_change_password = 0;
+        $obj->emp_password = '';
+
+        if($obj->save()) {
+            $arrData['success'] = true;
+            $arrData['message'] = 'Reset password data success';
+        } else {
+            $arrData['message'] = 'Oops.. please try again!';
+        }
+
+        return $response->withJson($arrData);
+    }
 }

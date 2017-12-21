@@ -40,6 +40,15 @@ class HomeController extends BaseController
         return $this->ci->get('renderer')->render($response, 'login.phtml', $this->data);
     }
 
+    public function changePassword($request, $response, $args)
+    {
+        $this->ci->get('logger')->info("Slim-Skeleton '/home/changePassword' route");
+
+        $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
+
+        return $this->ci->get('renderer')->render($response, 'changepassword.phtml', $this->data);
+    }
+
     public function logout($request, $response, $args)
     {
         $this->ci->get('logger')->info("Slim-Skeleton '/home/logout' route");

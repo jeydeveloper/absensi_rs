@@ -31,7 +31,9 @@ class ReportabsenceController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/absence/list' route");
 
-        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : 0;
+        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : '';
+        if(!empty($_SESSION['GUEST'])) $empId = $_SESSION['EMPID'];
+
         $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
@@ -121,8 +123,9 @@ class ReportabsenceController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/absence/list' route");
 
-        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : 0;
-        $month = !empty($request->getParam('month')) ? $request->getParam('month') : date('m');
+        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : '';
+        if(!empty($_SESSION['GUEST'])) $empId = $_SESSION['EMPID'];
+
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
         $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
@@ -352,5 +355,22 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['optEmployee'] = Employee::getOptNonVoid($arrUnitId, $arrDivisiId);
 
         return $this->ci->get('renderer')->render($response, 'report/absence/form.phtml', $this->data);
+    }
+
+    public function formIndividual($request, $response, $args)
+    {
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /master/bagian/list' route");
+
+        $this->data['menuActived'] = 'report';
+        $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+        $this->data['selectedMonth'] = !empty($request->getParam('slMonth')) ? $request->getParam('slMonth') : date('m');
+        $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
+        $this->data['totalDay'] = date('t', strtotime($this->data['selectedYear'] . '-' . $this->data['selectedMonth'] . '-01'));
+        $this->data['listMonth'] = $this->getMonthFilter();
+
+        $this->data['yearFilterRange'] = $this->getYearFilterRange();
+
+        return $this->ci->get('renderer')->render($response, 'report/absence/form_individual.phtml', $this->data);
     }
 }

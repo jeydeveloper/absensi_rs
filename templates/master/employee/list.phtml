@@ -191,7 +191,7 @@
                             <th>Name</th>
                             <th>Unit</th>
                             <th>Jabatan</th>
-                            <th width="15%">Action</th>
+                            <th width="20%">Action</th>
                         </tr>
                         </thead>
                     </table>
@@ -585,7 +585,7 @@
               {
                 "targets": -1,
                 "data": null,
-                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button>'
+                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button> <button class="btn btn-warning btn-xs btnReset" type="button"><i class="fa fa-paste"></i> Reset</button>'
               },
               {
                 "targets": [ 1 ],
@@ -640,6 +640,37 @@
                     setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
                 }
               }
+            );
+        } );
+
+        $('#example1 tbody').on( 'click', '.btnReset', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            swal({
+                    title: "Are you sure?",
+                    text: "Password will be reset!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, reset it!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $.post('<?php echo $baseUrl; ?>api/employee/reset-password',{<?php echo $primaryKey; ?>:data[ 1 ]},function(data) {
+                            if(data.success == true) {
+                                swal("Resetted!", data.message, "success");
+                                table.ajax.reload( null, false ); // user paging is not reset on reload
+                            } else {
+                                swal("Cancelled!", "Oops.. " + data.message, "error");
+                            }
+                            setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
+                        },'json');
+                    } else {
+                        swal("Cancelled", "Your data is safe :)", "error");
+                        setTimeout(function(){$('.sweet-alert .confirm').trigger('click');}, 1500);
+                    }
+                }
             );
         } );
 
