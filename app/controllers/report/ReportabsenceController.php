@@ -37,6 +37,13 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
+        $tmp = $this->getSettingDb();
+        if(!empty($tmp['tanggal_cutoff']) AND $tmp['tanggal_cutoff'] > 1) {
+            $arrLastMont = $this->getLastMonth($month, $year);
+            $month = $arrLastMont['month'];
+            $year = $arrLastMont['year'];
+        }
+
         if (empty($month)) {
             $response = $response->withRedirect($this->data['baseUrl'] . 'report/tahunan?year=' . $year . '&empId=' . $empId);
             return $response;
@@ -372,5 +379,22 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
         return $this->ci->get('renderer')->render($response, 'report/absence/form_individual.phtml', $this->data);
+    }
+
+    private function getLastMonth($month = '', $year = '') {
+        $ret = [
+            'month' => $month,
+            'year' => $year,
+        ];
+
+        $month = (int)$month - 1;
+        if($month < 0) {
+            $ret['month'] = 12;
+            $ret['year'] -= 1;
+        } else {
+            $ret['month'] = $month < 10 ? ('0' . $month) : $month;
+        }
+
+        return $ret;
     }
 }

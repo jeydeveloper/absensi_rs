@@ -196,7 +196,10 @@
                     </div>
                     <div class="panel-body">
                         <div class="row" style="margin-bottom:20px;">
-                            <form action="" role="form" method="get">
+                            <form id="frmProsesData" action="" role="form" method="get">
+                                <div class="form-group" id="notifProsesData" style="display: none;">
+                                    <p class="alert alert-success">Proses data sedang dilakukan, mohon ditunggu..</p>
+                                </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-4">
@@ -236,7 +239,7 @@
 <!--                                            <button type="submit" class="btn btn-default" name="importDefault"-->
 <!--                                                    value="1">SET JADWAL DEFAULT-->
 <!--                                            </button>-->
-                                            <button type="submit" class="btn btn-warning" name="import" value="1">PROSES DATA
+                                            <button id="btnProsesData" type="submit" class="btn btn-warning" name="import" value="1">PROSES DATA
                                             </button>
                                         </div>
                                     </div>
@@ -580,6 +583,12 @@
 <script type="text/javascript">
     $(function(){
         $(".js-source-states").select2();
+
+        $('#btnProsesData').click(function (e) {
+            e.preventDefault();
+            $('#notifProsesData').show();
+            $('#frmProsesData').submit();
+        })
     });
 </script>
 
