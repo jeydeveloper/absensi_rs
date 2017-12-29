@@ -37,7 +37,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
-        $tmp = $this->getSettingDb();
+        $this->data['settings'] = $tmp = $this->getSettingDb();
         if(!empty($tmp['tanggal_cutoff']) AND $tmp['tanggal_cutoff'] > 1) {
             $arrLastMont = $this->getLastMonth($month, $year);
             $month = $arrLastMont['month'];
@@ -259,10 +259,10 @@ class ReportabsenceController extends \App\Controllers\BaseController
             foreach ($res as $key => $value) {
                 $totalWaktu = !empty($value->totalWaktu) ? $this->calculateTime($value->totalWaktu) : 0;
                 $arrData[$value->tran_cardNo][$value->tgl] = [
-                    'wkt_min' => $value->wkt_min,
-                    'wkt_max' => $value->wkt_max,
-                    'time_min' => $value->time_min,
-                    'time_max' => $value->time_max,
+                    'wkt_min' => $value->wkt_min == '0000-00-00 00:00:00' ? '' : $value->wkt_min,
+                    'wkt_max' => $value->wkt_max == '0000-00-00 00:00:00' ? '' : $value->wkt_max,
+                    'time_min' => $value->time_min == '00:00:00' ? '' : $value->time_min,
+                    'time_max' => $value->time_max == '00:00:00' ? '' : $value->time_max,
                     'totalWaktu' => $totalWaktu,
                 ];
             }

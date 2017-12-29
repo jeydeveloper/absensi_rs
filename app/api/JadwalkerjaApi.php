@@ -342,9 +342,12 @@ class JadwalkerjaApi extends \App\Api\BaseApi
         }
 
         if (!empty($obj)) {
+            $resEmployee = Employee::find($userId);
+            $empCode = !empty($resEmployee->emp_code) ? $resEmployee->emp_code : '';
             $objEs = Employeeschedule::getByUniqCode($generateId);
             if (!empty($objEs)) {
                 $objEs->emsc_emp_id = $userId;
+                $objEs->emsc_emp_code = $empCode;
                 $objEs->emsc_uniq_code = $generateId;
                 if (!empty($idChangeStatus)) $objEs->emsc_schd_id = $idChangeStatus;
                 if (!empty($idStatus)) $objEs->emsc_sta_id = $idStatus;
@@ -354,6 +357,7 @@ class JadwalkerjaApi extends \App\Api\BaseApi
             } else {
                 $objEs = new Employeeschedule;
                 $objEs->emsc_emp_id = $userId;
+                $objEs->emsc_emp_code = $empCode;
                 $objEs->emsc_uniq_code = $generateId;
                 if (!empty($idChangeStatus)) $objEs->emsc_schd_id = $idChangeStatus;
                 if (!empty($idStatus)) $objEs->emsc_sta_id = $idStatus;

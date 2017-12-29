@@ -248,17 +248,17 @@
                             if (!empty($dataEmpAbsence[$empCode][$scheduleDate]) AND !empty($dataEmpHasSchedule['detail'][$empId][$generateId])) {
                                 $intMinSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min']));
                                 $intMaxSchedule = strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max']));
-                                $intMinAbsence = strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_min']);
-                                $intMaxAbsence = strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_max']);
+                                $intMinAbsence = !empty($dataEmpAbsence[$empCode][$scheduleDate]['wkt_min']) ? strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_min']) : '';
+                                $intMaxAbsence = !empty($dataEmpAbsence[$empCode][$scheduleDate]['wkt_max']) ? strtotime($dataEmpAbsence[$empCode][$scheduleDate]['wkt_max']) : '';
 
-                                if (strtolower($arrDayName[$dayNo]) == $apelDay) {
+                                if (!empty($intMinAbsence) AND strtolower($arrDayName[$dayNo]) == $apelDay) {
                                     if ($intMinAbsence <= $apelTime) {
                                         $hadirApel = 1;
                                         $arrJumlah['hadirApel'] += 1;
                                     }
                                 }
 
-                                if (($intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR ($intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
+                                if ((!empty($intMinAbsence) AND $intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR (!empty($intMaxAbsence) AND $intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
                                     $earlyOut = strtotime('-' . $setting['toleransi_out'] . ' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_max'])));
                                     $late = strtotime('+' . $setting['toleransi_in'] . ' minutes', strtotime(($scheduleDate . ' ' . $dataEmpHasSchedule['detail'][$empId][$generateId]['wkt_min'])));
                                     if ($intMinAbsence > $late) {
@@ -318,7 +318,7 @@
                                     if ($intMinAbsence <= $batasAbsenMasuk) {
                                         $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
                                         if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
-                                            $totalMinuteEearlyOut = 225;
+                                            $totalMinuteEearlyOut = $settings['sanksi_tidak_absen'];
                                         } else {
                                             $totalMinuteEearlyOut = 0;
                                         }
@@ -329,7 +329,7 @@
                                     } else {
                                         $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
                                         if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
-                                            $totalMinuteLate = 225;
+                                            $totalMinuteLate = $settings['sanksi_tidak_absen'];
                                         } else {
                                             $totalMinuteLate = 0;
                                         }
@@ -346,8 +346,8 @@
                                 $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = 'PIKET';
                             }
 
-                            if(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max'])) {
-                                $totalAlfa = 300;
+                            if(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
+                                $totalAlfa = $settings['sanksi_alfa'];
                                 $arrJumlah['totalAlfa'] += $totalAlfa;
                             }
 
