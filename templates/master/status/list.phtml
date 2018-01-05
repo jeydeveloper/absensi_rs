@@ -170,9 +170,11 @@
                         <thead>
                         <tr>
                             <th width="5%">No.</th>
-                            <th>ID</th>
+                            <th>ID Table</th>
                             <th>Name</th>
                             <th>Tipe</th>
+                            <th>Sanksi</th>
+                            <th>Potong Cuti</th>
                             <th width="15%">Action</th>
                         </tr>
                         </thead>
@@ -217,6 +219,7 @@
                     <option value="3">Terlambat</option>
                   </select>
                 </div>
+                <div class="form-group"><label for="sta_sanksi">Nilai Sanksi</label> <input type="text" id="sta_sanksi" name="sta_sanksi" placeholder="Isi nilai sanksi" class="form-control"></div>
                 <div class="form-group"><label for="sta_flag_cuti">Potong Cuti?</label> <input type="checkbox" id="sta_flag_cuti" name="sta_flag_cuti" class="form-control" value="1"></div>
             </div>
             <div class="modal-footer">
@@ -320,12 +323,12 @@
                 "targets": -1,
                 "data": null,
                 "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button>'
-              },
+              }/*,
               {
                 "targets": [ 1 ],
                 "visible": false,
                 "searchable": false
-              },
+              },*/
             ]
         });
 
@@ -437,7 +440,7 @@
         });
 
         $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
+            frm.find(':input:not("input[type="checkbox"]")').val('');
             frm.find('input[type="checkbox"]').attr('checked', false);
             frm.attr('action', '<?php echo $baseUrl ?>api/status/add');
             validator.resetForm();

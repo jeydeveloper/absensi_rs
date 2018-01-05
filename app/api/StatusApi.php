@@ -29,6 +29,8 @@ class StatusApi
               $value->sta_id,
               $value->sta_name,
               (!empty($value->sta_type) ? ($value->sta_type == 1 ? 'Hadir' : ($value->sta_type == 2 ? 'Tidak Hadir' : 'Terlambat')) : '-'),
+                (!empty($value->sta_sanksi) ? $value->sta_sanksi : '-'),
+                (!empty($value->sta_flag_cuti) ? '&#10004;' : '-'),
             );
           }
         }
@@ -45,11 +47,13 @@ class StatusApi
 
       $sta_name = $request->getParam('sta_name');
       $sta_type = $request->getParam('sta_type');
+      $sta_sanksi = $request->getParam('sta_sanksi');
       $sta_flag_cuti = !empty($request->getParam('sta_flag_cuti')) ? $request->getParam('sta_flag_cuti') : 0;
 
       $obj = new Status;
       $obj->sta_name = $sta_name;
       $obj->sta_type = $sta_type;
+      $obj->sta_sanksi = $sta_sanksi;
       $obj->sta_flag_cuti = $sta_flag_cuti;
       $obj->sta_created_at = Helper::dateNowDB();
 
@@ -73,11 +77,13 @@ class StatusApi
       $sta_id = $request->getParam('sta_id');
       $sta_name = $request->getParam('sta_name');
       $sta_type = $request->getParam('sta_type');
+      $sta_sanksi = $request->getParam('sta_sanksi');
       $sta_flag_cuti = !empty($request->getParam('sta_flag_cuti')) ? $request->getParam('sta_flag_cuti') : 0;
 
       $obj = Status::find($sta_id);
       $obj->sta_name = $sta_name;
       $obj->sta_type = $sta_type;
+      $obj->sta_sanksi = $sta_sanksi;
       $obj->sta_flag_cuti = $sta_flag_cuti;
       $obj->sta_updated_at = Helper::dateNowDB();
 
@@ -101,6 +107,7 @@ class StatusApi
         $arrData['sta_id'] = $obj->sta_id;
         $arrData['sta_name'] = $obj->sta_name;
         $arrData['sta_flag_cuti'] = $obj->sta_flag_cuti;
+        $arrData['sta_sanksi'] = $obj->sta_sanksi;
         $arrData['sta_type'] = !empty($obj->sta_type) ? $obj->sta_type : '';
       }
 

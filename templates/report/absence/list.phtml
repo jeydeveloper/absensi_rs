@@ -38,31 +38,33 @@
 </head>
 <body>
 <?php
-    function getNextGenerateId($date = '') {
-        if(empty($date)) return '';
+function getNextGenerateId($date = '')
+{
+    if (empty($date)) return '';
 
-        list($year, $month, $day) = explode('-', $date);
-        $lastDay = date('t', strtotime(($year.'-'.$month.'-01')));
+    list($year, $month, $day) = explode('-', $date);
+    $lastDay = date('t', strtotime(($year . '-' . $month . '-01')));
 
-        $newDay = (int)$day;
-        $newMonth = (int)$month;
-        $newYear = (int)$year;
-        if($newDay > $lastDay) {
-            $newDay = 1;
-            $newMonth += 1;
-        } else {
-            $newDay += 1;
-        }
-
-        if($newMonth > 12) {
-            $newYear += 1;
-        }
-
-        $newDay = $newDay < 10 ? ('0'.$newDay) : $newDay;
-        $newMonth = $newMonth < 10 ? ('0'.$newMonth) : $newMonth;
-
-        return ($newYear.'-'.$newMonth.'-'.$newDay);
+    $newDay = (int)$day;
+    $newMonth = (int)$month;
+    $newYear = (int)$year;
+    if ($newDay > $lastDay) {
+        $newDay = 1;
+        $newMonth += 1;
+    } else {
+        $newDay += 1;
     }
+
+    if ($newMonth > 12) {
+        $newYear += 1;
+    }
+
+    $newDay = $newDay < 10 ? ('0' . $newDay) : $newDay;
+    $newMonth = $newMonth < 10 ? ('0' . $newMonth) : $newMonth;
+
+    return ($newYear . '-' . $newMonth . '-' . $newDay);
+}
+
 ?>
 <?php if (!empty($data)): ?>
     <?php foreach ($data as $key => $value): ?>
@@ -103,7 +105,7 @@
                                     $afterMonth = 1;
                                     $afterYear += 1;
                                 }
-                                echo $arrMonthName[(int)$month] . ' ' . $afterYear;
+                                echo $arrMonthName[(int)$afterMonth] . ' ' . $afterYear;
                                 ?></td>
                         </tr>
                     </table>
@@ -113,29 +115,57 @@
                 <td>
                     <table border="1" cellpadding="5" cellspacing="0">
                         <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Hari</th>
-                            <th rowspan="2">Tanggal</th>
+                            <th rowspan="3">No</th>
+                            <th rowspan="3">Hari</th>
+                            <th rowspan="3">Tanggal</th>
                             <th colspan="2">Jam</th>
                             <th colspan="2">Dtg Lambat</th>
                             <th colspan="2">Plng Cepat</th>
-                            <th rowspan="2">Shift</th>
-                            <th colspan="<?php echo ($cntIzinTidakHadir + 1); ?>">Tidak Masuk</th>
-                            <th rowspan="2">Hadir Apel</th>
-                            <th rowspan="2">Apel</th>
-                            <th rowspan="2">Keterangan</th>
+                            <th rowspan="3">Shift</th>
+                            <?php
+                            $arrDinas = !empty($setting['list_id_sub_dinas']) ? explode(',', $setting['list_id_sub_dinas']) : [];
+                            $arrCuti = !empty($setting['list_id_sub_cuti']) ? explode(',', $setting['list_id_sub_cuti']) : [];
+                            $ttl = $cntIzinTidakHadir - count($arrDinas) - count($arrCuti) - 2;
+                            if($ttl < 0) {
+                                $ttl = 6;
+                            } else {
+                                $ttl += 6;
+                            }
+                            ?>
+                            <th colspan="<?php echo $ttl; ?>">Tidak Masuk</th>
+                            <th rowspan="3">Hadir Apel</th>
+                            <th rowspan="3">Apel</th>
+                            <th rowspan="3">Keterangan</th>
                         </tr>
                         <tr>
-                            <th>Masuk</th>
-                            <th>Pulang</th>
-                            <th>Jml</th>
-                            <th>Menit</th>
-                            <th>Jml</th>
-                            <th>Menit</th>
-                            <th>Alfa</th>
+                            <th rowspan="2">Masuk</th>
+                            <th rowspan="2">Pulang</th>
+                            <th rowspan="2">Jml</th>
+                            <th rowspan="2">Menit</th>
+                            <th rowspan="2">Jml</th>
+                            <th rowspan="2">Menit</th>
+                            <th colspan="2">Alfa</th>
+                            <th colspan="2">Izin</th>
+                            <th rowspan="2">Dinas</th>
+                            <th rowspan="2">Cuti</th>
                             <?php foreach ($izinTidakHadir as $value): ?>
-                                <th><?php echo $value->sta_name; ?></th>
+                                <?php
+                                if (in_array(strtolower($value->sta_name), ['alfa', 'izin'])) continue;
+                                if (!empty($arrDinas)) {
+                                    if (in_array(strtolower($value->sta_id), $arrDinas)) continue;
+                                }
+                                if (!empty($arrCuti)) {
+                                    if (in_array(strtolower($value->sta_id), $arrCuti)) continue;
+                                }
+                                ?>
+                                <th rowspan="2"><?php echo $value->sta_name; ?></th>
                             <?php endforeach; ?>
+                        </tr>
+                        <tr>
+                            <th>Jml</th>
+                            <th>Menit</th>
+                            <th>Jml</th>
+                            <th>Menit</th>
                         </tr>
                         <?php $cnt = 0;
                         $arrJumlah = [
@@ -151,7 +181,12 @@
                             'jumlahShiftBiasa' => [],
                             'jumlahShiftLibur' => [],
                             'waktuKerja' => [],
-                            'totalAlfa' => 0,
+                            'totalAlfaJml' => 0,
+                            'totalAlfaMenit' => 0,
+                            'totalIzinJml' => 0,
+                            'totalIzinMenit' => 0,
+                            'totalDinas' => 0,
+                            'totalCuti' => 0,
                         ];
 
                         $arrShift = [];
@@ -160,7 +195,8 @@
                         $nowMonth = $month; ?>
                         <?php for ($i = 0; $i <= $totalDay; $i++): ?>
                             <?php
-                            $totalAlfa = '';
+                            $totalAlfaMenit = '';
+                            $totalAlfaJml = '';
                             $month = $nowMonth;
                             $day = $tanggalStart + $i;
                             if ($day > $endDay) {
@@ -346,9 +382,11 @@
                                 $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = 'PIKET';
                             }
 
-                            if(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
-                                $totalAlfa = $settings['sanksi_alfa'];
-                                $arrJumlah['totalAlfa'] += $totalAlfa;
+                            if (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
+                                $totalAlfaMenit = $settings['sanksi_alfa'];
+                                $totalAlfaJml = 1;
+                                $arrJumlah['totalAlfaMenit'] += $totalAlfaMenit;
+                                $arrJumlah['totalAlfaJml'] += $totalAlfaJml;
                             }
 
                             ?>
@@ -377,8 +415,22 @@
                                         }
                                     } ?></td>
                                 <td><?php echo(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['code'] : ''); ?></td>
-                                <td><?php echo $totalAlfa; ?></td>
+                                <td><?php echo $totalAlfaJml; ?></td>
+                                <td><?php echo $totalAlfaMenit; ?></td>
+                                <td><?php echo ''; ?></td>
+                                <td><?php echo ''; ?></td>
+                                <td><?php echo ''; ?></td>
+                                <td><?php echo ''; ?></td>
                                 <?php foreach ($izinTidakHadir as $value): ?>
+                                    <?php
+                                    if (in_array(strtolower($value->sta_name), ['alfa', 'izin'])) continue;
+                                    if (!empty($arrDinas)) {
+                                        if (in_array(strtolower($value->sta_id), $arrDinas)) continue;
+                                    }
+                                    if (!empty($arrCuti)) {
+                                        if (in_array(strtolower($value->sta_id), $arrCuti)) continue;
+                                    }
+                                    ?>
                                     <td><?php if (!empty($dataEmpHasSchedule['izin'][$empId][$generateId][$value->sta_id])) {
                                             $arrJumlah['tidakMasuk'][$value->sta_id] = (!empty($arrJumlah['tidakMasuk'][$value->sta_id]) ? ($arrJumlah['tidakMasuk'][$value->sta_id] + 1) : 1);
                                             echo 1;
@@ -402,8 +454,22 @@
                             <td><?php echo $arrJumlah['jumlahPulangCepat']; ?></td>
                             <td><?php echo $arrJumlah['jumlahMenitPulangCepat']; ?></td>
                             <td></td>
-                            <td><?php echo $arrJumlah['totalAlfa']; ?></td>
+                            <td><?php echo $arrJumlah['totalAlfaJml']; ?></td>
+                            <td><?php echo $arrJumlah['totalAlfaMenit']; ?></td>
+                            <td><?php echo $arrJumlah['totalIzinJml']; ?></td>
+                            <td><?php echo $arrJumlah['totalIzinMenit']; ?></td>
+                            <td><?php echo $arrJumlah['totalDinas']; ?></td>
+                            <td><?php echo $arrJumlah['totalCuti']; ?></td>
                             <?php foreach ($izinTidakHadir as $value): ?>
+                                <?php
+                                if (in_array(strtolower($value->sta_name), ['alfa', 'izin'])) continue;
+                                if (!empty($arrDinas)) {
+                                    if (in_array(strtolower($value->sta_id), $arrDinas)) continue;
+                                }
+                                if (!empty($arrCuti)) {
+                                    if (in_array(strtolower($value->sta_id), $arrCuti)) continue;
+                                }
+                                ?>
                                 <td><?php echo(!empty($arrJumlah['tidakMasuk'][$value->sta_id]) ? $arrJumlah['tidakMasuk'][$value->sta_id] : 0); ?></td>
                             <?php endforeach; ?>
                             <td><?php echo $arrJumlah['hadirApel']; ?></td>
