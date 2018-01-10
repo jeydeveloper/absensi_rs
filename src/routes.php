@@ -199,6 +199,11 @@ $app->group('/report', function () {
   $this->get('/tahunan', \ReportabsenceController::class . ':listsYearly')->setName('reportabsence-listyearly');
   $this->get('/form', \ReportabsenceController::class . ':form')->setName('reportabsence-form');
   $this->get('/form-individual', \ReportabsenceController::class . ':formIndividual')->setName('reportabsence-formindividual');
+  $this->get('/summary', \ReportabsenceController::class . ':summary')->setName('reportabsence-summary');
+});
+
+$app->group('/api/report', function () {
+    $this->get('/lists', \ReportApi::class . ':lists')->setName('api-report-lists');
 });
 
 $app->group('/role-access', function () {

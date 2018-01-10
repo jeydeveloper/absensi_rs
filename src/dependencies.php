@@ -198,3 +198,7 @@ $container['UseradminController'] = function($c) {
 $container['UseradminApi'] = function($c) {
     return new App\Api\UseradminApi($c);
 };
+
+$container['ReportApi'] = function($c) {
+    return new App\Api\ReportApi($c);
+};

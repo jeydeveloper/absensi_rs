@@ -84,6 +84,9 @@
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(20, $myRoleAccess)): ?>
                     <li><a href="<?php echo $baseUrl; ?>report/form-individual">Individual Report</a></li>
                 <?php endif; ?>
+                <?php if ($_SESSION['USERID'] == 1 OR in_array(21, $myRoleAccess)): ?>
+                    <li><a href="<?php echo $baseUrl; ?>report/summary">Summary Report</a></li>
+                <?php endif; ?>
             </ul>
         </li>
     </ul>
