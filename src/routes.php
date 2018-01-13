@@ -204,6 +204,7 @@ $app->group('/report', function () {
 
 $app->group('/api/report', function () {
     $this->get('/lists', \ReportApi::class . ':lists')->setName('api-report-lists');
+    $this->get('/summary', \ReportApi::class . ':summary')->setName('api-report-summary');
 });
 
 $app->group('/role-access', function () {

@@ -27,9 +27,13 @@ class StatusModel extends Model
       return $res;
     }
 
-    public static function getAllKetidakhadiranNonVoid()
+    public static function getAllKetidakhadiranNonVoid($orderBy = '')
     {
-      $res = StatusModel::where('sta_void', 0)->where('sta_type', 2)->get();
+        if(!empty($orderBy)) {
+            $res = StatusModel::where('sta_void', 0)->where('sta_type', 2)->orderBy($orderBy, 'asc')->get();
+        } else {
+            $res = StatusModel::where('sta_void', 0)->where('sta_type', 2)->get();
+        }
       return $res;
     }
 

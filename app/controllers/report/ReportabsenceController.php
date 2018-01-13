@@ -402,11 +402,13 @@ class ReportabsenceController extends \App\Controllers\BaseController
     {
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/summary' route");
 
-        $this->data['startDate'] = !empty($request->getParam('startDate')) ? $request->getParam('startDate') : '';
-        $this->data['endDate'] = !empty($request->getParam('endDate')) ? $request->getParam('endDate') : '';
+        $this->data['startDate'] = !empty($request->getParam('startDate')) ? $request->getParam('startDate') : (date('m') . '/01/' . date('Y'));
+        $this->data['endDate'] = !empty($request->getParam('endDate')) ? $request->getParam('endDate') : date('m/t/Y');
 
         $this->data['menuActived'] = 'report';
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
+
+        $this->data['status'] = Status::getAllKetidakhadiranNonVoid('sta_name');
 
         return $this->ci->get('renderer')->render($response, 'report/absence/summary.phtml', $this->data);
     }
