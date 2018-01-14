@@ -204,7 +204,11 @@ function getNextGenerateId($date = '')
 
                                 $month = (int)$nowMonth + 1;
 
-                                if ($month > 12) $year += 1;
+                                if ($month > 12) {
+                                    $year += 1;
+                                    $month = 1;
+                                    $nowMonth = 0;
+                                }
 
                                 $month = $month < 9 ? "0$month" : $month;
                             }
@@ -383,10 +387,10 @@ function getNextGenerateId($date = '')
                             }
 
                             if (!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_min']) AND empty($dataEmpAbsence[$empCode][$scheduleDate]['time_max']) AND empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
-                                $totalAlfaMenit = $settings['sanksi_alfa'];
+                                /*$totalAlfaMenit = $settings['sanksi_alfa'];
                                 $totalAlfaJml = 1;
                                 $arrJumlah['totalAlfaMenit'] += $totalAlfaMenit;
-                                $arrJumlah['totalAlfaJml'] += $totalAlfaJml;
+                                $arrJumlah['totalAlfaJml'] += $totalAlfaJml;*/
                             }
 
                             ?>
@@ -415,12 +419,72 @@ function getNextGenerateId($date = '')
                                         }
                                     } ?></td>
                                 <td><?php echo(!empty($dataEmpHasSchedule['detail'][$empId][$generateId]['code']) ? $dataEmpHasSchedule['detail'][$empId][$generateId]['code'] : ''); ?></td>
-                                <td><?php echo $totalAlfaJml; ?></td>
-                                <td><?php echo $totalAlfaMenit; ?></td>
-                                <td><?php echo ''; ?></td>
-                                <td><?php echo ''; ?></td>
-                                <td><?php echo ''; ?></td>
-                                <td><?php echo ''; ?></td>
+                                <td>
+                                    <?php
+                                    //echo $totalAlfaJml;
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId])) AND in_array('alfa', $dataEmpHasSchedule['izinName'][$empId][$generateId])) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + 1) : 1);
+                                        $arrJumlah['totalAlfaJml'] += 1;
+                                        echo 1;
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    //echo $totalAlfaMenit;
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId])) AND in_array('alfa', $dataEmpHasSchedule['izinName'][$empId][$generateId])) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey]) : $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey]);
+                                        $arrJumlah['totalAlfaMenit'] += $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey];
+                                        echo $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey];
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId])) AND in_array('izin', $dataEmpHasSchedule['izinName'][$empId][$generateId])) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + 1) : 1);
+                                        $arrJumlah['totalIzinJml'] += 1;
+                                        echo 1;
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId])) AND in_array('izin', $dataEmpHasSchedule['izinName'][$empId][$generateId])) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey]) : $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey]);
+                                        $arrJumlah['totalIzinMenit'] += $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey];
+                                        echo $dataEmpHasSchedule['izinSanksi'][$empId][$generateId][$tKey];
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId]))) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        if(in_array($dataEmpHasSchedule['izin'][$empId][$generateId][$tKey], $arrDinas)) {
+                                            $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + 1) : 1);
+                                            $arrJumlah['totalDinas'] += 1;
+                                            echo 1;
+                                        }
+                                    }
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    if ((!empty($dataEmpHasSchedule['izin'][$empId][$generateId]))) {
+                                        $tKey = key($dataEmpHasSchedule['izin'][$empId][$generateId]);
+                                        if(in_array($dataEmpHasSchedule['izin'][$empId][$generateId][$tKey], $arrCuti)) {
+                                            $arrJumlah['tidakMasuk'][$tKey] = (!empty($arrJumlah['tidakMasuk'][$tKey]) ? ($arrJumlah['tidakMasuk'][$tKey] + 1) : 1);
+                                            $arrJumlah['totalCuti'] += 1;
+                                            echo 1;
+                                        }
+                                    }
+                                    ?>
+                                </td>
                                 <?php foreach ($izinTidakHadir as $value): ?>
                                     <?php
                                     if (in_array(strtolower($value->sta_name), ['alfa', 'izin'])) continue;

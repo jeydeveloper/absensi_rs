@@ -220,6 +220,8 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $arrData = [
             'detail' => [],
             'izin' => [],
+            'izinSanksi' => [],
+            'izinName' => [],
             'shift' => [],
         ];
         $res = Employeeschedule::getAllNonVoidWhereIn(array($empId), $dateStart, $dateEnd);
@@ -244,7 +246,12 @@ class ReportabsenceController extends \App\Controllers\BaseController
                     'total_waktu' => $minute,
                     'isScheduleGantiHari' => (!empty($value->schd_ganti_hari) ? $value->schd_ganti_hari : 0),
                 ];
-                if (!empty($value->sta_id)) $arrData['izin'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = 1;
+                if (!empty($value->sta_id)) {
+                    $arrData['izin'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = $value->sta_id;
+                    $arrData['izinSanksi'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = !empty($value->sta_sanksi) ? $value->sta_sanksi : 0;
+                    $arrData['izinName'][$value->emsc_emp_id][$value->emsc_uniq_code][$value->sta_id] = strtolower($value->sta_name);
+                }
+
                 if (!empty($value->schd_code)) $arrData['shift'][$value->schd_code] = $minute;
             }
         }
@@ -304,7 +311,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $nextYear = $year;
         $nextMonth = (int)$month + 1;
 
-        if ($nextMonth > 12) {
+        if ($nextMonth >= 12) {
             $nextMonth = 1;
             $nextYear += 1;
         }
@@ -317,7 +324,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
 
         if ($nextDay < 1) $nextDay = (int)date('t', mktime(0, 0, 0, $nextMonth, 1, $nextYear));
 
-        $nextDate = $year . '-' . ($nextMonth < 10 ? ("0$nextMonth") : $nextMonth) . '-' . ($nextDay < 10 ? ("$nextDay") : $nextDay);
+        $nextDate = $nextYear . '-' . ($nextMonth < 10 ? ("0$nextMonth") : $nextMonth) . '-' . ($nextDay < 10 ? ("$nextDay") : $nextDay);
         // echo $nextDate; exit();
         return $nextDate;
     }
@@ -388,7 +395,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         ];
 
         $month = (int)$month - 1;
-        if($month < 0) {
+        if($month == 0) {
             $ret['month'] = 12;
             $ret['year'] -= 1;
         } else {
