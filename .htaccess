@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME) !^public/
+RewriteRule ^(.*)$ /absensi/public/index.php [QSA,R=301,L]
