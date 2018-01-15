@@ -28,10 +28,10 @@
                     <li><a href="<?php echo $baseUrl; ?>status">Status</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(5, $myRoleAccess)): ?>
-                    <li><a href="<?php echo $baseUrl; ?>employee">Employee</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>employee">Pegawai</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(6, $myRoleAccess)): ?>
-                    <li><a href="<?php echo $baseUrl; ?>setting">Setting</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>setting">Pengaturan</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(7, $myRoleAccess)): ?>
                     <li><a href="<?php echo $baseUrl; ?>user-admin">User Admin</a></li>
@@ -42,7 +42,7 @@
             </ul>
         </li>
         <li <?php echo($menuActived == 'attendance' ? 'class="active"' : ''); ?>>
-            <a href="#"><span class="nav-label">Attendance</span><span class="fa arrow"></span> </a>
+            <a href="#"><span class="nav-label">Kehadiran</span><span class="fa arrow"></span> </a>
             <ul class="nav nav-second-level">
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(9, $myRoleAccess)): ?>
                     <li><a href="<?php echo $baseUrl; ?>holiday">Holiday</a></li>
@@ -70,13 +70,13 @@
             </ul>
         </li>
         <li <?php echo($menuActived == 'report' ? 'class="active"' : ''); ?>>
-            <a href="#"><span class="nav-label">Report</span><span class="fa arrow"></span> </a>
+            <a href="#"><span class="nav-label">Laporan</span><span class="fa arrow"></span> </a>
             <ul class="nav nav-second-level">
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(15, $myRoleAccess)): ?>
-                    <li><a href="<?php echo $baseUrl; ?>cuti">Cuti</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>cuti">Laporan Cuti</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(16, $myRoleAccess)): ?>
-                    <li><a href="<?php echo $baseUrl; ?>jadwal-kerja/detail">Kehadiran</a></li>
+                    <li><a href="<?php echo $baseUrl; ?>jadwal-kerja/detail">Laporan Kehadiran</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(19, $myRoleAccess)): ?>
                     <li><a href="<?php echo $baseUrl; ?>report/form">Form Report</a></li>
