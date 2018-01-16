@@ -341,6 +341,11 @@
   </table>
   <div class="page-break"></div>
 <?php endforeach; ?>
+    <?php if(empty($isExcel)): ?>
+        <div style="margin-top: 20px;">
+            <a href="<?php echo $actualLink; ?>&excel=1">EXPORT TO EXCEL</a>
+        </div>
+    <?php endif; ?>
 <?php else: ?>
 <p>Oops.. data kosong</p>
 <?php endif; ?>

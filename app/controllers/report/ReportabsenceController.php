@@ -25,6 +25,8 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
         $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
+
+        $this->data['actualLink'] = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     }
 
     public function lists($request, $response, $args)
@@ -37,16 +39,16 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
         $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
 
+        if (empty($month)) {
+            $response = $response->withRedirect($this->data['baseUrl'] . 'report/tahunan?year=' . $year . '&empId=' . $empId);
+            return $response;
+        }
+
         $this->data['settings'] = $tmp = $this->getSettingDb();
         if(!empty($tmp['tanggal_cutoff']) AND $tmp['tanggal_cutoff'] > 1) {
             $arrLastMont = $this->getLastMonth($month, $year);
             $month = $arrLastMont['month'];
             $year = $arrLastMont['year'];
-        }
-
-        if (empty($month)) {
-            $response = $response->withRedirect($this->data['baseUrl'] . 'report/tahunan?year=' . $year . '&empId=' . $empId);
-            return $response;
         }
 
         $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
@@ -121,6 +123,15 @@ class ReportabsenceController extends \App\Controllers\BaseController
                 $this->data['data'][$key]['dataEmpAbsence'] = $this->getEmployeeTransaksi($empCode, $dateStart, $dateEnd);
                 $this->data['data'][$key]['dataEmpHasCuti'] = $this->getEmployeeCuti($value->emp_id, $dateStart, $dateEnd);
             }
+        }
+
+        $this->data['isExcel'] = $isExcel = !empty($request->getParam('excel')) ? $request->getParam('excel') : '';
+        if(!empty($isExcel)) {
+            $filename = 'report_' . str_replace('-', '', date('Y-m-d')) . '.xls';
+            header("Content-type: application/octet-stream");
+            header("Content-Disposition: attachment; filename = " . $filename);
+            header("Pragma: no-cache");
+            header("Expires: 0");
         }
 
         return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
@@ -210,6 +221,15 @@ class ReportabsenceController extends \App\Controllers\BaseController
                     $this->data['data'][$key][$i]['dataEmpHasCuti'] = $this->getEmployeeCuti($value->emp_id, $dateStart, $dateEnd);
                 }
             }
+        }
+
+        $this->data['isExcel'] = $isExcel = !empty($request->getParam('excel')) ? $request->getParam('excel') : '';
+        if(!empty($isExcel)) {
+            $filename = 'report_' . str_replace('-', '', date('Y-m-d')) . '.xls';
+            header("Content-type: application/octet-stream");
+            header("Content-Disposition: attachment; filename = " . $filename);
+            header("Pragma: no-cache");
+            header("Expires: 0");
         }
 
         return $this->ci->get('renderer')->render($response, 'report/absence/list_tahunan.phtml', $this->data);
