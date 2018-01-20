@@ -45,6 +45,13 @@ class ReportabsenceController extends \App\Controllers\BaseController
         }
 
         $this->data['settings'] = $tmp = $this->getSettingDb();
+        $tanggalCutoffSpecial = $this->getTanggalCutoffSpecial($this->data['settings']['tanggal_cutoff_special']);
+        if(!empty($tanggalCutoffSpecial['bulan']) AND $tanggalCutoffSpecial['bulan'] == (int)$month) {
+            $this->data['settings']['tanggal_cutoff'] = !empty($tanggalCutoffSpecial['tanggalAwal']) ? $tanggalCutoffSpecial['tanggalAwal'] : 1;
+        }
+
+        //print_r($this->data['settings']); exit();
+
         if(!empty($tmp['tanggal_cutoff']) AND $tmp['tanggal_cutoff'] > 1) {
             $arrLastMont = $this->getLastMonth($month, $year);
             $month = $arrLastMont['month'];
@@ -111,8 +118,23 @@ class ReportabsenceController extends \App\Controllers\BaseController
 
                 $this->data['data'][$key]['setting'] = $this->getSettingDb();
 
-                $dateStart = $year . '-' . $month . '-' . ($this->data['data'][$key]['setting']['tanggal_cutoff'] < 10 ? ('0' . $this->data['data'][$key]['setting']['tanggal_cutoff']) : $this->data['data'][$key]['setting']['tanggal_cutoff']);
-                $dateEnd = $this->generateNextDate($dateStart);
+                $tanggalCutoffSpecial = $this->getTanggalCutoffSpecial($this->data['data'][$key]['setting']['tanggal_cutoff_special']);
+
+                $currMonth = !empty($request->getParam('month')) ? $request->getParam('month') : '';
+                if(!empty($tanggalCutoffSpecial['bulan']) AND $tanggalCutoffSpecial['bulan'] == (int)$currMonth) {
+                    $tanggalAwal = !empty($tanggalCutoffSpecial['tanggalAwal']) ? ((int)$tanggalCutoffSpecial['tanggalAwal']) : 1;
+                    $tanggalAkhir = !empty($tanggalCutoffSpecial['tanggalAkhir']) ? ((int)$tanggalCutoffSpecial['tanggalAkhir']) : 1;
+                    $dateStart = $year . '-' . $month . '-' . ($tanggalAwal < 10 ? ('0' . $tanggalAwal) : $tanggalAwal);
+                    $dateEnd = $this->generateNextDate($dateStart, $tanggalAkhir);
+
+                    $this->data['data'][$key]['setting']['tanggal_cutoff'] = $tanggalAwal;
+                } else {
+                    $dateStart = $year . '-' . $month . '-' . ($this->data['data'][$key]['setting']['tanggal_cutoff'] < 10 ? ('0' . $this->data['data'][$key]['setting']['tanggal_cutoff']) : $this->data['data'][$key]['setting']['tanggal_cutoff']);
+                    $dateEnd = $this->generateNextDate($dateStart);
+                }
+
+                //echo $dateStart . '#' . $dateEnd; exit();
+
                 $crDateStart = date_create($dateStart);
                 $crDateEnd = date_create($dateEnd);
                 $diff = date_diff($crDateEnd, $crDateStart);
@@ -208,8 +230,21 @@ class ReportabsenceController extends \App\Controllers\BaseController
 
                     $this->data['data'][$key][$i]['setting'] = $this->getSettingDb();
 
-                    $dateStart = $year . '-' . $month . '-' . ($this->data['data'][$key][$i]['setting']['tanggal_cutoff'] < 10 ? ('0' . $this->data['data'][$key][$i]['setting']['tanggal_cutoff']) : $this->data['data'][$key][$i]['setting']['tanggal_cutoff']);
-                    $dateEnd = $this->generateNextDate($dateStart);
+                    $tanggalCutoffSpecial = $this->getTanggalCutoffSpecial($this->data['data'][$key][$i]['setting']['tanggal_cutoff_special']);
+
+                    $currMonth = !empty($request->getParam('month')) ? $request->getParam('month') : '';
+                    if(!empty($tanggalCutoffSpecial['bulan']) AND $tanggalCutoffSpecial['bulan'] == (int)$currMonth) {
+                        $tanggalAwal = !empty($tanggalCutoffSpecial['tanggalAwal']) ? ((int)$tanggalCutoffSpecial['tanggalAwal']) : 1;
+                        $tanggalAkhir = !empty($tanggalCutoffSpecial['tanggalAkhir']) ? ((int)$tanggalCutoffSpecial['tanggalAkhir']) : 1;
+                        $dateStart = $year . '-' . $month . '-' . ($tanggalAwal < 10 ? ('0' . $tanggalAwal) : $tanggalAwal);
+                        $dateEnd = $this->generateNextDate($dateStart, $tanggalAkhir);
+
+                        $this->data['data'][$key][$i]['setting']['tanggal_cutoff'] = $tanggalAwal;
+                    } else {
+                        $dateStart = $year . '-' . $month . '-' . ($this->data['data'][$key][$i]['setting']['tanggal_cutoff'] < 10 ? ('0' . $this->data['data'][$key][$i]['setting']['tanggal_cutoff']) : $this->data['data'][$key][$i]['setting']['tanggal_cutoff']);
+                        $dateEnd = $this->generateNextDate($dateStart);
+                    }
+
                     $crDateStart = date_create($dateStart);
                     $crDateEnd = date_create($dateEnd);
                     $diff = date_diff($crDateEnd, $crDateStart);
@@ -324,7 +359,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         return $total;
     }
 
-    private function generateNextDate($date)
+    private function generateNextDate($date, $tanggalSpecialAkhir = '')
     {
         list($year, $month, $day) = explode('-', $date);
         $nextDay = (int)$day - 1;
@@ -343,6 +378,10 @@ class ReportabsenceController extends \App\Controllers\BaseController
         }
 
         if ($nextDay < 1) $nextDay = (int)date('t', mktime(0, 0, 0, $nextMonth, 1, $nextYear));
+
+        if(!empty($tanggalSpecialAkhir)) {
+            $nextDay = $tanggalSpecialAkhir;
+        }
 
         $nextDate = $nextYear . '-' . ($nextMonth < 10 ? ("0$nextMonth") : $nextMonth) . '-' . ($nextDay < 10 ? ("$nextDay") : $nextDay);
         // echo $nextDate; exit();
@@ -438,5 +477,31 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['status'] = Status::getAllKetidakhadiranNonVoid('sta_name');
 
         return $this->ci->get('renderer')->render($response, 'report/absence/summary.phtml', $this->data);
+    }
+
+    private function getTanggalCutoffSpecial($val = '') {
+        $arr = [
+            'bulan' => '',
+            'tanggalAwal' => '',
+            'tanggalAkhir' => '',
+        ];
+
+        if(!empty($val)) {
+            $tmp = explode(':', $val);
+            if(!empty($tmp)) {
+                $arr['bulan'] = $tmp[0];
+                if(!empty($tmp[1])) {
+                    $tmp2 = explode('#', $tmp[1]);
+                    if(!empty($tmp2)) {
+                        $arr['tanggalAwal'] = !empty($tmp2[0]) ? $tmp2[0] : '';
+                        $arr['tanggalAkhir'] = !empty($tmp2[1]) ? $tmp2[1] : '';
+                    }
+                }
+            }
+        }
+
+        //echo print_r($arr); exit();
+
+        return $arr;
     }
 }
