@@ -366,7 +366,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $nextYear = $year;
         $nextMonth = (int)$month + 1;
 
-        if ($nextMonth >= 12) {
+        if ($nextMonth > 12) {
             $nextMonth = 1;
             $nextYear += 1;
         }
