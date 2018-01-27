@@ -22,6 +22,7 @@ class EmployeeController extends \App\Controllers\BaseController
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
         $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
+        $this->data['isTutupJadwal'] = $this->checkTutupJadwal();
     }
 
     public function lists($request, $response, $args)

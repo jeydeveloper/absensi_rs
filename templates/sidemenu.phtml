@@ -61,7 +61,7 @@
         <li <?php echo($menuActived == 'prosesAbsensi' ? 'class="active"' : ''); ?>>
             <a href="#"><span class="nav-label">Proses Absensi</span><span class="fa arrow"></span> </a>
             <ul class="nav nav-second-level">
-                <?php if ($_SESSION['USERID'] == 1 OR in_array(13, $myRoleAccess)): ?>
+                <?php if ($_SESSION['USERID'] == 1 OR (in_array(13, $myRoleAccess) AND !$isTutupJadwal)): ?>
                     <li><a href="<?php echo $baseUrl; ?>mapping-jadwal">Pengaturan Jadwal</a></li>
                 <?php endif; ?>
                 <?php if ($_SESSION['USERID'] == 1 OR in_array(14, $myRoleAccess)): ?>

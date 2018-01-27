@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Gettext\Translator;
 use App\Models\SettingModel as Setting;
 use App\Models\UseradminModel as Useradmin;
+use App\Models\User as User;
 
 class BaseController
 {
@@ -65,5 +66,17 @@ class BaseController
         $arrData = explode(',', $res->role_privilege);
       }
       return $arrData;
+    }
+
+    public function checkTutupJadwal() {
+        $setting = $this->getSettingDb();
+        $tglTutupJadwal = !empty($setting['tanggal_tutup_jadwal']) ? $setting['tanggal_tutup_jadwal'] : '';
+        $res = User::getUserByID($_SESSION['USERID']);
+        if($res->usr_username != 'superadmin') {
+            if($tglTutupJadwal == (int)date('d')) {
+                return true;
+            }
+        }
+        return false;
     }
 }

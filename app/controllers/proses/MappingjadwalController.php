@@ -8,6 +8,7 @@ use App\Models\ScheduleModel as Schedule;
 use App\Models\TransaksiModel as Transaksi;
 use App\Models\EmployeeModel as Employee;
 use App\Models\SettingModel as Setting;
+use App\Models\User as User;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,10 +28,21 @@ class MappingjadwalController extends \App\Controllers\BaseController
         $this->data['baseUrl'] = $this->ci->get('settings')['baseUrl'];
 
         $this->data['myRoleAccess'] = $this->getRoleAccess($_SESSION['USERID']);
+        $this->data['isTutupJadwal'] = $this->checkTutupJadwal();
     }
 
     public function lists($request, $response, $args)
     {
+        $setting = $this->getSettingDb();
+        $tglTutupJadwal = !empty($setting['tanggal_tutup_jadwal']) ? $setting['tanggal_tutup_jadwal'] : '';
+        $res = User::getUserByID($_SESSION['USERID']);
+        if($res->usr_username != 'superadmin') {
+            if($tglTutupJadwal == (int)date('d')) {
+                return $response->withRedirect($this->ci->get('settings')['baseUrl']);
+                exit();
+            }
+        }
+
         //print_r($_GET); exit();
 
         $this->ci->get('logger')->info("Slim-Skeleton 'GET /proses/mappingjadwal/list' route");

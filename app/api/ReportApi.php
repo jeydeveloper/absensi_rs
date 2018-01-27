@@ -6,6 +6,7 @@ use Interop\Container\ContainerInterface;
 use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\EmployeeModel as Employee;
 use App\Models\StatusModel as Status;
+use App\Models\SettingModel as Setting;
 use App\Helper;
 
 class ReportApi
@@ -43,6 +44,8 @@ class ReportApi
         $arrData = array(
             'data' => array()
         );
+
+        $setting = $this->getSettingDb();
 
         $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 10;
         $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
@@ -84,6 +87,7 @@ class ReportApi
             $arrData['recordsTotal'] = count($resultTotal);
             $arrData['recordsFiltered'] = count($resultTotal);
 
+            $arrJumlah = [];
             $dataEmpHasStatus = [];
             $dataEmp = [];
             foreach ($result as $key => $value) {
@@ -100,6 +104,25 @@ class ReportApi
                         } else {
                             $dataEmpHasStatus[$value->emsc_emp_code][$value->sta_id] += $value->sta_sanksi;
                         }
+
+                        /*if(empty($value->sta_id)) {
+                            if (!empty($value->time_min) AND !empty($value->time_max) AND $value->time_min == $value->time_max) {
+                                $intMinAbsence = !empty($value->wkt_min) ? strtotime($value->wkt_min) : '';
+
+                                $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+                                $batasAbsenMasuk = strtotime('+' . $settingBatasAbsenMasuk . ' minutes', strtotime(($value->emsc_date . ' ' . $value->wkt_min)));
+
+                                if ($intMinAbsence <= $batasAbsenMasuk) {
+                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] = 0;
+
+                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] += $setting['sanksi_tidak_absen'];
+                                } else {
+                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] = 0;
+
+                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] += $setting['sanksi_tidak_absen'];
+                                }
+                            }
+                        }*/
                     }
                 }
             }
@@ -111,8 +134,10 @@ class ReportApi
                     $value->emp_id,
                     $value->emp_code,
                     $value->emp_name,
+                    (!empty($arrJumlah[$value->emp_code]['jumlahMenitTerlambat']) ? $arrJumlah[$value->emp_code]['jumlahMenitTerlambat'] : ''),
+                    (!empty($arrJumlah[$value->emp_code]['jumlahMenitPulangCepat']) ? $arrJumlah[$value->emp_code]['jumlahMenitPulangCepat'] : ''),
                 );
-                $cnt = 4;
+                $cnt = 6;
                 if(!empty($res)) {
                     foreach ($res as $key2 => $value2) {
                         $arrData['data'][$key][($cnt+$key2)] = !empty($dataEmpHasStatus[$value->emp_code][$value2->sta_id]) ? $dataEmpHasStatus[$value->emp_code][$value2->sta_id] : '';
@@ -127,5 +152,15 @@ class ReportApi
     private function formatDateDb($param = '') {
         $param = explode('/', $param);
         return ($param[2] . '-' . $param[0] . '-' . $param[1]);
+    }
+
+    public function getSettingDb()
+    {
+        $arrData = [];
+        $setting = Setting::getAllNonVoid();
+        foreach ($setting as $key => $value) {
+            $arrData[$value->sett_name] = $value->sett_value;
+        }
+        return $arrData;
     }
 }
