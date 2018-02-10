@@ -27,6 +27,9 @@
 
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/css/bootstrap-datepicker3.min.css" />
 
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.css" />
+    <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/vendor/select2-bootstrap/select2-bootstrap.css" />
+
     <!-- App styles -->
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/pe-icon-7-stroke.css" />
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/fonts/pe-icon-7-stroke/css/helper.css" />
@@ -448,7 +451,7 @@
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <label for="emp_uni_id">Nama Unit</label>
-                                        <select id="emp_uni_id" name="emp_uni_id" placeholder="Isi nama unit" class="form-control">
+                                        <select id="emp_uni_id" name="emp_uni_id" placeholder="Isi nama unit" class="form-control js-source-states">
                                           <<option value="">-- Pilih Unit --</option>
                                           <?php foreach($optUnit['unit'] as $key1 => $value1): ?>
                                             <optgroup label="<?php echo $optUnit['bagian'][$key1]; ?>">
@@ -461,7 +464,7 @@
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <label for="emp_jab_id">Nama Jabatan</label>
-                                        <select id="emp_jab_id" name="emp_jab_id" placeholder="Isi nama jabatan" class="form-control">
+                                        <select id="emp_jab_id" name="emp_jab_id" placeholder="Isi nama jabatan" class="form-control js-source-states">
                                           <<option value="">-- Pilih Jabatan --</option>
                                           <?php foreach($optJabatan as $value): ?>
                                           <option value="<?php echo $value['key']; ?>"><?php echo $value['value']; ?></option>
@@ -524,6 +527,8 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/moment/moment.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js"></script>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/select2-3.5.2/select2.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/autonumeric/2.0.0/autoNumeric.min.js"></script>
 
@@ -596,9 +601,24 @@
         });
 
         var fillInputForm = function(data) {
-          $.each(data, function(idx, val){
-            $('#'+idx).val(val);
-          });
+            $.each(data, function(idx, val){
+                var ckbox = $('#'+idx+'[type="checkbox"]');
+                if(ckbox.length > 0) {
+                    if(val == 1) {
+                        $('#'+idx).trigger('click');
+                    } else {
+                        $('#'+idx).attr('checked', false);
+                    }
+                } else if($('#'+idx).is('select')) {
+                    if($('#'+idx).hasClass('js-source-states')) {
+                        $('#'+idx).select2('val', val);
+                    } else {
+                        $('#'+idx).val(val);
+                    }
+                } else {
+                    $('#'+idx).val(val);
+                }
+            });
         };
 
         $('#example1 tbody').on( 'click', '.btnEdit', function () {
@@ -719,7 +739,9 @@
         });
 
         $("#myModal5").on("hidden.bs.modal", function () {
-            frm.find(':input').val('');
+            frm.find('input[type="text"]').val('');
+            frm.find("select").select2('val', '');
+            frm.find('input[type="checkbox"]').attr('checked', false);
             frm.attr('action', '<?php echo $baseUrl ?>api/employee/add');
             validator.resetForm();
             $('.form-control.error').removeClass('error');
@@ -756,6 +778,8 @@
         };
 
         $('.autonumeric').autoNumeric('init', autoNumericOptionsEuro);
+
+        $(".js-source-states").select2();
 
     });
 
