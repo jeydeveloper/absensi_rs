@@ -21,7 +21,12 @@ class EmployeeApi
           'data' => array()
         );
 
-        $result = Employee::getAllNonVoid();
+        if(isset($_SESSION['GUEST']) && $_SESSION['GUEST'] == 2) {
+            $result = Employee::getAllNonVoid('', '', '', '', '', $_SESSION['EMPID']);
+        } else {
+            $result = Employee::getAllNonVoid();
+        }
+
         if(!empty($result)) {
           foreach ($result as $key => $value) {
             $arrData['data'][] = array(

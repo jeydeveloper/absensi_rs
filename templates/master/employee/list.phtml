@@ -590,7 +590,11 @@
               {
                 "targets": -1,
                 "data": null,
-                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button> <button class="btn btn-warning btn-xs btnReset" type="button"><i class="fa fa-paste"></i> Reset</button>'
+                  <?php if(isset($_SESSION['GUEST']) && $_SESSION['GUEST'] == 2) : ?>
+                "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button>'
+                  <?php else: ?>
+                  "defaultContent": '<button class="btn btn-info btn-xs btnEdit" type="button"><i class="fa fa-paste"></i> Edit</button> <button class="btn btn-danger btn-xs btnDelete" type="button"><i class="fa fa-trash-o"></i> <span class="bold">Delete</span></button> <button class="btn btn-warning btn-xs btnReset" type="button"><i class="fa fa-paste"></i> Reset</button>'
+                  <?php endif; ?>
               },
               {
                 "targets": [ 1 ],

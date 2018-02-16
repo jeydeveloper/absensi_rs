@@ -40,7 +40,12 @@ $loggedInMiddleware = function ($request, $response, $next) {
         'post-api-session-check',
         'logout',
         'reportabsence-list',
-        'reportabsence-listyearly'
+        'reportabsence-listyearly',
+        'employee-list',
+        'employee-edit',
+        'api-employee-lists',
+        'api-employee-edit',
+        'post-api-employee-edit',
     );
 
     if (!isset($_SESSION['USERID']) && !in_array($routeName, $publicRoutesArray))
