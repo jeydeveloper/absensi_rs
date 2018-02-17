@@ -156,7 +156,12 @@ class ReportabsenceController extends \App\Controllers\BaseController
             header("Expires: 0");
         }
 
-        return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
+        $viewSchedule = !empty($request->getParam('schedule')) ? $request->getParam('schedule') : '';
+        if(!empty($viewSchedule)) {
+            return $this->ci->get('renderer')->render($response, 'report/absence/list_schedule.phtml', $this->data);
+        } else {
+            return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
+        }
     }
 
     public function listsYearly($request, $response, $args)

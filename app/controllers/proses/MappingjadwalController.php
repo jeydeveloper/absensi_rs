@@ -9,6 +9,8 @@ use App\Models\TransaksiModel as Transaksi;
 use App\Models\EmployeeModel as Employee;
 use App\Models\SettingModel as Setting;
 use App\Models\User as User;
+use App\Models\BagianModel as Bagian;
+use App\Models\UnitModel as Unit;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Collection;
@@ -97,6 +99,9 @@ class MappingjadwalController extends \App\Controllers\BaseController
         }
 
         $this->data['optEmployee'] = Employee::getOptNonVoid($arrUnitId, $arrDivisiId);
+
+        $this->data['optBagian'] = Bagian::getOptNonVoid();
+        $this->data['optUnit'] = Unit::getOptNonVoid();
 
         return $this->ci->get('renderer')->render($response, 'proses/mappingjadwal/list.phtml', $this->data);
     }
