@@ -198,11 +198,15 @@
                         </tr>
                         </thead>
                     </table>
+                    <?php if(empty($_SESSION['GUEST'])) : ?>
                     <div class="row">
                       <div class="col-sm-12">
                         <button id="btnAdd" class="btn btn-primary" data-toggle="modal" data-target="#myModal5"><i class="fa fa-plus"></i> Add</button>
                       </div>
                     </div>
+                    <?php else: ?>
+                        <button id="btnAdd" class="btn btn-primary" data-toggle="modal" data-target="#myModal5" style="display: none;"><i class="fa fa-plus"></i> Add</button>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -233,7 +237,9 @@
                       <a class="btn btn-default ln-tb-step tb-active" href="#step1" data-toggle="tab" id="ln-tb-step1">Step 1 - Personal data</a>
                       <a class="btn btn-default ln-tb-step" href="#step2" data-toggle="tab" id="ln-tb-step2">Step 2 - Address & Contact</a>
                       <a class="btn btn-default ln-tb-step" href="#step3" data-toggle="tab" id="ln-tb-step3">Step 3 - Bank & Insurance</a>
+                      <?php if(empty($_SESSION['GUEST'])) : ?>
                       <a class="btn btn-default ln-tb-step" href="#step4" data-toggle="tab" id="ln-tb-step4">Step 4 - Employee Info</a>
+                      <?php endif; ?>
                   </div>
                   <div class="tab-content">
                     <div id="step1" class="p-m tab-pane active">
