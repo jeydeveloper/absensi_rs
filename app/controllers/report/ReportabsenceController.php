@@ -11,6 +11,7 @@ use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\TransaksiModel as Transaksi;
 use App\Models\IzinModel as Izin;
 use App\Models\SettingModel as Setting;
+use App\Models\BagianModel as Bagian;
 
 class ReportabsenceController extends \App\Controllers\BaseController
 {
@@ -162,6 +163,138 @@ class ReportabsenceController extends \App\Controllers\BaseController
         } else {
             return $this->ci->get('renderer')->render($response, 'report/absence/list.phtml', $this->data);
         }
+    }
+
+    public function listsSchedule($request, $response, $args)
+    {
+        $this->ci->get('logger')->info("Slim-Skeleton 'GET /report/absence-schedule' route");
+
+        $arrData = array(
+            'data' => array()
+        );
+
+        $limit = !empty($request->getParam('length')) ? $request->getParam('length') : 0;
+        $offset = !empty($request->getParam('start')) ? $request->getParam('start') : 0;
+        $search = !empty($request->getParam('search')) ? $request->getParam('search') : '';
+
+        $month = !empty($request->getParam('month')) ? $request->getParam('month') : '';
+        $year = !empty($request->getParam('year')) ? $request->getParam('year') : date('Y');
+        $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
+        $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
+        $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : '';
+
+        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->data['myRoleAccess'])) ? true : false;
+        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->data['myRoleAccess'])) ? true : false;
+
+        $arrUnitId = [];
+        if ($onlyUnit) {
+            $res = Employee::getAllUnit($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+                if (!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+            }
+            if (empty($arrUnitId)) $arrUnitId[0] = 123456789;
+        }
+
+        $arrDivisiId = [];
+        if ($onlyDivisi) {
+            $res = Employee::getAllDivisi($_SESSION['EMPID']);
+            foreach ($res as $key => $value) {
+                if (!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+            }
+            if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+        }
+
+        if (!empty($bagianId)) {
+            $arrDivisiId[0] = $bagianId;
+        }
+        if (!empty($unitId)) {
+            $arrUnitId[0] = $unitId;
+        }
+
+
+        $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId, $empId);
+        $result = Employee::getAllNonVoid($limit, $offset, $search, $arrUnitId, $arrDivisiId, $empId);
+        if (!empty($result)) {
+            $arrSchedule = Schedule::getOptNonVoid();
+
+            $this->data['recordsTotal'] = count($resultTotal);
+            $this->data['recordsFiltered'] = count($resultTotal);
+            $jumlahTanggal = date('t', strtotime("$year-$month-01"));
+
+            $dataEmpHasSchedule = [];
+            $dataEmp = [];
+            foreach ($result as $key => $value) {
+                $dataEmp[$value->emp_code] = $value->emp_code;
+            }
+
+
+            if (!empty($dataEmp)) {
+                $dateStart = "$year-$month-01";
+                $dateEnd = date('Y-m-t', strtotime($dateStart));
+                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp, $dateStart, $dateEnd);
+                if (!empty($res)) {
+                    foreach ($res as $key => $value) {
+                        $code = !empty($value->emsc_schd_id) ? $value->schd_code : '';
+                        $color = !empty($value->emsc_schd_id) ? $value->schd_color : '';
+                        $dataEmpHasSchedule[$value->emsc_emp_code][$value->emsc_uniq_code] = [
+                            'code' => $code,
+                            'color' => $color,
+                        ];
+                    }
+                }
+            }
+
+            foreach ($result as $key => $value) {
+                $this->data['data'][$key] = array(
+                    ($key + 1),
+                    $value->emp_id,
+                    $value->emp_code,
+                    $value->emp_name,
+                );
+                $len = count($this->data['data'][$key]);
+                $forLimit = $jumlahTanggal + $len;
+                //echo $forLimit; exit();
+
+                $cnt = 1;
+                for ($i = $len; $i < $forLimit; $i++) {
+                    $tanggal = $cnt < 10 ? ('0' . $cnt) : $cnt;
+                    $generateId = $year . $month . $tanggal . $value->emp_id;
+                    $scheduleDate = $year . '-' . $month . '-' . $tanggal;
+                    $lblShift = !empty($dataEmpHasSchedule[$value->emp_code][$generateId]['code']) ? $dataEmpHasSchedule[$value->emp_code][$generateId]['code'] : $this->getLabelScheduleDefault($scheduleDate);
+                    $this->data['data'][$key][$i] = $lblShift;
+                    $cnt++;
+                }
+            }
+            //print_r($this->data['data']);
+        }
+
+        $this->data['month'] = $month;
+        $this->data['year'] = $year;
+        $this->data['bagian'] = Bagian::getBagianByID($bagianId);
+        $this->data['arrMonthName'] = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        $this->data['isExcel'] = $isExcel = !empty($request->getParam('excel')) ? $request->getParam('excel') : '';
+        if(!empty($isExcel)) {
+            $filename = 'report_' . str_replace('-', '', date('Y-m-d')) . '.xls';
+            header("Content-type: application/octet-stream");
+            header("Content-Disposition: attachment; filename = " . $filename);
+            header("Pragma: no-cache");
+            header("Expires: 0");
+        }
+
+        return $this->ci->get('renderer')->render($response, 'report/absence/list_schedule.phtml', $this->data);
+    }
+
+    private function getLabelScheduleDefault($date = '') {
+        if(empty($date)) return '-';
+        list($y, $m, $d) = explode('-', $date);
+        $dayNo = date('w', mktime(0, 0, 0, $m, $d, $y));
+        if (!in_array($dayNo, [6, 0])) {
+            $text = 'NORM';
+        } else {
+            $text = '-';
+        }
+        return $text;
     }
 
     public function listsYearly($request, $response, $args)

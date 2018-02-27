@@ -196,6 +196,7 @@ $app->group('/api/mappingjadwal', function () {
 
 $app->group('/report', function () {
   $this->get('/absence', \ReportabsenceController::class . ':lists')->setName('reportabsence-list');
+  $this->get('/absence-schedule', \ReportabsenceController::class . ':listsSchedule')->setName('reportabsence-listschedule');
   $this->get('/tahunan', \ReportabsenceController::class . ':listsYearly')->setName('reportabsence-listyearly');
   $this->get('/form', \ReportabsenceController::class . ':form')->setName('reportabsence-form');
   $this->get('/form-individual', \ReportabsenceController::class . ':formIndividual')->setName('reportabsence-formindividual');

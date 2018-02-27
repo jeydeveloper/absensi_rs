@@ -126,10 +126,11 @@ function getNextGenerateId($date = '')
                             $arrDinas = !empty($setting['list_id_sub_dinas']) ? explode(',', $setting['list_id_sub_dinas']) : [];
                             $arrCuti = !empty($setting['list_id_sub_cuti']) ? explode(',', $setting['list_id_sub_cuti']) : [];
                             $ttl = $cntIzinTidakHadir - count($arrDinas) - count($arrCuti) - 2;
+                            echo $ttl;
                             if($ttl < 0) {
-                                $ttl = 6;
+                                $ttl = 7;
                             } else {
-                                $ttl += 6;
+                                $ttl += 7;
                             }
                             ?>
                             <th colspan="<?php echo $ttl; ?>">Tidak Masuk</th>
