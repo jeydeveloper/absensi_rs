@@ -27,6 +27,12 @@ class BagianModel extends Model
       return $result;
     }
 
+    public static function getBagianByID($id)
+    {
+      $result = BagianModel::where('bag_id', $id)->first();
+      return $result;
+    }
+
     public static function getOptNonVoid()
     {
       $arrData = array();
