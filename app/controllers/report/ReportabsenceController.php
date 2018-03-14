@@ -191,6 +191,8 @@ class ReportabsenceController extends \App\Controllers\BaseController
             $res = Employee::getAllUnit($_SESSION['EMPID']);
             foreach ($res as $key => $value) {
                 if (!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+                $unitId = $value->uni_id;
+                $bagianId = $value->bag_id;
             }
             if (empty($arrUnitId)) $arrUnitId[0] = 123456789;
         }
@@ -200,6 +202,8 @@ class ReportabsenceController extends \App\Controllers\BaseController
             $res = Employee::getAllDivisi($_SESSION['EMPID']);
             foreach ($res as $key => $value) {
                 if (!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+                $bagianId = $value->bag_id;
+                $unitId = $value->uni_id;
             }
             if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
         }
