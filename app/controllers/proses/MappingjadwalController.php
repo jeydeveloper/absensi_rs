@@ -77,8 +77,8 @@ class MappingjadwalController extends \App\Controllers\BaseController
         $this->data['selectedYear'] = !empty($request->getParam('slYear')) ? $request->getParam('slYear') : date('Y');
         $this->data['yearFilterRange'] = $this->getYearFilterRange();
 
-        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
-        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
+        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->data['myRoleAccess'])) ? true : false;
+        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->data['myRoleAccess'])) ? true : false;
 
         $arrUnitId = [];
         if ($onlyUnit) {
