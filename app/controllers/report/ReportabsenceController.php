@@ -204,12 +204,26 @@ class ReportabsenceController extends \App\Controllers\BaseController
             if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
         }
 
-        if (!empty($bagianId)) {
+        if (($_SESSION['USERID'] == 1 AND !empty($bagianId)) OR (!empty($bagianId) AND !$onlyDivisi)) {
+            $arrDivisiId = [];
             $arrDivisiId[0] = $bagianId;
         }
-        if (!empty($unitId)) {
+        if (($_SESSION['USERID'] == 1 AND !empty($unitId)) OR (!empty($unitId) AND !$onlyUnit)) {
+            $arrUnitId = [];
             $arrUnitId[0] = $unitId;
         }
+
+        if ($_SESSION['USERID'] != 1 AND $onlyDivisi AND !$onlyUnit) $arrUnitId = [];
+        if ($_SESSION['USERID'] != 1 AND $onlyUnit AND !$onlyDivisi) $arrDivisiId = [];
+
+        $this->data['onlyDivisi'] = $onlyDivisi;
+        $this->data['onlyUnit'] = $onlyUnit;
+
+        // print_r($arrDivisiId);
+        // print_r($arrUnitId);
+        // exit();
+
+        //echo $_SESSION['USERID'];
 
 
         $resultTotal = Employee::getAllNonVoid('', '', $search, $arrUnitId, $arrDivisiId, $empId);

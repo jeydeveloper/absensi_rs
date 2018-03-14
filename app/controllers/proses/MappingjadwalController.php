@@ -98,6 +98,21 @@ class MappingjadwalController extends \App\Controllers\BaseController
             if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
         }
 
+        if ($_SESSION['USERID'] == 1 OR (!empty($bagianId) AND !$onlyDivisi)) {
+            $arrDivisiId = [];
+            $arrDivisiId[0] = $bagianId;
+        }
+        if ($_SESSION['USERID'] == 1 OR (!empty($unitId) AND !$onlyUnit)) {
+            $arrUnitId = [];
+            $arrUnitId[0] = $unitId;
+        }
+
+        if ($_SESSION['USERID'] != 1 AND $onlyDivisi AND !$onlyUnit) $arrUnitId = [];
+        if ($_SESSION['USERID'] != 1 AND $onlyUnit AND !$onlyDivisi) $arrDivisiId = [];
+
+        $this->data['onlyDivisi'] = $onlyDivisi;
+        $this->data['onlyUnit'] = $onlyUnit;
+
         $this->data['optEmployee'] = Employee::getOptNonVoid($arrUnitId, $arrDivisiId);
 
         $this->data['optBagian'] = Bagian::getOptNonVoid();
