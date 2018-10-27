@@ -173,7 +173,7 @@
                           <div class="form-group">
                               <div class="col-md-12">
                                   <div class="row">
-                                      <div class="col-md-8">
+                                      <div class="col-md-6">
                                           <!--<label for="emcu_tanggal">Periode</label>-->
                                           <div class="input-daterange input-group">
                                               <input type="text" class="input-sm form-control" name="startDate" id="startDate" value="<?php echo $startDate; ?>" />
@@ -181,7 +181,34 @@
                                               <input type="text" class="input-sm form-control" name="endDate" id="endDate" value="<?php echo $endDate; ?>" />
                                           </div>
                                       </div>
-                                      <div class="col-md-4">
+                                      <div class="col-md-2">
+                                      <select class="form-control" name="cari" id="cari">
+                                        <option value="">-- Cari --</option>
+                                        <option value="sBagian" <?php echo (!empty($bagianId) ? 'selected' : ''); ?>>Bagian</option>
+                                        <option value="sUnit" <?php echo (!empty($unitId) ? 'selected' : ''); ?>>Unit</option>
+                                      </select>
+                                    </div>
+                                    <div class="col-md-2 sChoice" id="sBagian" <?php echo (!empty($bagianId) ? '' : 'style="display:none;"'); ?>>
+                                      <select class="form-control" name="bagianId">
+                                        <option value="">-- Pilih Bagian --</option>
+                                        <?php foreach($optBagian as $value): ?>
+                                          <option value="<?php echo $value['key']; ?>" <?php echo ((!empty($bagianId) AND $bagianId == $value['key']) ? 'selected' : ''); ?>><?php echo $value['value']; ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                    </div>
+                                    <div class="col-md-2 sChoice" id="sUnit" <?php echo (!empty($unitId) ? '' : 'style="display:none;"'); ?>>
+                                      <select class="form-control" name="unitId">
+                                        <option value="">-- Pilih Unit --</option>
+                                        <?php foreach($optUnit['unit'] as $key1 => $value1): ?>
+                                          <optgroup label="<?php echo $optUnit['bagian'][$key1]; ?>">
+                                          <?php foreach($value1 as $value2): ?>
+                                          <option value="<?php echo $value2['key']; ?>" <?php echo ((!empty($unitId) AND $unitId == $value2['key']) ? 'selected' : ''); ?>><?php echo $value2['value']; ?></option>
+                                          <?php endforeach; ?>
+                                          </optgroup>
+                                        <?php endforeach; ?>
+                                      </select>
+                                    </div>
+                                      <div class="col-md-2">
                                           <button type="submit" name="btnView" class="btn btn-success" id="btnView">View</button>
                                       </div>
                                   </div>
@@ -315,7 +342,7 @@
         var table = $('#example1').DataTable( {
             "processing": true,
             "serverSide": true,
-            "ajax": '<?php echo $baseUrl; ?>api/report/summary?startdate=<?php echo $startDate; ?>&enddate=<?php echo $endDate; ?>',
+            "ajax": '<?php echo $baseUrl; ?>api/report/summary?startdate=<?php echo $startDate; ?>&enddate=<?php echo $endDate; ?>&bagianId=<?php echo $bagianId; ?>&unitId=<?php echo $unitId; ?>',
             dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
             "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
             buttons: [
@@ -340,6 +367,30 @@
         });
 
         $('.input-daterange').datepicker({ });
+
+        $('#cari').change(function(){
+          var attrId = $(this).val();
+          if(attrId == '') {
+            // $('#btnView').attr('disabled', true);
+          }
+
+          $('.sChoice').find('select').attr('disabled', true);
+          $('.sChoice').hide();
+
+          $('#'+attrId).find('select').val('');
+          $('#'+attrId).show();
+          $('#'+attrId).find('select').attr('disabled', false);
+          // $('#btnView').attr('disabled', true);
+        });
+
+        $('.sChoice select').change(function(){
+          var attrId = $(this).val();
+          if(attrId == '') {
+            // $('#btnView').attr('disabled', true);
+          } else {
+            // $('#btnView').attr('disabled', false);
+          }
+        });
 
     });
 

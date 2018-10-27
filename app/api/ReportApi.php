@@ -58,25 +58,34 @@ class ReportApi
         $startDate = $this->formatDateDb($startDate);
         $endDate = $this->formatDateDb($endDate);
 
-        $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
-        $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
+        $bagianId = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
+        $unitId = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
 
-        $arrUnitId = [];
-        if ($onlyUnit) {
-            $res = Employee::getAllUnit($_SESSION['EMPID']);
-            foreach ($res as $key => $value) {
-                if (!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
-            }
-            if (empty($arrUnitId)) $arrUnitId[0] = 123456789;
-        }
+        if(!empty($bagianId)) {
+            $arrDivisiId[0] = $bagianId;
+        } elseif(!empty($unitId)) {
+            $arrUnitId[0] = $unitId;
+        } else {
+            $onlyUnit = ($_SESSION['USERID'] != 1 AND in_array(17, $this->myRoleAccess)) ? true : false;
+            $onlyDivisi = ($_SESSION['USERID'] != 1 AND in_array(18, $this->myRoleAccess)) ? true : false;
 
-        $arrDivisiId = [];
-        if ($onlyDivisi) {
-            $res = Employee::getAllDivisi($_SESSION['EMPID']);
-            foreach ($res as $key => $value) {
-                if (!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+            $arrUnitId = [];
+            if ($onlyUnit) {
+                $res = Employee::getAllUnit($_SESSION['EMPID']);
+                foreach ($res as $key => $value) {
+                    if (!empty($value->uni_id)) $arrUnitId[$value->uni_id] = $value->uni_id;
+                }
+                if (empty($arrUnitId)) $arrUnitId[0] = 123456789;
             }
-            if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+
+            $arrDivisiId = [];
+            if ($onlyDivisi) {
+                $res = Employee::getAllDivisi($_SESSION['EMPID']);
+                foreach ($res as $key => $value) {
+                    if (!empty($value->bag_id)) $arrDivisiId[$value->bag_id] = $value->bag_id;
+                }
+                if (empty($arrDivisiId)) $arrDivisiId[0] = 123456789;
+            }
         }
 
 

@@ -12,6 +12,7 @@ use App\Models\TransaksiModel as Transaksi;
 use App\Models\IzinModel as Izin;
 use App\Models\SettingModel as Setting;
 use App\Models\BagianModel as Bagian;
+use App\Models\UnitModel as Unit;
 
 class ReportabsenceController extends \App\Controllers\BaseController
 {
@@ -631,6 +632,12 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
         $this->data['status'] = Status::getAllKetidakhadiranNonVoid('sta_name');
+
+        $this->data['optBagian'] = Bagian::getOptNonVoid();
+        $this->data['optUnit'] = Unit::getOptNonVoid();
+
+        $this->data['bagianId'] = !empty($request->getParam('bagianId')) ? $request->getParam('bagianId') : '';
+        $this->data['unitId'] = !empty($request->getParam('unitId')) ? $request->getParam('unitId') : '';
 
         return $this->ci->get('renderer')->render($response, 'report/absence/summary.phtml', $this->data);
     }
