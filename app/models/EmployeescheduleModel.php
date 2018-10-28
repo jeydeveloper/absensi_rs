@@ -43,7 +43,7 @@ class EmployeescheduleModel extends Model
         return $res;
     }
 
-    public static function getAllNonVoidWhereIn($data = null, $dateStart = '', $dateEnd = '')
+    public static function getAllNonVoidWhereIn($data = null, $dateStart = '', $dateEnd = '', $report = false)
     {
         if (!is_array($data)) return 0;
 
@@ -63,7 +63,11 @@ class EmployeescheduleModel extends Model
             $newMonth = $newMonth < 10 ? "0$newMonth" : $newMonth;
             $dateEnd = $year . '-' . $newMonth . '-01';
         } else {
-            $newTanggal = 1 + (int)$day;
+            if($report) {
+                $newTanggal = (int)$day;
+            } else {
+                $newTanggal = 1 + (int)$day;
+            }
             $newTanggal = $newTanggal < 10 ? "0$newTanggal" : $newTanggal;
             $dateEnd = $year . '-' . $month . '-' . $newTanggal;
         }

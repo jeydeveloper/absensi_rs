@@ -52,6 +52,7 @@ class ReportApi
         $search = !empty($request->getParam('search')) ? $request->getParam('search') : '';
 
         $empId = !empty($request->getParam('empId')) ? $request->getParam('empId') : '';
+        // $empId = 821;
 
         $startDate = !empty($request->getParam('startdate')) ? $request->getParam('startdate') : '';
         $endDate = !empty($request->getParam('enddate')) ? $request->getParam('enddate') : '';
@@ -105,7 +106,8 @@ class ReportApi
 
 
             if (!empty($dataEmp)) {
-                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp, $startDate, $endDate);
+                $res = Employeeschedule::getAllNonVoidWhereIn($dataEmp, $startDate, $endDate, true);
+                // print_r($res);
                 if (!empty($res)) {
                     foreach ($res as $key => $value) {
                         if(empty($dataEmpHasStatus[$value->emsc_emp_code][$value->sta_id])) {
@@ -114,24 +116,102 @@ class ReportApi
                             $dataEmpHasStatus[$value->emsc_emp_code][$value->sta_id] += $value->sta_sanksi;
                         }
 
-                        /*if(empty($value->sta_id)) {
-                            if (!empty($value->time_min) AND !empty($value->time_max) AND $value->time_min == $value->time_max) {
-                                $intMinAbsence = !empty($value->wkt_min) ? strtotime($value->wkt_min) : '';
-
-                                $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
-                                $batasAbsenMasuk = strtotime('+' . $settingBatasAbsenMasuk . ' minutes', strtotime(($value->emsc_date . ' ' . $value->wkt_min)));
-
-                                if ($intMinAbsence <= $batasAbsenMasuk) {
-                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] = 0;
-
-                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] += $setting['sanksi_tidak_absen'];
+                        if(empty($value->sta_id)) {
+                            $dayNo = date('w', $value->tgl);
+                            // echo "string".$dayNo;
+                            if (!in_array($dayNo, [6, 0])) {
+                                if(empty($value->schd_waktu_awal) AND empty($value->schd_waktu_akhir)) {
+                                    if ($dayNo == 5) {
+                                        $minSchedule = $value->tgl . ' ' . $setting['default_2_schedule_in'];
+                                        $maxSchedule = $value->tgl . ' ' . $setting['default_2_schedule_out'];
+                                    } else {
+                                        $minSchedule = $value->tgl . ' ' . $setting['default_1_schedule_in'];
+                                        $maxSchedule = $value->tgl . ' ' . $setting['default_1_schedule_out'];
+                                    }
                                 } else {
-                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] = 0;
+                                    $minSchedule = $value->tgl . ' ' . $value->schd_waktu_awal;
+                                    $maxSchedule = $value->tgl . ' ' . $value->schd_waktu_akhir;
+                                }
+                            } else {
+                                $minSchedule = $value->tgl . ' ' . $value->schd_waktu_awal;
+                                $maxSchedule = $value->tgl . ' ' . $value->schd_waktu_akhir;
+                            }
+                            
+                            $intMinSchedule = strtotime($minSchedule);
+                            $intMaxSchedule = strtotime($maxSchedule);
+                            $intMinAbsence = strtotime($value->wkt_min);
+                            $intMaxAbsence = strtotime($value->wkt_max);
 
-                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] += $setting['sanksi_tidak_absen'];
+                            if ((!empty($intMinAbsence) AND $intMinAbsence >= $intMinSchedule AND $intMinAbsence <= $intMaxSchedule) OR (!empty($intMaxAbsence) AND $intMaxAbsence >= $intMinSchedule AND $intMaxAbsence <= $intMaxSchedule) OR ($intMinAbsence <= $intMinSchedule AND $intMaxAbsence >= $intMaxSchedule)) {
+                                $earlyOut = strtotime('-' . $setting['toleransi_out'] . ' minutes', $intMaxSchedule);
+                                $late = strtotime('+' . $setting['toleransi_in'] . ' minutes', $intMinSchedule);
+                                if ($intMinAbsence > $late) {
+                                    $statusLate = true;
+                                    $totalMinuteLate = date('h:i', ($intMinAbsence - $intMinSchedule));
+                                    list($hour, $minute) = explode(':', $totalMinuteLate);
+                                    $hour = (int)$hour;
+                                    $minute = (int)$minute;
+                                    $hour = $hour > 0 ? (($hour - 1) * 60) : 0;
+                                    $minute += $hour;
+                                    $totalMinuteLate = $minute;
+                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] = 0;
+                                    // $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] += $minute;
+                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] += 1;
+                                }
+                                if ($intMaxAbsence < $earlyOut) {
+                                    $statusEearlyOut = true;
+                                    $totalMinuteEearlyOut = date('h:i', ($intMaxSchedule - $intMaxAbsence));
+                                    list($hour, $minute) = explode(':', $totalMinuteEearlyOut);
+                                    $hour = (int)$hour;
+                                    $minute = (int)$minute;
+                                    $hour = $hour > 0 ? (($hour - 1) * 60) : 0;
+                                    $minute += $hour;
+                                    $totalMinuteEearlyOut = $minute;
+                                    if(empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] = 0;
+                                    // $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] += $minute;
+                                    $arrJumlah[$value->emsc_emp_code]['jumlahMenitPulangCepat'] += 1;
                                 }
                             }
-                        }*/
+
+                            /*if (!empty($value->time_min) AND !empty($value->time_max) AND $value->time_min == $value->time_max) {
+                                $settingBatasAbsenMasuk = $setting['batas_absen_masuk'] * 60;
+                                $batasAbsenMasuk = strtotime('+' . $settingBatasAbsenMasuk . ' minutes', $intMinSchedule);
+
+                                $isSameSchedule = true;
+
+                                // if (!empty($totalMinuteLate)) $arrJumlah['jumlahMenitTerlambat'] -= $totalMinuteLate;
+                                if (!empty($totalMinuteLate)) $arrJumlah['jumlahMenitTerlambat'] -= 1;
+                                // if (!empty($totalMinuteEearlyOut)) $arrJumlah['jumlahMenitPulangCepat'] -= $totalMinuteEearlyOut;
+                                if (!empty($totalMinuteEearlyOut)) $arrJumlah['jumlahMenitPulangCepat'] -= 1;
+
+                                if ($intMinAbsence <= $batasAbsenMasuk) {
+                                    $dataEmpAbsence[$empCode][$scheduleDate]['time_max'] = '';
+                                    if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
+                                        $totalMinuteEearlyOut = $settings['sanksi_tidak_absen'];
+                                    } else {
+                                        $totalMinuteEearlyOut = 0;
+                                    }
+                                    $totalMinuteLate = '';
+                                    $statusLate = '';
+                                    $arrJumlah['jumlahMenitPulangCepat'] += $totalMinuteEearlyOut;
+                                    if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $arrJumlah['jumlahPulangCepat'] += 1;
+                                } else {
+                                    $dataEmpAbsence[$empCode][$scheduleDate]['time_min'] = '';
+                                    if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) {
+                                        $totalMinuteLate = $settings['sanksi_tidak_absen'];
+                                    } else {
+                                        $totalMinuteLate = 0;
+                                    }
+                                    $totalMinuteEearlyOut = '';
+                                    $statusEearlyOut = '';
+                                    $arrJumlah['jumlahMenitTerlambat'] += $totalMinuteLate;
+                                    if (empty($dataEmpHasSchedule['izin'][$empId][$generateId])) $arrJumlah['jumlahTerlambat'] += 1;
+                                }
+                            }*/
+                        } else {
+                            if(empty($arrJumlah[$value->emsc_emp_code][$value->sta_id])) $arrJumlah[$value->emsc_emp_code][$value->sta_id] = 0;
+                            $arrJumlah[$value->emsc_emp_code][$value->sta_id] += 1;
+                        }
                     }
                 }
             }
@@ -149,7 +229,8 @@ class ReportApi
                 $cnt = 6;
                 if(!empty($res)) {
                     foreach ($res as $key2 => $value2) {
-                        $arrData['data'][$key][($cnt+$key2)] = !empty($dataEmpHasStatus[$value->emp_code][$value2->sta_id]) ? $dataEmpHasStatus[$value->emp_code][$value2->sta_id] : '';
+                        // $arrData['data'][$key][($cnt+$key2)] = !empty($dataEmpHasStatus[$value->emp_code][$value2->sta_id]) ? $dataEmpHasStatus[$value->emp_code][$value2->sta_id] : '';
+                        $arrData['data'][$key][($cnt+$key2)] = !empty($arrJumlah[$value->emp_code][$value2->sta_id]) ? $arrJumlah[$value->emp_code][$value2->sta_id] : '';
                     }
                 }
             }
