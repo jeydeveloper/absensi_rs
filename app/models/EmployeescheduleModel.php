@@ -54,7 +54,7 @@ class EmployeescheduleModel extends Model
 
         list($year, $month, $day) = explode('-', $dateEnd);
         $lastDate = date('t', strtotime($dateEnd));
-        if ($day == $lastDate) {
+        if ($day == $lastDate AND !$report) {
             $newMonth = 1 + (int)$month;
             if ($newMonth > 12) {
                 $newMonth = 1;
