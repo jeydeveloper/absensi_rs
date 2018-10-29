@@ -33,9 +33,9 @@
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>assets/styles/style.css">
 
     <style media="screen">
-    .dt-buttons{
+    /*.dt-buttons{
       display: none;
-    }
+    }*/
     </style>
 
 </head>
@@ -285,11 +285,33 @@
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- DataTables buttons scripts -->
+<?php if(1==2): ?>
 <script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/pdfmake.min.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/vfs_fonts.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<?php endif; ?>
+
+<?php if(1==2): ?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+<?php endif; ?>
+
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/pdfmake.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/pdfmake/build/vfs_fonts.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/buttons.html5.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/buttons.print.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/dataTables.buttons.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/buttons.flash.min.js"></script>
+<script src="<?php echo $baseUrl; ?>assets/vendor/datatables-new/jszip.min.js"></script>
 <script src="<?php echo $baseUrl; ?>assets/vendor/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
 
 <script src="<?php echo $baseUrl; ?>assets/vendor/jquery-validation/jquery.validate.min.js"></script>
@@ -363,7 +385,14 @@
             "scrollCollapse": true,
             "fixedColumns": {
                 "leftColumns": 4
-            }
+            },
+            'dom': 'Bfrtip',
+            // 'buttons': [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ],
+            'buttons': [
+                'excel'
+            ]
         });
 
         $('.input-daterange').datepicker({ });
