@@ -632,6 +632,7 @@ class ReportabsenceController extends \App\Controllers\BaseController
         $this->data['sideMenu'] = $this->ci->get('renderer')->fetch('sidemenu.phtml', $this->data);
 
         $this->data['status'] = Status::getAllKetidakhadiranNonVoid('sta_name');
+        $this->data['shift'] = Schedule::getForReportNonVoid();
 
         $this->data['optBagian'] = Bagian::getOptNonVoid();
         $this->data['optUnit'] = Unit::getOptNonVoid();

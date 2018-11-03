@@ -44,4 +44,22 @@ class ScheduleModel extends Model
 
         return $arrData;
     }
+
+    public static function getForReportNonVoid()
+    {
+        $arrData = array();
+
+        $result = ScheduleModel::where('schd_void', 0)->get();
+
+        if(!empty($result)) {
+            foreach ($result as $key => $value) {
+                $arrData[] = array(
+                    'schd_id' => $value->schd_id,
+                    'schd_name' => $value->schd_name,
+                );
+            }
+        }
+
+        return $arrData;
+    }
 }

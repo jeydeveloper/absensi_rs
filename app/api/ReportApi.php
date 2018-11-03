@@ -7,6 +7,7 @@ use App\Models\EmployeescheduleModel as Employeeschedule;
 use App\Models\EmployeeModel as Employee;
 use App\Models\StatusModel as Status;
 use App\Models\SettingModel as Setting;
+use App\Models\ScheduleModel as Schedule;
 use App\Helper;
 
 class ReportApi
@@ -207,14 +208,22 @@ class ReportApi
                                 if ($telat AND !empty($arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'])) $arrJumlah[$value->emsc_emp_code]['jumlahMenitTerlambat'] -= 1;
                             }
                         } else {
+                            //untuk izin
                             if(empty($arrJumlah[$value->emsc_emp_code][$value->sta_id])) $arrJumlah[$value->emsc_emp_code][$value->sta_id] = 0;
                             $arrJumlah[$value->emsc_emp_code][$value->sta_id] += 1;
+                        }
+
+                        if(!empty($value->emsc_schd_id)) {
+                            //untuk schedule
+                            if(empty($arrJumlah[$value->emsc_emp_code]['shift'][$value->emsc_schd_id])) $arrJumlah[$value->emsc_emp_code]['shift'][$value->emsc_schd_id] = 0;
+                            $arrJumlah[$value->emsc_emp_code]['shift'][$value->emsc_schd_id] += 1;
                         }
                     }
                 }
             }
 
             $res = Status::getAllKetidakhadiranNonVoid('sta_name');
+            $res2 = Schedule::getForReportNonVoid();
             foreach ($result as $key => $value) {
                 $arrData['data'][$key] = array(
                     ($key + 1),
@@ -224,11 +233,19 @@ class ReportApi
                     (!empty($arrJumlah[$value->emp_code]['jumlahMenitTerlambat']) ? $arrJumlah[$value->emp_code]['jumlahMenitTerlambat'] : ''),
                     (!empty($arrJumlah[$value->emp_code]['jumlahMenitPulangCepat']) ? $arrJumlah[$value->emp_code]['jumlahMenitPulangCepat'] : ''),
                 );
+
                 $cnt = 6;
                 if(!empty($res)) {
                     foreach ($res as $key2 => $value2) {
                         // $arrData['data'][$key][($cnt+$key2)] = !empty($dataEmpHasStatus[$value->emp_code][$value2->sta_id]) ? $dataEmpHasStatus[$value->emp_code][$value2->sta_id] : '';
                         $arrData['data'][$key][($cnt+$key2)] = !empty($arrJumlah[$value->emp_code][$value2->sta_id]) ? $arrJumlah[$value->emp_code][$value2->sta_id] : '';
+                    }
+                }
+
+                $cnt = $cnt + ((!empty($res)) ? count($res) : 0);
+                if(!empty($res2)) {
+                    foreach ($res2 as $key2 => $value2) {
+                        $arrData['data'][$key][($cnt+$key2)] = !empty($arrJumlah[$value->emp_code]['shift'][$value2['schd_id']]) ? $arrJumlah[$value->emp_code]['shift'][$value2['schd_id']] : '';
                     }
                 }
             }

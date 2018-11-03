@@ -228,6 +228,9 @@
                             <?php foreach ($status as $value): ?>
                                 <th><?php echo $value->sta_name; ?></th>
                             <?php endforeach; ?>
+                            <?php foreach ($shift as $value): ?>
+                                <th><?php echo $value['schd_name']; ?></th>
+                            <?php endforeach; ?>
                         </tr>
                         </thead>
                     </table>
