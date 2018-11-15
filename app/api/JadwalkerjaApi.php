@@ -383,6 +383,8 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                     'scheduleDate' => $scheduleDate,
                 ];
 
+                // print_r($arrParam);
+
                 $arrData['button'] = $this->getButtonJadwal($arrParam);
 
                 $arrData['success'] = true;
@@ -682,7 +684,7 @@ class JadwalkerjaApi extends \App\Api\BaseApi
         $dataEmpHasSchedule = [];
         $dataEmpHasCuti = [];
 
-        $res = Employeeschedule::getAllNonVoidWhereIn($arrParam['dataEmpId']);
+        $res = Employeeschedule::getAllNonVoidWhereIn($arrParam['dataEmp']);
         if (!empty($res)) {
             foreach ($res as $key => $value) {
                 $dataEmpHasSchedule[$value->emsc_emp_id][$value->emsc_uniq_code] = [
@@ -759,6 +761,8 @@ class JadwalkerjaApi extends \App\Api\BaseApi
                 ];
             }
         }
+
+        // print_r($dataEmpHasSchedule);
 
         $tooltip = 'OFF';
         if (!empty($dataEmpHasSchedule[$arrParam['empId']][$generateId])) {
